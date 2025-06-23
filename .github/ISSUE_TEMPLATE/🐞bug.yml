@@ -1,7 +1,12 @@
 name: "🐞 Bug"
 description: "버그 수정"
-labels: [ "bug" ]
+labels: [ "fix" ]
 body:
+  - type: textarea
+    attributes:
+      label: 🔑 Keyword
+      description: 브랜치 생성 시 사용할 키워드를 입력해 주세요.
+      placeholder: 예) add-ootd-api
   - type: textarea
     attributes:
       label: 🛠 버그 설명

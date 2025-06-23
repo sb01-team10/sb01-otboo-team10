@@ -2,6 +2,36 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.4.7'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'jacoco'
+}
+
+test {
+    useJUnitPlatform()
+    if (System.getProperty("excludeTags")) {
+        useJUnitPlatform {
+            excludeTags System.getProperty("excludeTags")
+        }
+    }
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+    // Q클래스 등 자동 생성 코드 제외
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, exclude: [
+                            '**/Q*.class',                        // QueryDSL Q클래스
+                            '**/generated/**',                   // generated 경로
+                    ])
+                })
+        )
+    }
 }
 
 group = 'com.codeit'
