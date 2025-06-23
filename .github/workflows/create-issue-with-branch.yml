@@ -34,11 +34,11 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const body = context.payload.issue.body || ""
-            const match = body.match(/### 🔑 Keyword\s*\n+([^\n]+)/)
-            const keyword = match ? match[1].trim().toLowerCase().replace(/[^a-z0-9-]/g, '-') : `issue-${context.payload.issue.number}`
-            core.setOutput("keyword", keyword)
-            
+            const body = context.payload.issue.body;
+            const keywordMatch = body.match(/### 🔑 Keyword\s*\n+([^\n]+)/);
+            const keyword = keywordMatch ? keywordMatch[1].trim() : null;
+            core.setOutput('keyword', keyword);
+
       - name: Sanitize Label
         id: sanitize-label
         run: |
