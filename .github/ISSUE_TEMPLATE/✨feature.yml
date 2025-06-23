@@ -1,7 +1,14 @@
 name: "✨ Feature"
 description: "새로운 기능 추가"
-labels: [ "feature" ]
+labels: [ "feat" ]
 body:
+  - type: textarea
+    attributes:
+      label: 🔑 Keyword
+      description: 브랜치 생성 시 사용할 키워드를 입력해 주세요.
+      placeholder: 예) add-ootd-api
+    validations:
+      required: true
   - type: textarea
     attributes:
       label: 📄 설명

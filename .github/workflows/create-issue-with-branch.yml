@@ -1,0 +1,55 @@
+name: Auto Create Branch with ISSUE
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@4
+
+      - name: Extract Label
+        id: extract-label
+        run: |
+          # 레이블이 없는 경우 "other"로 기본값 설정
+          if [ -z "${{ toJson(github.event.issue.labels) }}" ]; then
+            echo "label=other" >> $GITHUB_ENV
+          else
+            LABEL=$(echo '${{ toJson(github.event.issue.labels) }}' | jq -r '.[0].name')
+            echo "label=${LABEL}" >> $GITHUB_ENV
+          fi
+
+      - name: Extract Keyword
+        id: extract-keyword
+        run: |
+          # 이슈 본문에서 키워드 추출
+          KEYWORD=$(echo "${{ github.event.issue.body }}" | grep -A1 '### 🔑 Keyword' | tail -1 | tr -d '\r' | xargs)
+          # 키워드가 없으면 이슈 번호만 사용
+          if [ -z "$KEYWORD" ]; then
+            KEYWORD="issue-${{ github.event.issue.number }}"
+          fi
+          # 브랜치명에 허용되지 않는 문자 변환
+          SANITIZED_KEYWORD=$(echo "$KEYWORD" | tr '[:upper:]' '[:lower:]' | tr -cd '[:alnum:]-' | sed 's/--/-/g')
+          echo "keyword=${SANITIZED_KEYWORD}" >> $GITHUB_ENV
+
+      - name: Sanitize Label
+        id: sanitize-label
+        run: |
+          # 레이블명 무효 문자 처리
+          RAW_LABEL="${{ env.label }}"
+          SANITIZED_LABEL=$(echo "$RAW_LABEL" | tr '[:upper:]' '[:lower:]' | tr -cd '[:alnum:]-' | sed 's/--/-/g')
+          echo "sanitized_label=${SANITIZED_LABEL}" >> $GITHUB_ENV
+
+      - name: Create Branch
+        run: |
+          ISSUE_NUMBER=${{ github.event.issue.number }}
+          BRANCH_NAME="${{ env.sanitized_label }}/$ISSUE_NUMBER/${{ env.keyword }}"
+          git checkout -b "$BRANCH_NAME"
+          git push origin "$BRANCH_NAME"

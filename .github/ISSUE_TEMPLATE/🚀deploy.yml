@@ -4,6 +4,11 @@ labels: [ "deploy" ]
 body:
   - type: textarea
     attributes:
+      label: 🔑 Keyword
+      description: 브랜치 생성 시 사용할 키워드를 입력해 주세요.
+      placeholder: 예) add-ootd-api
+  - type: textarea
+    attributes:
       label: 🔄 배포 내용
       description: 이번 배포에 포함될 주요 변경 사항을 설명해주세요.
       placeholder: 신규 기능 추가, 버그 수정 등

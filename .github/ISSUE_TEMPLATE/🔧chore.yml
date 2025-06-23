@@ -4,6 +4,11 @@ labels: [ "chore" ]
 body:
   - type: textarea
     attributes:
+      label: 🔑 Keyword
+      description: 브랜치 생성 시 사용할 키워드를 입력해 주세요.
+      placeholder: 예) add-ootd-api
+  - type: textarea
+    attributes:
       label: 📝 설명
       description: 이번 작업의 목적과 내용을 설명해주세요.
       placeholder: CI/CD 설정 변경, 문서 업데이트 등
