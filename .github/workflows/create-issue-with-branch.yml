@@ -36,7 +36,19 @@ jobs:
           script: |
             const body = context.payload.issue.body;
             const keywordMatch = body.match(/### 🔑 Keyword\s*\n+([^\n]+)/);
-            const keyword = keywordMatch ? keywordMatch[1].trim() : null;
+            let keyword = keywordMatch ? keywordMatch[1].trim() : null;
+            if (keyword === null) {
+                keyword = `issue-${context.payload.issue.number}`;
+            } else {
+                keyword = keyword.toLowerCase();
+                keyword = keyword.replace(/[^a-z0-9-]+/g, '-');
+                keyword = keyword.replace(/-{2,}/g, '-');
+                keyword = keyword.replace(/^-+|-+$/g, '');
+                
+                if (!keyword) {
+                    keyword = `issue-${context.payload.issue.number}`;
+                }
+            }
             core.setOutput('keyword', keyword);
 
       - name: Sanitize Label
