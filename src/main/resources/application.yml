@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: weatherwear
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: postgresql
+  transaction:
+    default-timeout: 30
+
+springdoc:
+  swagger-ui:

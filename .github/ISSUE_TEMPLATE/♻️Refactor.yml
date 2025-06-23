@@ -1,0 +1,22 @@
+name: "♻️ Refactor"
+description: "코드 리팩토링"
+labels: [ "refactor" ]
+body:
+  - type: textarea
+    attributes:
+      label: ✏️ 설명
+      description: 리팩토링이 필요한 이유와 변경 사항을 설명해주세요.
+      placeholder: 코드 유지보수성 개선, 성능 최적화 등
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: ✅ 작업할 내용
+      description: 리팩토링해야 할 내용을 체크리스트 형태로 작성해 주세요.
+      placeholder: 코드 정리, 불필요한 함수 제거 등
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 📂 참고 사항
+      description: 관련된 이슈나 문서를 추가해주세요.

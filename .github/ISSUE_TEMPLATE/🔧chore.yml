@@ -1,0 +1,22 @@
+name: "🔧 Chore"
+description: "기타 작업"
+labels: [ "chore" ]
+body:
+  - type: textarea
+    attributes:
+      label: 📝 설명
+      description: 이번 작업의 목적과 내용을 설명해주세요.
+      placeholder: CI/CD 설정 변경, 문서 업데이트 등
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: ✅ 작업할 내용
+      description: 세부 작업 내용을 체크박스 형태로 작성해주세요.
+      placeholder: 필요하면 리스트로 작성해주세요.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 📄 참고 자료
+      description: 참고할 내용이 있다면 작성해 주세요.

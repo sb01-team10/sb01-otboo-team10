@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        use_sql_comments: false
+        highlight_sql: false
+        generate_statistics: false
+
+  logging:
+    level:
+      org:
+        hibernate:
+          sql: info  # 운영 환경에서는 SQL 로그를 info로 설정

@@ -1,0 +1,31 @@
+name: "🐞 Bug"
+description: "버그 수정"
+labels: [ "bug" ]
+body:
+  - type: textarea
+    attributes:
+      label: 🛠 버그 설명
+      description: 버그에 대한 자세한 설명을 작성해 주세요.
+      placeholder: 언제, 어떤 환경에서 발생했는지 상세히 적어주세요. (가능하면) Given-When-Then 형식으로 서술해주세요
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 🎯 예상 동작
+      description: 버그가 발생하지 않았을 경우의 예상되는 동작을 작성해 주세요.
+      placeholder: 정상적인 동작을 설명해주세요.
+  - type: textarea
+    attributes:
+      label: 🖥 재현 방법
+      description: 버그를 재현하는 방법을 단계별로 작성해 주세요.
+      placeholder: 1. 해당 페이지로 이동
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 📸 스크린샷
+      description: 버그 발생 화면을 캡처하여 첨부해주세요.
+  - type: textarea
+    attributes:
+      label: 📝 참고 사항
+      description: 관련 로그나 기타 참고할 내용을 작성해 주세요.

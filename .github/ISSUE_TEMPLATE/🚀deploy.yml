@@ -1,0 +1,22 @@
+name: "🚀 Deploy"
+description: "배포 관련 작업"
+labels: [ "deploy" ]
+body:
+  - type: textarea
+    attributes:
+      label: 🔄 배포 내용
+      description: 이번 배포에 포함될 주요 변경 사항을 설명해주세요.
+      placeholder: 신규 기능 추가, 버그 수정 등
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 🔍 체크리스트
+      description: 배포 전 확인해야 할 사항을 체크박스 형태로 작성해 주세요.
+      placeholder: 배포 브랜치 확인, 테스트 완료 여부 등
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 🚧 주의 사항
+      description: 배포 시 유의할 점이 있다면 작성해 주세요.
