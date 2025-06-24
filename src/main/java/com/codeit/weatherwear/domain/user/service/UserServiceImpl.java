@@ -87,4 +87,5 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.toProfileDto(user);
     }
+    
 }
