@@ -82,11 +82,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // JPA Json 타입 매핑용
+    implementation 'com.vladmihalcea:hibernate-types-60:2.20.0'
 }
 
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+

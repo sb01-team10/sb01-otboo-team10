@@ -1,17 +1,14 @@
 package com.codeit.weatherwear.domain.clothes.entity;
 
-import jakarta.persistence.CollectionTable;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -19,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -44,9 +42,10 @@ public class Attributes {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    @Builder.Default
-    @ElementCollection
-    @CollectionTable(name="selectable_values",joinColumns = @JoinColumn(name = "id"))
-    private List<String> selectableValues = new ArrayList<>();
+    @Type(value= ListArrayType.class)
+    @Column(
+        name = "selectable_values",
+        columnDefinition = "varchar(100)[]"
+    )
+    private List<String> selectableValues;
 }
