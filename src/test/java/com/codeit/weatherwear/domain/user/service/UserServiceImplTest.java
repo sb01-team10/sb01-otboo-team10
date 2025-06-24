@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.codeit.weatherwear.domain.user.dto.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.UserDto;
@@ -102,23 +103,24 @@ class UserServiceImplTest {
             .name("originalName")
             .build();
 
-        UserDto dto = new UserDto(
+        ProfileDto dto = new ProfileDto(
             userId,
-            null,
-            null,
             "newName",
-            Role.USER,
+            Gender.MALE,
             null,
-            false
+            null,
+            null,
+            null
         );
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(userMapper.toDto(user)).thenReturn(dto);
+        when(userMapper.toProfileDto(user)).thenReturn(dto);
 
         // when
-        UserDto result = userService.updateProfile(userId, request);
+        ProfileDto result = userService.updateProfile(userId, request);
 
         // then
         assertThat(result.getName()).isEqualTo("newName");
+        assertThat(result.getGender()).isEqualTo(Gender.MALE);
     }
 }

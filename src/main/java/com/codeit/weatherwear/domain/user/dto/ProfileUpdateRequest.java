@@ -1,5 +1,6 @@
 package com.codeit.weatherwear.domain.user.dto;
 
+import com.codeit.weatherwear.domain.location.dto.LocationDto;
 import com.codeit.weatherwear.domain.user.entity.Gender;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;

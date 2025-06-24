@@ -1,5 +1,6 @@
 package com.codeit.weatherwear.domain.user.service;
 
+import com.codeit.weatherwear.domain.user.dto.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.UserDto;
@@ -9,5 +10,5 @@ public interface UserService {
 
     UserDto create(UserCreateRequest userCreateRequest);
 
-    UserDto updateProfile(UUID userId, ProfileUpdateRequest profileUpdateRequest);
+    ProfileDto updateProfile(UUID userId, ProfileUpdateRequest profileUpdateRequest);
 }

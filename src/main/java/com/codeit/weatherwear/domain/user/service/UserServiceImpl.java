@@ -1,8 +1,9 @@
 package com.codeit.weatherwear.domain.user.service;
 
+import com.codeit.weatherwear.domain.location.dto.LocationDto;
 import com.codeit.weatherwear.domain.location.entity.Location;
 import com.codeit.weatherwear.domain.location.repository.LocationRepository;
-import com.codeit.weatherwear.domain.user.dto.LocationDto;
+import com.codeit.weatherwear.domain.user.dto.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.UserDto;
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDto updateProfile(UUID userId, ProfileUpdateRequest profileUpdateRequest) {
+    public ProfileDto updateProfile(UUID userId, ProfileUpdateRequest profileUpdateRequest) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new UserNotFoundException());
 
@@ -66,7 +67,7 @@ public class UserServiceImpl implements UserService {
             location = locationRepository.save(
                 new Location(
                     locationDto.latitude(),
-                    locationDto.logitude(),
+                    locationDto.longitude(),
                     locationDto.x(),
                     locationDto.y(),
                     locationName
@@ -84,6 +85,6 @@ public class UserServiceImpl implements UserService {
             profileUpdateRequest.temperatureSensitivity(),
             null);
 
-        return userMapper.toDto(user);
+        return userMapper.toProfileDto(user);
     }
 }

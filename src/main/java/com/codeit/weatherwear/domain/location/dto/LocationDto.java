@@ -1,10 +1,10 @@
-package com.codeit.weatherwear.domain.user.dto;
+package com.codeit.weatherwear.domain.location.dto;
 
 import java.util.List;
 
 public record LocationDto(
     Double latitude,
-    Double logitude,
+    Double longitude,
     Integer x,
     Integer y,
     List<String> locationNames
