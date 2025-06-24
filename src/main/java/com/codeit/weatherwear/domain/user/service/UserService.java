@@ -11,6 +11,8 @@ public interface UserService {
 
     UserDto create(UserCreateRequest userCreateRequest);
 
+    ProfileDto findProfile(UUID userId);
+
     ProfileDto updateProfile(UUID userId, ProfileUpdateRequest profileUpdateRequest);
 
     UUID updateLock(UUID userId, UserLockUpdateRequest userLockUpdateRequest);

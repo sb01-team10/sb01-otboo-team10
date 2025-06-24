@@ -54,6 +54,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    public ProfileDto findProfile(UUID userId) {
+        return null;
+    }
+
+    @Transactional
+    @Override
     public ProfileDto updateProfile(UUID userId, ProfileUpdateRequest profileUpdateRequest) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new UserNotFoundException());

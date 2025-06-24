@@ -162,4 +162,26 @@ class UserServiceImplTest {
         // then
         assertThat(user.isLocked()).isEqualTo(true);
     }
+
+    @Test
+    void 프로필_조회_성공() {
+        // given
+        UUID userId = UUID.randomUUID();
+
+        User user = User.builder()
+            .name("test")
+            .build();
+
+        ProfileDto dto = new ProfileDto(userId, "test", null, null, null, null, null);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userMapper.toProfileDto(user)).thenReturn(dto);
+
+        // when
+        ProfileDto result = userService.findProfile(userId);
+
+        // then
+        assertThat(result.getUserId()).isEqualTo(userId);
+        assertThat(result.getName()).isEqualTo("test");
+    }
 }
