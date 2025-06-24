@@ -18,6 +18,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -30,7 +32,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "users")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
@@ -84,4 +86,35 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
     private Location location;
+
+    @Builder
+    public User(UUID id,
+        String email,
+        String name,
+        String password,
+        Role role,
+        boolean locked,
+        Gender gender,
+        LocalDate birthDate,
+        int temperatureSensitivity,
+        String profileImageUrl,
+        List<OAuthProvider> linkedOAuthProviders,
+        Location location,
+        Instant createdAt,
+        Instant updatedAt) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.role = role == null ? Role.USER : role;
+        this.locked = locked;
+        this.gender = gender;
+        this.birthDate = birthDate;
+        this.temperatureSensitivity = temperatureSensitivity;
+        this.profileImageUrl = profileImageUrl;
+        this.linkedOAuthProviders = linkedOAuthProviders;
+        this.location = location;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }
