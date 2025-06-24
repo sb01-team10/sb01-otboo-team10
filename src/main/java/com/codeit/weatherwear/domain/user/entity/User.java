@@ -74,7 +74,7 @@ public class User {
     private LocalDate birthDate;
 
     @Column(name = "temperature_sensitivity")
-    private int temperatureSensitivity;
+    private Integer temperatureSensitivity;
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;
@@ -88,20 +88,11 @@ public class User {
     private Location location;
 
     @Builder
-    public User(UUID id,
-        String email,
-        String name,
-        String password,
-        Role role,
-        boolean locked,
-        Gender gender,
-        LocalDate birthDate,
-        int temperatureSensitivity,
-        String profileImageUrl,
+    public User(UUID id, String email, String name, String password,
+        Role role, boolean locked, Gender gender, LocalDate birthDate,
+        Integer temperatureSensitivity, String profileImageUrl,
         List<OAuthProvider> linkedOAuthProviders,
-        Location location,
-        Instant createdAt,
-        Instant updatedAt) {
+        Location location, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -116,5 +107,27 @@ public class User {
         this.location = location;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public void updateProfile(String name, Gender gender, LocalDate birthDate, Location location,
+        Integer temperatureSensitivity, String profileImageUrl) {
+        if (name != null) {
+            this.name = name;
+        }
+        if (gender != null) {
+            this.gender = gender;
+        }
+        if (birthDate != null) {
+            this.birthDate = birthDate;
+        }
+        if (location != null) {
+            this.location = location;
+        }
+        if (temperatureSensitivity != null) {
+            this.temperatureSensitivity = temperatureSensitivity;
+        }
+        if (profileImageUrl != null) {
+            this.profileImageUrl = profileImageUrl;
+        }
     }
 }
