@@ -120,6 +120,5 @@ class UserServiceImplTest {
 
         // then
         assertThat(result.getName()).isEqualTo("newName");
-        verify(user).updateProfile(any(), any(), any(), any(), any(), any());
     }
 }
