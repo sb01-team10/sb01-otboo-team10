@@ -13,8 +13,13 @@ import org.springframework.stereotype.Service;
 public class AttributesServiceImpl implements AttributesService{
 
     private final AttributesRepository attributesRepository;
-    private final AttributesMapper mapper;
+    private final AttributesMapper attributesMapper;
 
+    /**
+     * 속성 등록
+     * @param request 속성 생성 요청 DTO
+     * @return 속성DTO
+     */
     @Override
     public ClothesAttributeDefDto create(ClothesAttributeDefCreateRequest request) {
         if(attributesRepository.existsByName(request.definitionName())){
@@ -33,6 +38,6 @@ public class AttributesServiceImpl implements AttributesService{
             .build();
 
         Attributes save = attributesRepository.save(attributes);
-        return mapper.toDto(save);
+        return attributesMapper.toDto(save);
     }
 }

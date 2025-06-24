@@ -18,6 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AttributesController implements AttributesApi {
     private final AttributesService service;
 
+    /**
+     * 새로운 의상 속성을 등록합니다.
+     *
+     * @param dto 속성 정보(id,이름, 후보값들)
+     * @return 201 400
+     */
     @Override
     @PostMapping
     public ResponseEntity<ClothesAttributeDefDto> create(@RequestBody ClothesAttributeDefCreateRequest dto) {
