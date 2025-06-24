@@ -15,6 +15,7 @@ public class UserDto {
     private final UUID id;
     private final Instant createdAt;
     private final String email;
+    private final String name;
     private final Role role;
     private final List<OAuthProvider> linkedOAuthProviders;
     private final boolean locked;

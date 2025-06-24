@@ -1,5 +1,70 @@
 package com.codeit.weatherwear.domain.user.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.codeit.weatherwear.domain.user.dto.UserCreateRequest;
+import com.codeit.weatherwear.domain.user.dto.UserDto;
+import com.codeit.weatherwear.domain.user.entity.Role;
+import com.codeit.weatherwear.domain.user.entity.User;
+import com.codeit.weatherwear.domain.user.mapper.UserMapper;
+import com.codeit.weatherwear.domain.user.repository.UserRepository;
+import java.time.Instant;
+import java.util.UUID;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
+    @InjectMocks
+    private UserServiceImpl userService;
+
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private UserMapper userMapper;
+
+    @Test
+    void 회원가입_성공() {
+        // given
+        UserCreateRequest request = new UserCreateRequest("test", "test@test.com", "test");
+
+        when(userRepository.existsByEmail(request.email())).thenReturn(false);
+        when(userRepository.existsByName(request.name())).thenReturn(false);
+
+        User user = User.builder()
+            .name(request.name())
+            .email(request.email())
+            .password(request.password())
+            .locked(false)
+            .build();
+
+        UserDto dto = new UserDto(
+            UUID.randomUUID(),
+            Instant.now(),
+            request.email(),
+            request.name(),
+            user.getRole(),
+            user.getLinkedOAuthProviders(),
+            user.isLocked()
+        );
+
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userMapper.toDto(user)).thenReturn(dto);
+
+        // when
+        UserDto result = userService.create(request);
+
+        // then
+        assertThat(result.getEmail()).isEqualTo("test@test.com");
+        assertThat(result.getName()).isEqualTo("test");
+        assertThat(result.getRole()).isEqualTo(Role.USER);
+        verify(userRepository).save(any(User.class));
+    }
 }
