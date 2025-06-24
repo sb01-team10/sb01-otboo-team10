@@ -1,6 +1,6 @@
-package com.codeit.weatherwear.user.entity;
+package com.codeit.weatherwear.domain.user.entity;
 
-import com.codeit.weatherwear.location.entity.Location;
+import com.codeit.weatherwear.domain.location.entity.Location;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +18,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -30,7 +32,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "users")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
@@ -72,7 +74,7 @@ public class User {
     private LocalDate birthDate;
 
     @Column(name = "temperature_sensitivity")
-    private int temperatureSensitivity;
+    private Integer temperatureSensitivity;
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;
@@ -84,4 +86,52 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
     private Location location;
+
+    @Builder
+    public User(UUID id, String email, String name, String password,
+        Role role, boolean locked, Gender gender, LocalDate birthDate,
+        Integer temperatureSensitivity, String profileImageUrl,
+        List<OAuthProvider> linkedOAuthProviders,
+        Location location, Instant createdAt, Instant updatedAt) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.role = role == null ? Role.USER : role;
+        this.locked = locked;
+        this.gender = gender;
+        this.birthDate = birthDate;
+        this.temperatureSensitivity = temperatureSensitivity;
+        this.profileImageUrl = profileImageUrl;
+        this.linkedOAuthProviders = linkedOAuthProviders;
+        this.location = location;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public void updateProfile(String name, Gender gender, LocalDate birthDate, Location location,
+        Integer temperatureSensitivity, String profileImageUrl) {
+        if (name != null) {
+            this.name = name;
+        }
+        if (gender != null) {
+            this.gender = gender;
+        }
+        if (birthDate != null) {
+            this.birthDate = birthDate;
+        }
+        if (location != null) {
+            this.location = location;
+        }
+        if (temperatureSensitivity != null) {
+            this.temperatureSensitivity = temperatureSensitivity;
+        }
+        if (profileImageUrl != null) {
+            this.profileImageUrl = profileImageUrl;
+        }
+    }
+
+    public void updateLocked(boolean locked) {
+        this.locked = locked;
+    }
 }
