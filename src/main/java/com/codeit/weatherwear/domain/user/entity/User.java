@@ -1,6 +1,6 @@
-package com.codeit.weatherwear.user.entity;
+package com.codeit.weatherwear.domain.user.entity;
 
-import com.codeit.weatherwear.location.entity.Location;
+import com.codeit.weatherwear.domain.location.entity.Location;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

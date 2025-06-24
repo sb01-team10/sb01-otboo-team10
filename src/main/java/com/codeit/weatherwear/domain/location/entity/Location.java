@@ -1,4 +1,4 @@
-package com.codeit.weatherwear.location.entity;
+package com.codeit.weatherwear.domain.location.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

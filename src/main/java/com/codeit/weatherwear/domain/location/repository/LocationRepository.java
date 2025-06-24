@@ -1,6 +1,6 @@
-package com.codeit.weatherwear.location.repository;
+package com.codeit.weatherwear.domain.location.repository;
 
-import com.codeit.weatherwear.location.entity.Location;
+import com.codeit.weatherwear.domain.location.entity.Location;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

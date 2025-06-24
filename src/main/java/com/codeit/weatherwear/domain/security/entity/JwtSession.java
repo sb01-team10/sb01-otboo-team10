@@ -1,4 +1,4 @@
-package com.codeit.weatherwear.security.entity;
+package com.codeit.weatherwear.domain.security.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
