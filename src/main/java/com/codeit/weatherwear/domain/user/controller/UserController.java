@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,12 @@ public class UserController {
     public ResponseEntity<UserDto> createUser(
         @Valid @RequestBody UserCreateRequest userCreateRequest) {
         UserDto result = userService.create(userCreateRequest);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/{userId}/profiles")
+    ResponseEntity<ProfileDto> findProfile(@PathVariable UUID userId) {
+        ProfileDto result = userService.findProfile(userId);
         return ResponseEntity.ok(result);
     }
 

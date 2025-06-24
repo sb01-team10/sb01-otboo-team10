@@ -52,10 +52,12 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public ProfileDto findProfile(UUID userId) {
-        return null;
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException());
+        return userMapper.toProfileDto(user);
     }
 
     @Transactional
