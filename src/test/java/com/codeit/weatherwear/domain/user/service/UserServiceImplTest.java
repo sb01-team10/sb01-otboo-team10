@@ -6,14 +6,18 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.codeit.weatherwear.domain.user.dto.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.UserDto;
+import com.codeit.weatherwear.domain.user.entity.Gender;
 import com.codeit.weatherwear.domain.user.entity.Role;
 import com.codeit.weatherwear.domain.user.entity.User;
 import com.codeit.weatherwear.domain.user.exception.UserAlreadyExistsException;
 import com.codeit.weatherwear.domain.user.mapper.UserMapper;
 import com.codeit.weatherwear.domain.user.repository.UserRepository;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -79,5 +83,43 @@ class UserServiceImplTest {
 
         // when & then
         assertThrows(UserAlreadyExistsException.class, () -> userService.create(request));
+    }
+
+    @Test
+    void 프로필_업데이트_성공() {
+        //given
+        UUID userId = UUID.randomUUID();
+
+        ProfileUpdateRequest request = new ProfileUpdateRequest(
+            "newName",
+            Gender.MALE,
+            LocalDate.now(),
+            null,
+            null
+        );
+
+        User user = User.builder()
+            .name("originalName")
+            .build();
+
+        UserDto dto = new UserDto(
+            userId,
+            null,
+            null,
+            "newName",
+            Role.USER,
+            null,
+            false
+        );
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userMapper.toDto(user)).thenReturn(dto);
+
+        // when
+        UserDto result = userService.updateProfile(userId, request);
+
+        // then
+        assertThat(result.getName()).isEqualTo("newName");
+        verify(user).updateProfile(any(), any(), any(), any(), any(), any());
     }
 }
