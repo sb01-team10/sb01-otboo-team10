@@ -1,5 +1,6 @@
 package com.codeit.weatherwear.domain.clothes.controller;
 
+import com.codeit.weatherwear.domain.clothes.controller.api.AttributesApi;
 import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefCreateRequest;
 import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefDto;
 import com.codeit.weatherwear.domain.clothes.service.AttributesService;
@@ -14,9 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/clothes/attribute-defs")
-public class AttributesController {
+public class AttributesController implements AttributesApi {
     private final AttributesService service;
 
+    @Override
     @PostMapping
     public ResponseEntity<ClothesAttributeDefDto> create(@RequestBody ClothesAttributeDefCreateRequest dto) {
         ClothesAttributeDefDto createAttribute = service.create(dto);

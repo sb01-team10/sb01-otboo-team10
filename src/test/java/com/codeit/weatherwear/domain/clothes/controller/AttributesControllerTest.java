@@ -2,19 +2,16 @@ package com.codeit.weatherwear.domain.clothes.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefCreateRequest;
 import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefDto;
-import com.codeit.weatherwear.domain.clothes.entity.Attributes;
 import com.codeit.weatherwear.domain.clothes.repository.AttributesRepository;
 import com.codeit.weatherwear.domain.clothes.service.AttributesService;
 import com.codeit.weatherwear.global.exception.GlobalExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
