@@ -1,5 +1,20 @@
 spring:
+  # env
+  config:
+    import: optional:file:.env.dev[.properties]
+
+  # DB
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  #JPA
   jpa:
+    hibernate:
+      ddl-auto: validate
+    database: postgresql
     show-sql: false
     properties:
       hibernate:
@@ -7,14 +22,42 @@ spring:
         use_sql_comments: true
         highlight_sql: true
         generate_statistics: false
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/${DB_NAME}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+        open-in-view: false
+        cache:
+          use_second_level_cache: false
 
-  logging:
-    level:
-      org:
-        hibernate:
-          sql: debug  # 개발 환경에서는 SQL 로그를 debug로 설정
+  transaction:
+    default-timeout: 30
+
+# logging
+logging:
+  level:
+    root: info
+    com.codeit.weatherwear: debug
+    org:
+      hibernate:
+        sql: debug
+
+# port
+server:
+  port: ${SERVER_PORT:8080}
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+# swagger
+springdoc:
+  default-consumes-media-type: application/json   # 기본 요청 Content-Type
+  default-produces-media-type: application/json   # 기본 응답 Content-Type
+  swagger-ui:
+    operations-sorter: alpha    # API 메서드 알파벳 순 정렬
+    tags-sorter: alpha          # API 태그 알파벳 순 정렬
+    path: /swagger-ui
+    display-request-duration: true
+    doc-expansion: none
+    filter: true
+    show-extensions: true
