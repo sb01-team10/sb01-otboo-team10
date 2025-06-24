@@ -1,7 +1,7 @@
 package com.codeit.weatherwear.domain.clothes.controller;
 
-import static org.awaitility.Awaitility.given;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -49,8 +49,9 @@ public class AttributesControllerTest {
             UUID.randomUUID(),
             "색상",
             List.of("빨강", "파랑"));
-        ClothesAttributeDefDto dto = new ClothesAttributeDefDto(UUID.randomUUID(),
+        ClothesAttributeDefDto dto = new ClothesAttributeDefDto(request.definitionId(),
             "색상",List.of("빨강", "파랑"));
+
         given(service.create(any(ClothesAttributeDefCreateRequest.class))).willReturn(dto);
 
         //when
