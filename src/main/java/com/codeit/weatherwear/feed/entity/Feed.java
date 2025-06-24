@@ -64,4 +64,13 @@ public class Feed {
     this.commentCount = commentCount;
   }
 
+  public void increaseCommentCount() {
+    this.commentCount++;
+  }
+
+  public void decreaseCommentCount() {
+    this.commentCount--;
+  }
+
+
 }
