@@ -10,6 +10,8 @@ import java.time.Instant;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Table(name = "jwt_sessions")
@@ -21,6 +23,14 @@ public class JwtSession {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(updatable = false)
     private UUID id;
+
+    @CreatedDate
+    @Column(name = "created_at", updatable = false, insertable = false)
+    private Instant createdAt;
+    
+    @LastModifiedDate
+    @Column(name = "updated_at", updatable = true)
+    private Instant updatedAt;
 
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
     private UUID userId;
