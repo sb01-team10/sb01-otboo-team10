@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
+import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.response.UserDto;
 import com.codeit.weatherwear.domain.user.entity.Gender;
@@ -140,5 +141,25 @@ class UserServiceImplTest {
 
         // when & then
         assertThrows(UserNotFoundException.class, () -> userService.updateProfile(userId, request));
+    }
+
+    @Test
+    void 잠금상태_변경_성공() {
+        // given
+        UUID userId = UUID.randomUUID();
+
+        UserLockUpdateRequest request = new UserLockUpdateRequest(true);
+
+        User user = User.builder()
+            .locked(false)
+            .build();
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // when
+        userService.updateLock(userId, request);
+
+        // then
+        assertThat(user.isLocked()).isEqualTo(true);
     }
 }
