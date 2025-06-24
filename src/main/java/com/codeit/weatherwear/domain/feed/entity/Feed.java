@@ -1,11 +1,15 @@
 package com.codeit.weatherwear.domain.feed.entity;
 
+import com.codeit.weatherwear.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
@@ -35,6 +39,10 @@ public class Feed {
   @LastModifiedDate
   @Column(name = "updated_at")
   private Instant updatedAt;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "author_id", nullable = false)
+  private User author;
 
   @Column(name = "like_count")
   private int likeCount = 0;

@@ -1,5 +1,6 @@
 package com.codeit.weatherwear.domain.feed.entity;
 
+import com.codeit.weatherwear.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -38,17 +39,17 @@ public class FeedComment {
   @JoinColumn(name = "feed_id", nullable = false)
   private Feed feed;
 
-  // todo: 이건 추후 User 엔티티 추가되면 User로 변경할 예정
-  @Column(name = "user_id")
-  private UUID userId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "author_id", nullable = false)
+  private User author;
 
   @Column(name = "content")
   private String content;
 
   @Builder
-  private FeedComment(Feed feed, UUID userId, String content) {
+  private FeedComment(Feed feed, User author, String content) {
     this.feed = feed;
-    this.userId = userId;
+    this.author = author;
     this.content = content;
   }
 }
