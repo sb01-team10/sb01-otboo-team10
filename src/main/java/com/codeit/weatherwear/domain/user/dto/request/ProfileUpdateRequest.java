@@ -1,4 +1,4 @@
-package com.codeit.weatherwear.domain.user.dto;
+package com.codeit.weatherwear.domain.user.dto.request;
 
 import com.codeit.weatherwear.domain.location.dto.LocationDto;
 import com.codeit.weatherwear.domain.user.entity.Gender;

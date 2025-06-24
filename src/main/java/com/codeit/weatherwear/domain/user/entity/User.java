@@ -130,4 +130,8 @@ public class User {
             this.profileImageUrl = profileImageUrl;
         }
     }
+
+    public void updateLocked(boolean locked) {
+        this.locked = locked;
+    }
 }

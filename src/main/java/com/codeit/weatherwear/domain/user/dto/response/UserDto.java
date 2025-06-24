@@ -1,4 +1,4 @@
-package com.codeit.weatherwear.domain.user.dto;
+package com.codeit.weatherwear.domain.user.dto.response;
 
 import com.codeit.weatherwear.domain.user.entity.OAuthProvider;
 import com.codeit.weatherwear.domain.user.entity.Role;

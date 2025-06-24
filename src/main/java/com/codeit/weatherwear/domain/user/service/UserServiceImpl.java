@@ -3,10 +3,11 @@ package com.codeit.weatherwear.domain.user.service;
 import com.codeit.weatherwear.domain.location.dto.LocationDto;
 import com.codeit.weatherwear.domain.location.entity.Location;
 import com.codeit.weatherwear.domain.location.repository.LocationRepository;
-import com.codeit.weatherwear.domain.user.dto.ProfileDto;
-import com.codeit.weatherwear.domain.user.dto.ProfileUpdateRequest;
-import com.codeit.weatherwear.domain.user.dto.UserCreateRequest;
-import com.codeit.weatherwear.domain.user.dto.UserDto;
+import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
+import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
+import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
+import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
+import com.codeit.weatherwear.domain.user.dto.response.UserDto;
 import com.codeit.weatherwear.domain.user.entity.User;
 import com.codeit.weatherwear.domain.user.exception.UserAlreadyExistsException;
 import com.codeit.weatherwear.domain.user.exception.UserNotFoundException;
@@ -87,5 +88,15 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.toProfileDto(user);
     }
-    
+
+    @Transactional
+    @Override
+    public UUID updateLock(UUID userId, UserLockUpdateRequest userLockUpdateRequest) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException());
+
+        user.updateLocked(userLockUpdateRequest.locked());
+
+        return user.getId();
+    }
 }

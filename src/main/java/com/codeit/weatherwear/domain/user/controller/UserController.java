@@ -1,9 +1,10 @@
 package com.codeit.weatherwear.domain.user.controller;
 
-import com.codeit.weatherwear.domain.user.dto.ProfileDto;
-import com.codeit.weatherwear.domain.user.dto.ProfileUpdateRequest;
-import com.codeit.weatherwear.domain.user.dto.UserCreateRequest;
-import com.codeit.weatherwear.domain.user.dto.UserDto;
+import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
+import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
+import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
+import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
+import com.codeit.weatherwear.domain.user.dto.response.UserDto;
 import com.codeit.weatherwear.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import java.util.UUID;
@@ -42,6 +43,13 @@ public class UserController {
         @RequestPart(required = false) MultipartFile profileImage) {
         // TODO: S3 세팅 후 프로필 이미지 업데이트 추가
         ProfileDto result = userService.updateProfile(userId, profileUpdateRequest);
+        return ResponseEntity.ok(result);
+    }
+
+    @PatchMapping("/{userId}/lock")
+    ResponseEntity<UUID> updateLock(@PathVariable UUID userId,
+        @RequestBody UserLockUpdateRequest userLockUpdateRequest) {
+        UUID result = userService.updateLock(userId, userLockUpdateRequest);
         return ResponseEntity.ok(result);
     }
 }
