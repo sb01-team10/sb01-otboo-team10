@@ -1,6 +1,6 @@
-package com.codeit.weatherwear.feed.repository;
+package com.codeit.weatherwear.domain.feed.repository;
 
-import com.codeit.weatherwear.feed.entity.FeedLike;
+import com.codeit.weatherwear.domain.feed.entity.FeedLike;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

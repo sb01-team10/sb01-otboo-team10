@@ -2,7 +2,8 @@ package com.codeit.weatherwear.feed.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.codeit.weatherwear.feed.entity.Feed;
+import com.codeit.weatherwear.domain.feed.entity.Feed;
+import com.codeit.weatherwear.domain.feed.repository.FeedRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
