@@ -13,7 +13,7 @@ spring:
   #JPA
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     database: postgresql
     show-sql: false
     properties:

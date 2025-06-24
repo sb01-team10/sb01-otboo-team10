@@ -1,15 +1,12 @@
-package com.codeit.weatherwear.feed.reposiroty;
+package com.codeit.weatherwear.feed.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.codeit.weatherwear.feed.entity.Feed;
-import com.codeit.weatherwear.feed.repository.FeedRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
