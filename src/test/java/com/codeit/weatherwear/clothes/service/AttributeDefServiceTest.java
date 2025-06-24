@@ -1,15 +1,17 @@
 package com.codeit.weatherwear.clothes.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.awaitility.Awaitility.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.codeit.weatherwear.clothes.attributes.dto.ClothesAttributeDefCreateRequest;
-import com.codeit.weatherwear.clothes.attributes.entity.Attributes;
+import com.codeit.weatherwear.clothes.dto.ClothesAttributeDefCreateRequest;
+import com.codeit.weatherwear.clothes.dto.ClothesAttributeDefDto;
+import com.codeit.weatherwear.clothes.entity.Attributes;
+import com.codeit.weatherwear.clothes.mapper.AttributesMapper;
+import com.codeit.weatherwear.clothes.repository.AttributesRepository;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
@@ -38,22 +40,24 @@ public class AttributeDefServiceTest {
         @Test
         void createAttributes_Success(){
             //given
-            ClothesAttributeDefCreateRequest dto= new ClothesAttributeDefCreateRequest(
+            ClothesAttributeDefCreateRequest request= new ClothesAttributeDefCreateRequest(
                 UUID.randomUUID(),
                 "색상",
                 List.of("빨강", "파랑"));
             Attributes attributes = Attributes.builder()
                 .id(UUID.randomUUID())
                 .createdAt(Instant.now())
+                .updatedAt(Instant.now())
                 .name("색상")
-                .selectable_values(List.of("빨강","파랑")).build();
+                .selectableValues(List.of("빨강","파랑")).build();
+            ClothesAttributeDefDto dto= new ClothesAttributeDefDto(attributes.getId(),attributes.getName(),attributes.getSelectableValues());
             given(attributesRepository.save(any(Attributes.class))).willReturn(attributes);
             given(attributesMapper.toDto(any(Attributes.class))).willReturn(dto);
             //when
             ClothesAttributeDefDto result=sut.create(request);
             //then
-            assertThat(result.getName()).isEqualTo("색상");
-            assertThat(result.getSelectableValues()).containExactly("빨강", "파랑");
+            assertThat(result.name()).isEqualTo("색상");
+            assertThat(result.selectableValues()).containsExactly("빨강", "파랑");
             verify(attributesRepository, times(1)).save(any(Attributes.class));
         }
     }

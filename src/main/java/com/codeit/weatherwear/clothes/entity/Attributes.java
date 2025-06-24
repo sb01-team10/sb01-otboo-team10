@@ -1,4 +1,4 @@
-package com.codeit.weatherwear.clothes.attributes.entity;
+package com.codeit.weatherwear.clothes.entity;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -45,7 +45,8 @@ public class Attributes {
     private String name;
 
     @Column(nullable = false)
+    @Builder.Default
     @ElementCollection
     @CollectionTable(name="selectable_values",joinColumns = @JoinColumn(name = "id"))
-    private List<String> selectable_values = new ArrayList<>();
+    private List<String> selectableValues = new ArrayList<>();
 }

@@ -1,4 +1,4 @@
-package com.codeit.weatherwear.clothes.attributes.dto;
+package com.codeit.weatherwear.clothes.dto;
 
 
 import java.util.List;
