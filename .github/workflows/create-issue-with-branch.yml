@@ -44,7 +44,7 @@ jobs:
                 keyword = keyword.replace(/[^a-z0-9-]+/g, '-');
                 keyword = keyword.replace(/-{2,}/g, '-');
                 keyword = keyword.replace(/^-+|-+$/g, '');
-                
+            
                 if (!keyword) {
                     keyword = `issue-${context.payload.issue.number}`;
                 }
