@@ -1,6 +1,5 @@
 package com.codeit.weatherwear.domain.clothes.entity;
 
-import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -16,7 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -42,10 +42,7 @@ public class Attributes {
     @Column(nullable = false)
     private String name;
 
-    @Type(value= ListArrayType.class)
-    @Column(
-        name = "selectable_values",
-        columnDefinition = "varchar(100)[]"
-    )
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
     private List<String> selectableValues;
 }
