@@ -1,6 +1,7 @@
 package com.codeit.weatherwear.domain.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -9,6 +10,7 @@ import com.codeit.weatherwear.domain.user.dto.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.UserDto;
 import com.codeit.weatherwear.domain.user.entity.Role;
 import com.codeit.weatherwear.domain.user.entity.User;
+import com.codeit.weatherwear.domain.user.exception.UserAlreadyExistsException;
 import com.codeit.weatherwear.domain.user.mapper.UserMapper;
 import com.codeit.weatherwear.domain.user.repository.UserRepository;
 import java.time.Instant;
@@ -66,5 +68,16 @@ class UserServiceImplTest {
         assertThat(result.getName()).isEqualTo("test");
         assertThat(result.getRole()).isEqualTo(Role.USER);
         verify(userRepository).save(any(User.class));
+    }
+
+    @Test
+    void 회원가입_실패() {
+        // given
+        UserCreateRequest request = new UserCreateRequest("test", "test@test.com", "test");
+
+        when(userRepository.existsByName(request.name())).thenReturn(true);
+
+        // when & then
+        assertThrows(UserAlreadyExistsException.class, () -> userService.create(request));
     }
 }
