@@ -1,4 +1,4 @@
-package com.codeit.weatherwear.clothes.service;
+package com.codeit.weatherwear.domain.clothes.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
