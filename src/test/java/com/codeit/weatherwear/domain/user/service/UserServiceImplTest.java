@@ -6,14 +6,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.codeit.weatherwear.domain.user.dto.ProfileDto;
-import com.codeit.weatherwear.domain.user.dto.ProfileUpdateRequest;
-import com.codeit.weatherwear.domain.user.dto.UserCreateRequest;
-import com.codeit.weatherwear.domain.user.dto.UserDto;
+import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
+import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
+import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
+import com.codeit.weatherwear.domain.user.dto.response.UserDto;
 import com.codeit.weatherwear.domain.user.entity.Gender;
 import com.codeit.weatherwear.domain.user.entity.Role;
 import com.codeit.weatherwear.domain.user.entity.User;
 import com.codeit.weatherwear.domain.user.exception.UserAlreadyExistsException;
+import com.codeit.weatherwear.domain.user.exception.UserNotFoundException;
 import com.codeit.weatherwear.domain.user.mapper.UserMapper;
 import com.codeit.weatherwear.domain.user.repository.UserRepository;
 import java.time.Instant;
@@ -122,5 +123,22 @@ class UserServiceImplTest {
         // then
         assertThat(result.getName()).isEqualTo("newName");
         assertThat(result.getGender()).isEqualTo(Gender.MALE);
+    }
+
+    @Test
+    void 프로필_업데이트_실패() {
+        // given
+        UUID userId = UUID.randomUUID();
+        ProfileUpdateRequest request = new ProfileUpdateRequest(
+            null,
+            null,
+            null,
+            null,
+            null
+        );
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(UserNotFoundException.class, () -> userService.updateProfile(userId, request));
     }
 }
