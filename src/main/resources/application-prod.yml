@@ -1,5 +1,20 @@
 spring:
+  # env
+  config:
+    import: optional:file:.env.prod[.properties]
+
+  # DB
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  #JPA
   jpa:
+    hibernate:
+      ddl-auto: validate
+    database: postgresql
     show-sql: false
     properties:
       hibernate:
@@ -7,9 +22,27 @@ spring:
         use_sql_comments: false
         highlight_sql: false
         generate_statistics: false
+        open-in-view: false
+        cache:
+          use_second_level_cache: false
 
-  logging:
-    level:
-      org:
-        hibernate:
-          sql: info  # 운영 환경에서는 SQL 로그를 info로 설정
+  transaction:
+    default-timeout: 30
+
+# logging
+logging:
+  level:
+    org:
+      hibernate:
+        sql: info
+
+# port
+server:
+  port: ${SERVER_PORT:8080}
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
