@@ -1,19 +1,22 @@
 package com.codeit.weatherwear.clothes.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.codeit.weatherwear.clothes.dto.ClothesAttributeDefCreateRequest;
-import com.codeit.weatherwear.clothes.dto.ClothesAttributeDefDto;
-import com.codeit.weatherwear.clothes.entity.Attributes;
-import com.codeit.weatherwear.clothes.mapper.AttributesMapper;
-import com.codeit.weatherwear.clothes.repository.AttributesRepository;
+import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefCreateRequest;
+import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefDto;
+import com.codeit.weatherwear.domain.clothes.entity.Attributes;
+import com.codeit.weatherwear.domain.clothes.mapper.AttributesMapper;
+import com.codeit.weatherwear.domain.clothes.repository.AttributesRepository;
+import com.codeit.weatherwear.domain.clothes.service.AttributesServiceImpl;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -37,10 +40,11 @@ public class AttributeDefServiceTest {
     @Nested
     @DisplayName("속성 등록 테스트")
     class RegisterAttributeDef {
+
         @Test
-        void createAttributes_Success(){
+        void createAttributes_Success() {
             //given
-            ClothesAttributeDefCreateRequest request= new ClothesAttributeDefCreateRequest(
+            ClothesAttributeDefCreateRequest request = new ClothesAttributeDefCreateRequest(
                 UUID.randomUUID(),
                 "색상",
                 List.of("빨강", "파랑"));
@@ -49,17 +53,34 @@ public class AttributeDefServiceTest {
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
                 .name("색상")
-                .selectableValues(List.of("빨강","파랑")).build();
-            ClothesAttributeDefDto dto= new ClothesAttributeDefDto(attributes.getId(),attributes.getName(),attributes.getSelectableValues());
+                .selectableValues(List.of("빨강", "파랑")).build();
+            ClothesAttributeDefDto dto = new ClothesAttributeDefDto(attributes.getId(),
+                attributes.getName(), attributes.getSelectableValues());
             given(attributesRepository.save(any(Attributes.class))).willReturn(attributes);
             given(attributesMapper.toDto(any(Attributes.class))).willReturn(dto);
             //when
-            ClothesAttributeDefDto result=sut.create(request);
+            ClothesAttributeDefDto result = sut.create(request);
             //then
             assertThat(result.name()).isEqualTo("색상");
             assertThat(result.selectableValues()).containsExactly("빨강", "파랑");
             verify(attributesRepository, times(1)).save(any(Attributes.class));
         }
-    }
 
+        @Test
+        @DisplayName("속성 등록 실패 - 중복 속성 입력")
+        void createAttributes_Fail() {
+            //given
+            given(attributesRepository.existsByName("사이즈")).willReturn(true);
+            ClothesAttributeDefCreateRequest request = new ClothesAttributeDefCreateRequest(
+                UUID.randomUUID(),
+                "사이즈",
+                List.of("L")
+            );
+            //when
+            //then
+            assertThatThrownBy(() -> sut.create(request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미 등록된 속성입니다.");
+        }
+    }
 }

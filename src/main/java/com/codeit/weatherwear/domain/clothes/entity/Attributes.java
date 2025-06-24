@@ -1,4 +1,4 @@
-package com.codeit.weatherwear.clothes.entity;
+package com.codeit.weatherwear.domain.clothes.entity;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
