@@ -2,6 +2,7 @@ package com.codeit.weatherwear.security.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -12,11 +13,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "jwt_sessions")
 @Getter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class JwtSession {
 
     @Id
@@ -25,9 +28,9 @@ public class JwtSession {
     private UUID id;
 
     @CreatedDate
-    @Column(name = "created_at", updatable = false, insertable = false)
+    @Column(name = "created_at", updatable = false)
     private Instant createdAt;
-    
+
     @LastModifiedDate
     @Column(name = "updated_at", updatable = true)
     private Instant updatedAt;
