@@ -1,5 +1,6 @@
-package com.codeit.weatherwear.feed.entity;
+package com.codeit.weatherwear.domain.ootd.entity;
 
+import com.codeit.weatherwear.domain.feed.entity.Feed;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -17,14 +18,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "feed_comment")
+@Table(name = "ootd_clothes")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FeedComment {
+public class OotdClothes {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,21 +36,21 @@ public class FeedComment {
   @Column(name = "created_at", updatable = false)
   private Instant createdAt;
 
+  @LastModifiedDate
+  @Column(name = "updated_at")
+  private Instant updatedAt;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "feed_id", nullable = false)
   private Feed feed;
 
-  // todo: 이건 추후 User 엔티티 추가되면 User로 변경할 예정
-  @Column(name = "user_id")
-  private UUID userId;
-
-  @Column(name = "content")
-  private String content;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "ootd_id", nullable = false)
+  private Ootd ootd;
 
   @Builder
-  private FeedComment(Feed feed, UUID userId, String content) {
+  private OotdClothes(Feed feed, Ootd ootd) {
     this.feed = feed;
-    this.userId = userId;
-    this.content = content;
+    this.ootd = ootd;
   }
 }

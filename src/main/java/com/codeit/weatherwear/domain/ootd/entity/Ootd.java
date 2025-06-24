@@ -1,11 +1,16 @@
-package com.codeit.weatherwear.feed.entity;
+package com.codeit.weatherwear.domain.ootd.entity;
 
+import com.codeit.weatherwear.domain.feed.entity.Feed;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
@@ -18,11 +23,11 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "feed")
+@Table(name = "ootd")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Feed {
+public class Ootd {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,41 +41,12 @@ public class Feed {
   @Column(name = "updated_at")
   private Instant updatedAt;
 
-  @Column(name = "like_count")
-  private int likeCount = 0;
-
-  @Column(name = "comment_count")
-  private int commentCount = 0;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "feed_id", nullable = false)
+  private Feed feed;
 
   @Builder
-  private Feed(int likeCount, int commentCount) {
-    this.likeCount = likeCount;
-    this.commentCount = commentCount;
+  private Ootd(Feed feed) {
+    this.feed = feed;
   }
-
-  public void updateLikeCount(int likeCount) {
-    this.likeCount = likeCount;
-  }
-
-  public void increaseLikeCount() {
-    this.likeCount++;
-  }
-
-  public void decreaseLikeCount() {
-    this.likeCount--;
-  }
-
-  public void updateCommentCount(int commentCount) {
-    this.commentCount = commentCount;
-  }
-
-  public void increaseCommentCount() {
-    this.commentCount++;
-  }
-
-  public void decreaseCommentCount() {
-    this.commentCount--;
-  }
-
-
 }

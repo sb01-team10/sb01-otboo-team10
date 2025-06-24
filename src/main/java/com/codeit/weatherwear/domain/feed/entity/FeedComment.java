@@ -1,5 +1,6 @@
-package com.codeit.weatherwear.feed.entity;
+package com.codeit.weatherwear.domain.feed.entity;
 
+import com.codeit.weatherwear.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -17,15 +18,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "feed_like")
+@Table(name = "feed_comment")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FeedLike {
+public class FeedComment {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,21 +35,21 @@ public class FeedLike {
   @Column(name = "created_at", updatable = false)
   private Instant createdAt;
 
-  @LastModifiedDate
-  @Column(name = "updated_at")
-  private Instant updatedAt;
-
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "feed_id", nullable = false)
   private Feed feed;
 
-  // todo: 이건 추후 User 엔티티 추가되면 User로 변경할 예정
-  @Column(name = "user_id")
-  private UUID userId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "author_id", nullable = false)
+  private User author;
+
+  @Column(name = "content")
+  private String content;
 
   @Builder
-  private FeedLike(UUID userId, Feed feed) {
-    this.userId = userId;
+  private FeedComment(Feed feed, User author, String content) {
     this.feed = feed;
+    this.author = author;
+    this.content = content;
   }
 }
