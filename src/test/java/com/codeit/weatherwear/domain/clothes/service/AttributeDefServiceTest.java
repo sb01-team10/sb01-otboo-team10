@@ -110,5 +110,27 @@ public class AttributeDefServiceTest {
             assertThat(result.selectableValues()).containsExactly("빨강","노랑");
             verify(attributesRepository, times(1)).findById(id);
         }
+
+        @Test
+        @DisplayName("수정 실패- 이름 불일치")
+        void updateAttributes_Fail() {
+            //given
+            UUID id = UUID.randomUUID();
+            Attributes attributes = Attributes.builder()
+                .id(UUID.randomUUID())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .name("색상")
+                .selectableValues(new ArrayList<>(List.of("빨강", "파랑"))).build();
+            given(attributesRepository.findById(id)).willReturn(Optional.of(attributes));
+
+            ClothesAttributeDefUpdateRequest request=new ClothesAttributeDefUpdateRequest("사이즈",List.of("S","L"));
+            //when
+            //then
+            assertThatThrownBy(() -> sut.update(id, request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("해당 속성명이 일치하지 않습니다.");
+            verify(attributesRepository, times(1)).findById(id);
+        }
     }
 }
