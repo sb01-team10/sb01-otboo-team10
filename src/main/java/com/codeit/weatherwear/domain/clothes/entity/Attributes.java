@@ -50,7 +50,14 @@ public class Attributes {
     private List<String> selectableValues;
 
     public void update(ClothesAttributeDefUpdateRequest request) {
-        this.name = request.name();
+        if (!this.name.equals(request.name())) {
+            throw new IllegalArgumentException("해당 속성명이 일치하지 않습니다.");
+        }
+        List<String> values = request.selectValues();
+        if(values.size() != values.stream().distinct().count()) {
+            throw new IllegalArgumentException("중복 선택값이 존재합니다.");
+        }
+
         this.selectableValues.clear();
         this.selectableValues.addAll(request.selectValues());
         this.updatedAt = Instant.now();
