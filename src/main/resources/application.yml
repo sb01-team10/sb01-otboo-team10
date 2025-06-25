@@ -20,3 +20,7 @@ spring:
 
 server:
   shutdown: graceful
+
+weather:
+  api-url: ${WEATHER_INFO_API_URL}
+  api-service-key: ${WEATHER_INFO_SERVICE_KEY}
