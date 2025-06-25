@@ -27,6 +27,9 @@ public class FollowService {
     User followee = userRepository.findById(request.followeeId())
         .orElseThrow(UserNotFoundException::new);
 
+    //예외 비즈니스 로직은 추후 작성 예정
+    //ex) 자기 자신을 팔로우 할 수 없음, 이미 팔로우 한 유저를 팔로우 할 수 없음
+
     Follow follow = followRepository.save(Follow.create(followee, follower));
 
     FollowDto dto = FollowDto.from(follow);
