@@ -14,6 +14,7 @@ import com.codeit.weatherwear.domain.clothes.mapper.AttributesMapper;
 import com.codeit.weatherwear.domain.clothes.repository.AttributesRepository;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -79,6 +80,35 @@ public class AttributeDefServiceTest {
             assertThatThrownBy(() -> sut.create(request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("이미 등록된 속성입니다.");
+        }
+    }
+
+    @Nested
+    @DisplayName("속성 수정 테스트")
+    class UpdateAttributeDef {
+
+        @Test
+        @DisplayName("수정 성공")
+        void updateAttributes_Success() {
+            //given
+            UUID id = UUID.randomUUID();
+            Attributes attributes = Attributes.builder()
+                .id(UUID.randomUUID())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .name("색상")
+                .selectableValues(List.of("빨강", "파랑")).build();
+            given(attributesRepository.findById(id)).willReturn(Optional.of(attributes));
+
+            ClothesAttributeDefUpdateRequest request=new ClothesAttributeDefUpdateRequest("색상",List.of("빨강","노랑"));
+            given(attributesMapper.toDto(attributes))
+                .willReturn(new ClothesAttributeDefDto(id, "색상", List.of("빨강", "노랑")));
+            //when
+            ClothesAttributeDefDto result=sut.update(id, request);
+            //then
+            assertThat(result.name()).isEqualTo("색상");
+            assertThat(result.selectableValues()).containsExactly("빨강","노랑");
+            verify(attributesRepository, times(1)).findById(id);
         }
     }
 }
