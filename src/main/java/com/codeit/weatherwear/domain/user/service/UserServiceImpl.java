@@ -8,17 +8,22 @@ import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserRoleUpdateRequest;
+import com.codeit.weatherwear.domain.user.dto.request.UserSortDirection;
 import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.response.UserDto;
+import com.codeit.weatherwear.domain.user.dto.response.UserPageResponse;
+import com.codeit.weatherwear.domain.user.entity.Role;
 import com.codeit.weatherwear.domain.user.entity.User;
 import com.codeit.weatherwear.domain.user.exception.UserAlreadyExistsException;
 import com.codeit.weatherwear.domain.user.exception.UserNotFoundException;
 import com.codeit.weatherwear.domain.user.mapper.UserMapper;
 import com.codeit.weatherwear.domain.user.repository.UserRepository;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -131,4 +136,48 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.toUserDto(user);
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public UserPageResponse<UserDto> searchUsers(String cursor, UUID idAfter, int limit,
+        String sortBy, UserSortDirection sortDirection, String emailLike, Role roleEqual,
+        Boolean locked) {
+
+        Slice<User> slice = userRepository.searchUsers(cursor, idAfter, limit, sortBy,
+            sortDirection, emailLike, roleEqual, locked);
+
+        List<User> users = slice.getContent();
+        List<UserDto> userDtos = users.stream()
+            .map(userMapper::toUserDto)
+            .toList();
+
+        // 커서 구하기
+        User lastUser = (users.size() > 0) ? null : users.get(users.size() - 1);
+        Object nextCursor = null;
+        UUID nextIdAfter = null;
+        if (lastUser != null) {
+            switch (sortBy) {
+                case "email":
+                    nextCursor = lastUser.getEmail();
+                    break;
+                case "createdAt":
+                    nextCursor = lastUser.getCreatedAt();
+                    break;
+                default:
+                    throw new IllegalArgumentException("지원하지 않는 정렬 기준입니다.");
+            }
+            nextIdAfter = lastUser.getId();
+        }
+
+        return new UserPageResponse<>(
+            userDtos,
+            nextCursor,
+            nextIdAfter,
+            slice.hasNext(),
+            userRepository.getTotalCount(emailLike, roleEqual, locked),
+            sortBy,
+            sortDirection.name()
+        );
+    }
+
 }

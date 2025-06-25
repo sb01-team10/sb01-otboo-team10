@@ -5,8 +5,11 @@ import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserRoleUpdateRequest;
+import com.codeit.weatherwear.domain.user.dto.request.UserSortDirection;
 import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.response.UserDto;
+import com.codeit.weatherwear.domain.user.dto.response.UserPageResponse;
+import com.codeit.weatherwear.domain.user.entity.Role;
 import com.codeit.weatherwear.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import java.util.UUID;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +46,22 @@ public class UserController {
     @GetMapping("/{userId}/profiles")
     ResponseEntity<ProfileDto> findProfile(@PathVariable UUID userId) {
         ProfileDto result = userService.findProfile(userId);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("")
+    ResponseEntity<UserPageResponse<UserDto>> searchUsers(
+        @RequestParam(required = false) String cursor,
+        @RequestParam(required = false) UUID idAfter,
+        @RequestParam int limit,
+        @RequestParam String sortBy,
+        @RequestParam UserSortDirection sortDirection,
+        @RequestParam(required = false) String emailLike,
+        @RequestParam(required = false) Role roleEqual,
+        @RequestParam(required = false) Boolean locked
+    ) {
+        UserPageResponse<UserDto> result = userService.searchUsers(cursor, idAfter, limit, sortBy,
+            sortDirection, emailLike, roleEqual, locked);
         return ResponseEntity.ok(result);
     }
 
