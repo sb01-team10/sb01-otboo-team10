@@ -78,6 +78,9 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'com.h2database:h2'
 
+    // Mongo DB
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
     //mapstruct
     implementation 'org.mapstruct:mapstruct:1.6.3'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
