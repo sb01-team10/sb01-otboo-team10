@@ -37,7 +37,7 @@ public class AttributesController implements AttributesApi {
     }
 
     /**
-     * 의상 속성을 등록합니다.
+     * 의상 속성을 수정합니다.
      *
      * @param definitionId,request 속성 정보(이름, 후보값들)
      * @return 200 400
