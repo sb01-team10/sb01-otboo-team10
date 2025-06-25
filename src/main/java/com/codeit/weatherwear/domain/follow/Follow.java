@@ -1,6 +1,7 @@
 package com.codeit.weatherwear.domain.follow;
 
-import com.codeit.weatherwear.user.entity.User;
+
+import com.codeit.weatherwear.domain.user.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

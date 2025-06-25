@@ -1,5 +1,6 @@
 package com.codeit.weatherwear.domain.clothes.entity;
 
+import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefUpdateRequest;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,4 +48,11 @@ public class Attributes {
     @Type(JsonType.class)
     @Column(name = "selectable_values", columnDefinition = "jsonb")
     private List<String> selectableValues;
+
+    public void update(ClothesAttributeDefUpdateRequest request) {
+        this.name = request.name();
+        this.selectableValues.clear();
+        this.selectableValues.addAll(request.selectValues());
+        this.updatedAt = Instant.now();
+    }
 }

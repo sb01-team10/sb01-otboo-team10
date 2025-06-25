@@ -2,11 +2,13 @@ package com.codeit.weatherwear.domain.clothes.service;
 
 import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefCreateRequest;
 import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefDto;
+import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefUpdateRequest;
 import com.codeit.weatherwear.domain.clothes.entity.Attributes;
 import com.codeit.weatherwear.domain.clothes.mapper.AttributesMapper;
 import com.codeit.weatherwear.domain.clothes.repository.AttributesRepository;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +28,7 @@ public class AttributesServiceImpl implements AttributesService{
     @Override
     @Transactional
     public ClothesAttributeDefDto create(ClothesAttributeDefCreateRequest request) {
-        if(attributesRepository.existsByName(request.definitionName())){
+        if(attributesRepository.existsByName(request.name())){
             throw new IllegalArgumentException("이미 등록된 속성입니다.");
         }
         if(request.selectValues().isEmpty()){
@@ -38,11 +40,22 @@ public class AttributesServiceImpl implements AttributesService{
         }
 
         Attributes attributes = Attributes.builder()
-            .name(request.definitionName())
+            .name(request.name())
             .selectableValues(request.selectValues())
             .build();
 
         Attributes save = attributesRepository.save(attributes);
         return attributesMapper.toDto(save);
     }
+
+    @Override
+    @Transactional
+    public ClothesAttributeDefDto update(UUID id, ClothesAttributeDefUpdateRequest request) {
+        Attributes attributes = attributesRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 속성입니다"));
+        attributes.update(request);
+        return attributesMapper.toDto(attributes);
+    }
+
+
 }

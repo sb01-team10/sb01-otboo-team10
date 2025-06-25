@@ -9,10 +9,12 @@ import static org.mockito.Mockito.verify;
 
 import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefCreateRequest;
 import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefDto;
+import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefUpdateRequest;
 import com.codeit.weatherwear.domain.clothes.entity.Attributes;
 import com.codeit.weatherwear.domain.clothes.mapper.AttributesMapper;
 import com.codeit.weatherwear.domain.clothes.repository.AttributesRepository;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -95,7 +97,7 @@ public class AttributeDefServiceTest {
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
                 .name("색상")
-                .selectableValues(List.of("빨강", "파랑")).build();
+                .selectableValues(new ArrayList<>(List.of("빨강", "파랑"))).build();
             given(attributesRepository.findById(id)).willReturn(Optional.of(attributes));
 
             ClothesAttributeDefUpdateRequest request=new ClothesAttributeDefUpdateRequest("색상",List.of("빨강","노랑"));
