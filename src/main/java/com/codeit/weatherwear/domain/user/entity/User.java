@@ -88,7 +88,7 @@ public class User {
     private Location location;
 
     @Builder
-    public User(UUID id, String email, String name, String password,
+    private User(UUID id, String email, String name, String password,
         Role role, boolean locked, Gender gender, LocalDate birthDate,
         Integer temperatureSensitivity, String profileImageUrl,
         List<OAuthProvider> linkedOAuthProviders,
