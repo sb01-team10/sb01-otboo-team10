@@ -79,6 +79,12 @@ public class AttributesControllerTest {
             .build();
         given(repository.findById(id)).willReturn(Optional.of(attributes));
         ClothesAttributeDefUpdateRequest request = new ClothesAttributeDefUpdateRequest("색상", List.of("빨강", "노랑"));
+
+        ClothesAttributeDefDto dto = new ClothesAttributeDefDto(UUID.randomUUID(),
+            "색상", List.of("빨강", "노랑"));
+
+        given(service.update(id,request)).willReturn(dto);
+
         //when
         //then
         mockMvc.perform(
