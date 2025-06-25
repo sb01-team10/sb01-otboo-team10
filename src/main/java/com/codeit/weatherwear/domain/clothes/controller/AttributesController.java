@@ -54,7 +54,7 @@ public class AttributesController implements AttributesApi {
 
     @Override
     @DeleteMapping("/{definitionId}")
-    public ResponseEntity<ClothesAttributeDefDto> delete(@PathVariable UUID definitionId) {
+    public ResponseEntity<Void> delete(@PathVariable UUID definitionId) {
         service.delete(definitionId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

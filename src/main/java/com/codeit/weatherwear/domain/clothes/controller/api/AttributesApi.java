@@ -76,7 +76,7 @@ public interface AttributesApi {
         )
     })
     @DeleteMapping("/{definitionId}")
-    ResponseEntity<ClothesAttributeDefDto> delete(
+    ResponseEntity<Void> delete(
         @Parameter(
             name="definitionId",
             required = true

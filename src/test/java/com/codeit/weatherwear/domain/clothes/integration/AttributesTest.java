@@ -42,6 +42,7 @@ public class AttributesTest {
     @Autowired
     private AttributesRepository repository;
 
+    @Autowired
     private EntityManager em;
 
     @Test
