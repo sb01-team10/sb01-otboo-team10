@@ -43,10 +43,9 @@ public class AttributesControllerTest {
     void save_success() throws Exception {
         //given
         ClothesAttributeDefCreateRequest request = new ClothesAttributeDefCreateRequest(
-            UUID.randomUUID(),
             "색상",
             List.of("빨강", "파랑"));
-        ClothesAttributeDefDto dto = new ClothesAttributeDefDto(request.definitionId(),
+        ClothesAttributeDefDto dto = new ClothesAttributeDefDto(UUID.randomUUID(),
             "색상",List.of("빨강", "파랑"));
 
         given(service.create(any(ClothesAttributeDefCreateRequest.class))).willReturn(dto);

@@ -38,7 +38,6 @@ public class AttributesTest {
     void create_success() throws Exception {
         //given
         ClothesAttributeDefCreateRequest request = new ClothesAttributeDefCreateRequest(
-            UUID.randomUUID(),
             "색상",
             List.of("빨강", "파랑"));
         HttpHeaders headers = new HttpHeaders();

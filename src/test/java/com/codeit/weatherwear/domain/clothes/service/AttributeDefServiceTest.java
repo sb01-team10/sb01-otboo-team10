@@ -44,7 +44,6 @@ public class AttributeDefServiceTest {
         void createAttributes_Success() {
             //given
             ClothesAttributeDefCreateRequest request = new ClothesAttributeDefCreateRequest(
-                UUID.randomUUID(),
                 "색상",
                 List.of("빨강", "파랑"));
             Attributes attributes = Attributes.builder()
@@ -71,7 +70,6 @@ public class AttributeDefServiceTest {
             //given
             given(attributesRepository.existsByName("사이즈")).willReturn(true);
             ClothesAttributeDefCreateRequest request = new ClothesAttributeDefCreateRequest(
-                UUID.randomUUID(),
                 "사이즈",
                 List.of("L")
             );
