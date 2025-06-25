@@ -9,6 +9,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ public class AttributesController implements AttributesApi {
     /**
      * 새로운 의상 속성을 등록합니다.
      *
-     * @param dto 속성 정보(id,이름, 후보값들)
+     * @param dto 속성 정보(이름, 후보값들)
      * @return 201 400
      */
     @Override
@@ -35,11 +36,17 @@ public class AttributesController implements AttributesApi {
         return ResponseEntity.status(HttpStatus.CREATED).body(createAttribute);
     }
 
+    /**
+     * 의상 속성을 등록합니다.
+     *
+     * @param definitionId,request 속성 정보(이름, 후보값들)
+     * @return 200 400
+     */
     @Override
     @PatchMapping("/{definitionId}")
     public ResponseEntity<ClothesAttributeDefDto> update(
         @PathVariable UUID definitionId,
-        @RequestBody ClothesAttributeDefUpdateRequest request) {
+        @Validated @RequestBody ClothesAttributeDefUpdateRequest request) {
         ClothesAttributeDefDto updateAttribute = service.update(definitionId, request);
         return ResponseEntity.status(HttpStatus.OK).body(updateAttribute);
     }

@@ -9,7 +9,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -59,7 +61,7 @@ public class Attributes {
         }
 
         this.selectableValues.clear();
-        this.selectableValues.addAll(request.selectValues());
+        this.selectableValues=new ArrayList<>(values);
         this.updatedAt = Instant.now();
     }
 }
