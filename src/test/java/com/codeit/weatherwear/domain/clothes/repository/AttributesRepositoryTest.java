@@ -32,6 +32,6 @@ class AttributesRepositoryTest {
         Attributes result = sut.save(attributes);
         //then
         assertThat(result.getName()).isEqualTo("색상");
-        assertThat(result.getSelectableValues()).containsExactly("빨강","파랑");
+        assertThat(result.getSelectableValues()).containsExactly("빨강", "파랑");
     }
 }
