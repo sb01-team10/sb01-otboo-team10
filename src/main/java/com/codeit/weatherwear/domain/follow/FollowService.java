@@ -1,7 +1,9 @@
 package com.codeit.weatherwear.domain.follow;
 
 import com.codeit.weatherwear.domain.follow.dto.FollowDto;
+import com.codeit.weatherwear.domain.follow.dto.FollowSummaryDto;
 import com.codeit.weatherwear.domain.follow.dto.request.FollowCreateRequest;
+import com.codeit.weatherwear.domain.follow.repository.FollowRepository;
 import com.codeit.weatherwear.domain.user.entity.User;
 import com.codeit.weatherwear.domain.user.exception.UserNotFoundException;
 import com.codeit.weatherwear.domain.user.repository.UserRepository;
@@ -36,6 +38,10 @@ public class FollowService {
     log.info("Follow 생성: {}", dto);
 
     return dto;
+  }
+
+  public FollowSummaryDto getSummary(UUID userId, UUID myId) {
+    return followRepository.getSummary(userId, myId);
   }
 
   @Transactional
