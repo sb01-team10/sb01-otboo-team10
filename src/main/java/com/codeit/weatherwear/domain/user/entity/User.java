@@ -136,8 +136,12 @@ public class User {
     }
 
     public void updatePassword(String password) {
-        if (password != null) {
+        if (password != null || !password.isBlank()) {
             this.password = password;
         }
+    }
+
+    public void updateRole(Role role) {
+        this.role = role;
     }
 }

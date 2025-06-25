@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = LocationMapper.class)
 public interface UserMapper {
 
-    UserDto toDto(User user);
+    UserDto toUserDto(User user);
 
     @Mapping(source = "id", target = "userId")
     ProfileDto toProfileDto(User user);

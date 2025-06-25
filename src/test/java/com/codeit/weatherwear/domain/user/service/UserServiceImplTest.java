@@ -67,7 +67,7 @@ class UserServiceImplTest {
         );
 
         when(userRepository.save(any(User.class))).thenReturn(user);
-        when(userMapper.toDto(user)).thenReturn(dto);
+        when(userMapper.toUserDto(user)).thenReturn(dto);
 
         // when
         UserDto result = userService.create(request);
@@ -230,16 +230,21 @@ class UserServiceImplTest {
             .id(userId)
             .role(Role.USER)
             .build();
-        UserDto dto = new UserDto(
-            userId, null, null, null, null, null, false
-        );
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        // 실제로 role이 바뀌었는지 확인하기 위해 invocate
+        when(userMapper.toUserDto(any(User.class)))
+            .thenAnswer(invocation -> {
+                User u = invocation.getArgument(0);
+                return new UserDto(u.getId(), null, null, u.getName(), u.getRole(), null,
+                    u.isLocked());
+            });
 
         // when
         UserDto result = userService.updateRole(userId, request);
 
         // then
+        assertThat(user.getRole()).isEqualTo(Role.ADMIN);
         assertThat(result.getRole()).isEqualTo(Role.ADMIN);
     }
 

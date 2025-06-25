@@ -7,6 +7,7 @@ import com.codeit.weatherwear.domain.user.dto.request.ChangePasswordRequest;
 import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
+import com.codeit.weatherwear.domain.user.dto.request.UserRoleUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.response.UserDto;
 import com.codeit.weatherwear.domain.user.entity.User;
@@ -50,7 +51,7 @@ public class UserServiceImpl implements UserService {
                 .build()
         );
 
-        return userMapper.toDto(user);
+        return userMapper.toUserDto(user);
     }
 
     @Transactional(readOnly = true)
@@ -119,5 +120,15 @@ public class UserServiceImpl implements UserService {
         String newPassword = changePasswordRequest.password();
 
         user.updatePassword(newPassword);
+    }
+
+    @Transactional
+    @Override
+    public UserDto updateRole(UUID userId, UserRoleUpdateRequest userRoleUpdateRequest) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException());
+        user.updateRole(userRoleUpdateRequest.role());
+
+        return userMapper.toUserDto(user);
     }
 }

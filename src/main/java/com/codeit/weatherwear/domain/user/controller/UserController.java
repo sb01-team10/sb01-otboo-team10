@@ -4,6 +4,7 @@ import com.codeit.weatherwear.domain.user.dto.request.ChangePasswordRequest;
 import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
+import com.codeit.weatherwear.domain.user.dto.request.UserRoleUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.response.UserDto;
 import com.codeit.weatherwear.domain.user.service.UserService;
@@ -66,5 +67,12 @@ public class UserController {
         @RequestBody ChangePasswordRequest changePasswordRequest) {
         userService.updatePassword(userId, changePasswordRequest);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{userId}/role")
+    ResponseEntity<UserDto> updateRole(@PathVariable UUID userId,
+        @RequestBody UserRoleUpdateRequest userRoleUpdateRequest) {
+        UserDto result = userService.updateRole(userId, userRoleUpdateRequest);
+        return ResponseEntity.ok(result);
     }
 }
