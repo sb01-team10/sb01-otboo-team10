@@ -30,4 +30,10 @@ public class FollowController {
         .body(followService.create(followCreateRequest));
   }
 
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    followService.delete(id);
+    return ResponseEntity.noContent().build();
+  }
+
 }

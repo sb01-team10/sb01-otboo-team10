@@ -29,7 +29,18 @@ public class FollowService {
 
     Follow follow = followRepository.save(Follow.create(followee, follower));
 
-    return FollowDto.from(follow);
+    FollowDto dto = FollowDto.from(follow);
+    log.info("Follow 생성: {}", dto);
+
+    return dto;
+  }
+
+  @Transactional
+  public void delete(UUID id) {
+    followRepository.findById(id).ifPresent(follow -> {
+        followRepository.delete(follow);
+        log.info("Follow 삭제. id: {}", id);
+    });
   }
 
 }
