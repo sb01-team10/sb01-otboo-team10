@@ -10,6 +10,7 @@ import com.codeit.weatherwear.domain.user.dto.request.ChangePasswordRequest;
 import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
+import com.codeit.weatherwear.domain.user.dto.request.UserRoleUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.response.UserDto;
 import com.codeit.weatherwear.domain.user.entity.Gender;
@@ -217,5 +218,39 @@ class UserServiceImplTest {
         // when & then
         assertThrows(UserNotFoundException.class,
             () -> userService.updatePassword(userId, request));
+    }
+
+    @Test
+    void 권한_수정_성공() {
+        // given
+        UUID userId = UUID.randomUUID();
+        UserRoleUpdateRequest request = new UserRoleUpdateRequest(Role.ADMIN);
+
+        User user = User.builder()
+            .id(userId)
+            .role(Role.USER)
+            .build();
+        UserDto dto = new UserDto(
+            userId, null, null, null, null, null, false
+        );
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // when
+        UserDto result = userService.updateRole(userId, request);
+
+        // then
+        assertThat(result.getRole()).isEqualTo(Role.ADMIN);
+    }
+
+    @Test
+    void 권한_수정_실패() {
+        // given
+        UUID userId = UUID.randomUUID();
+        UserRoleUpdateRequest request = new UserRoleUpdateRequest(Role.ADMIN);
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(UserNotFoundException.class, () -> userService.updateRole(userId, request));
     }
 }
