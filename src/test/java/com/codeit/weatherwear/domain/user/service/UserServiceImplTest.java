@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.codeit.weatherwear.domain.user.dto.request.ChangePasswordRequest;
 import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
@@ -183,5 +184,27 @@ class UserServiceImplTest {
         // then
         assertThat(result.getUserId()).isEqualTo(userId);
         assertThat(result.getName()).isEqualTo("test");
+    }
+
+    @Test
+    void 비밀번호_변경_성공() {
+        // given
+
+        UUID userId = UUID.randomUUID();
+
+        User user = User.builder()
+            .id(userId)
+            .password("originalPassword")
+            .build();
+
+        ChangePasswordRequest request = new ChangePasswordRequest("newPassword");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // when
+        userService.updatePassword(userId, request);
+
+        // then
+        assertThat(user.getPassword()).isEqualTo("newPassword");
     }
 }
