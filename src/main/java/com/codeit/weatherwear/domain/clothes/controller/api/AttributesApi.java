@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +38,8 @@ public interface AttributesApi {
     @PostMapping
     ResponseEntity<ClothesAttributeDefDto> create(@RequestBody ClothesAttributeDefCreateRequest request);
 
+
+
     @Operation(summary = "의상 속성 수정", description = "의상 속성 정의 수정 API")
     @ApiResponses({
         @ApiResponse(
@@ -57,4 +60,26 @@ public interface AttributesApi {
         )
         @PathVariable(value = "definitionId") UUID definitionId,
         @RequestBody ClothesAttributeDefUpdateRequest request);
+
+
+
+    @Operation(summary = "의상 속성 삭제", description = "의상 속성 정의 삭제 API")
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "의상 속성 정의 삭제 성공",
+            content = @Content(schema = @Schema(implementation = ClothesAttributeDefDto.class))),
+        @ApiResponse(
+            responseCode = "400",
+            description = "의상 속성 정의 삭제 실패",
+            content = @Content(schema = @Schema(implementation = ClothesAttributeDefDto.class))
+        )
+    })
+    @DeleteMapping("/{definitionId}")
+    ResponseEntity<ClothesAttributeDefDto> delete(
+        @Parameter(
+            name="definitionId",
+            required = true
+        )
+        @PathVariable(value = "definitionId") UUID definitionId);
 }
