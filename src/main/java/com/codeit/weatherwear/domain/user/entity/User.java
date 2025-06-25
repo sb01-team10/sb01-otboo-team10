@@ -88,7 +88,7 @@ public class User {
     private Location location;
 
     @Builder
-    public User(UUID id, String email, String name, String password,
+    private User(UUID id, String email, String name, String password,
         Role role, boolean locked, Gender gender, LocalDate birthDate,
         Integer temperatureSensitivity, String profileImageUrl,
         List<OAuthProvider> linkedOAuthProviders,
@@ -133,5 +133,15 @@ public class User {
 
     public void updateLocked(boolean locked) {
         this.locked = locked;
+    }
+
+    public void updatePassword(String password) {
+        if (password != null || !password.isBlank()) {
+            this.password = password;
+        }
+    }
+
+    public void updateRole(Role role) {
+        this.role = role;
     }
 }
