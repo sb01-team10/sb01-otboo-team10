@@ -100,14 +100,15 @@ public class AttributeDefServiceTest {
                 .selectableValues(new ArrayList<>(List.of("빨강", "파랑"))).build();
             given(attributesRepository.findById(id)).willReturn(Optional.of(attributes));
 
-            ClothesAttributeDefUpdateRequest request=new ClothesAttributeDefUpdateRequest("색상",List.of("빨강","노랑"));
+            ClothesAttributeDefUpdateRequest request = new ClothesAttributeDefUpdateRequest("색상",
+                List.of("빨강", "노랑"));
             given(attributesMapper.toDto(attributes))
                 .willReturn(new ClothesAttributeDefDto(id, "색상", List.of("빨강", "노랑")));
             //when
-            ClothesAttributeDefDto result=sut.update(id, request);
+            ClothesAttributeDefDto result = sut.update(id, request);
             //then
             assertThat(result.name()).isEqualTo("색상");
-            assertThat(result.selectableValues()).containsExactly("빨강","노랑");
+            assertThat(result.selectableValues()).containsExactly("빨강", "노랑");
             verify(attributesRepository, times(1)).findById(id);
         }
 
@@ -124,13 +125,38 @@ public class AttributeDefServiceTest {
                 .selectableValues(new ArrayList<>(List.of("빨강", "파랑"))).build();
             given(attributesRepository.findById(id)).willReturn(Optional.of(attributes));
 
-            ClothesAttributeDefUpdateRequest request=new ClothesAttributeDefUpdateRequest("사이즈",List.of("S","L"));
+            ClothesAttributeDefUpdateRequest request = new ClothesAttributeDefUpdateRequest("사이즈",
+                List.of("S", "L"));
             //when
             //then
             assertThatThrownBy(() -> sut.update(id, request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 속성명이 일치하지 않습니다.");
             verify(attributesRepository, times(1)).findById(id);
+        }
+    }
+
+    @Nested
+    @DisplayName("속성 삭제 테스트")
+    class DeleteAttributeDef {
+
+        @Test
+        @DisplayName("삭제 성공")
+        void deleteAttributes_Success() {
+            //given
+            UUID id = UUID.randomUUID();
+            Attributes attributes = Attributes.builder()
+                .id(UUID.randomUUID())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .name("색상")
+                .selectableValues(new ArrayList<>(List.of("빨강", "파랑"))).build();
+            given(attributesRepository.findById(id)).willReturn(Optional.of(attributes));
+            //when
+            sut.delete(id);
+            //then
+            verify(attributesRepository, times(1)).findById(id);
+            verify(attributesRepository, times(1)).deleteById(id);
         }
     }
 }
