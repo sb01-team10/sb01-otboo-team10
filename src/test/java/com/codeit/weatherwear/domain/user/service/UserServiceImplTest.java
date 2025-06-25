@@ -206,4 +206,16 @@ class UserServiceImplTest {
         // then
         assertThat(user.getPassword()).isEqualTo("newPassword");
     }
+
+    @Test
+    void 비밀번호_변경_실패() {
+        // given
+        UUID userId = UUID.randomUUID();
+        ChangePasswordRequest request = new ChangePasswordRequest("newPassword");
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(UserNotFoundException.class,
+            () -> userService.updatePassword(userId, request));
+    }
 }
