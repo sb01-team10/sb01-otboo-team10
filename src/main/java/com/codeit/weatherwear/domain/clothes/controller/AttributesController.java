@@ -32,7 +32,7 @@ public class AttributesController implements AttributesApi {
      */
     @Override
     @PostMapping
-    public ResponseEntity<ClothesAttributeDefDto> create(@RequestBody ClothesAttributeDefCreateRequest dto) {
+    public ResponseEntity<ClothesAttributeDefDto> create(@Validated @RequestBody ClothesAttributeDefCreateRequest dto) {
         ClothesAttributeDefDto createAttribute = service.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createAttribute);
     }
