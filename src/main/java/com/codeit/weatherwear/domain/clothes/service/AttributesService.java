@@ -7,6 +7,9 @@ import java.util.UUID;
 
 public interface AttributesService {
     ClothesAttributeDefDto create(ClothesAttributeDefCreateRequest request);
-    ClothesAttributeDefDto update(UUID id,ClothesAttributeDefUpdateRequest request);
+
+    ClothesAttributeDefDto update(UUID id, ClothesAttributeDefUpdateRequest request);
+
+    void delete(UUID id);
 
 }

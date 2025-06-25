@@ -48,6 +48,12 @@ public class AttributesServiceImpl implements AttributesService{
         return attributesMapper.toDto(save);
     }
 
+    /**
+     * 속성 수정
+     * @param id
+     * @param request 속성 수정 요청 DTO
+     * @return 속성 DTO
+     */
     @Override
     @Transactional
     public ClothesAttributeDefDto update(UUID id, ClothesAttributeDefUpdateRequest request) {
@@ -55,6 +61,14 @@ public class AttributesServiceImpl implements AttributesService{
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 속성입니다"));
         attributes.update(request);
         return attributesMapper.toDto(attributes);
+    }
+
+
+    @Override
+    public void delete(UUID id) {
+        Attributes attributes = attributesRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 속성입니다"));
+        attributesRepository.deleteById(attributes.getId());
     }
 
 

@@ -93,7 +93,7 @@ public class AttributeDefServiceTest {
             //given
             UUID id = UUID.randomUUID();
             Attributes attributes = Attributes.builder()
-                .id(UUID.randomUUID())
+                .id(id)
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
                 .name("색상")
@@ -118,7 +118,7 @@ public class AttributeDefServiceTest {
             //given
             UUID id = UUID.randomUUID();
             Attributes attributes = Attributes.builder()
-                .id(UUID.randomUUID())
+                .id(id)
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
                 .name("색상")
@@ -146,7 +146,7 @@ public class AttributeDefServiceTest {
             //given
             UUID id = UUID.randomUUID();
             Attributes attributes = Attributes.builder()
-                .id(UUID.randomUUID())
+                .id(id)
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
                 .name("색상")
