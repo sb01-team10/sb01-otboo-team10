@@ -189,7 +189,6 @@ class UserServiceImplTest {
     @Test
     void 비밀번호_변경_성공() {
         // given
-
         UUID userId = UUID.randomUUID();
 
         User user = User.builder()

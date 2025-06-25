@@ -3,6 +3,7 @@ package com.codeit.weatherwear.domain.user.service;
 import com.codeit.weatherwear.domain.location.dto.LocationDto;
 import com.codeit.weatherwear.domain.location.entity.Location;
 import com.codeit.weatherwear.domain.location.repository.LocationRepository;
+import com.codeit.weatherwear.domain.user.dto.request.ChangePasswordRequest;
 import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
@@ -67,6 +68,7 @@ public class UserServiceImpl implements UserService {
             .orElseThrow(() -> new UserNotFoundException());
 
         // Location 생성
+        // TODO: Location 생성 로직은 LocationService에 위임
         Location location = null;
         LocationDto locationDto = profileUpdateRequest.location();
         if (locationDto != null) {
@@ -106,5 +108,16 @@ public class UserServiceImpl implements UserService {
         user.updateLocked(userLockUpdateRequest.locked());
 
         return user.getId();
+    }
+
+    @Transactional
+    @Override
+    public void updatePassword(UUID userId, ChangePasswordRequest changePasswordRequest) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException());
+
+        String newPassword = changePasswordRequest.password();
+
+        user.updatePassword(newPassword);
     }
 }

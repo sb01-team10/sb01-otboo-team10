@@ -134,4 +134,10 @@ public class User {
     public void updateLocked(boolean locked) {
         this.locked = locked;
     }
+
+    public void updatePassword(String password) {
+        if (password != null) {
+            this.password = password;
+        }
+    }
 }

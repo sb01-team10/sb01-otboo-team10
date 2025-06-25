@@ -1,5 +1,6 @@
 package com.codeit.weatherwear.domain.user.controller;
 
+import com.codeit.weatherwear.domain.user.dto.request.ChangePasswordRequest;
 import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
@@ -58,5 +59,12 @@ public class UserController {
         @RequestBody UserLockUpdateRequest userLockUpdateRequest) {
         UUID result = userService.updateLock(userId, userLockUpdateRequest);
         return ResponseEntity.ok(result);
+    }
+
+    @PatchMapping("/{userId}/password")
+    ResponseEntity<Void> updatePassword(@PathVariable UUID userId,
+        @RequestBody ChangePasswordRequest changePasswordRequest) {
+        userService.updatePassword(userId, changePasswordRequest);
+        return ResponseEntity.ok().build();
     }
 }

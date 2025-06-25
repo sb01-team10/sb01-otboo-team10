@@ -1,5 +1,6 @@
 package com.codeit.weatherwear.domain.user.service;
 
+import com.codeit.weatherwear.domain.user.dto.request.ChangePasswordRequest;
 import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
@@ -16,4 +17,7 @@ public interface UserService {
     ProfileDto updateProfile(UUID userId, ProfileUpdateRequest profileUpdateRequest);
 
     UUID updateLock(UUID userId, UserLockUpdateRequest userLockUpdateRequest);
+
+    void updatePassword(UUID userId, ChangePasswordRequest changePasswordRequest);
+
 }

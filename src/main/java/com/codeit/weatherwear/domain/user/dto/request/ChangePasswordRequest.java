@@ -1,2 +1,7 @@
-package com.codeit.weatherwear.domain.user.dto.request;public record ChangePasswordRequest() {
+package com.codeit.weatherwear.domain.user.dto.request;
+
+public record ChangePasswordRequest(
+    String password
+) {
+
 }
