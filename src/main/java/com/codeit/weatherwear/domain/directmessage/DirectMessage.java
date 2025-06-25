@@ -1,6 +1,6 @@
 package com.codeit.weatherwear.domain.directmessage;
 
-import com.codeit.weatherwear.user.entity.User;
+import com.codeit.weatherwear.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
