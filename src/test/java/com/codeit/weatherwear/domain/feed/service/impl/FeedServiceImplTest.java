@@ -10,6 +10,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.codeit.weatherwear.domain.feed.dto.request.FeedCreateRequest;
+import com.codeit.weatherwear.domain.feed.dto.request.FeedGetParamRequest;
 import com.codeit.weatherwear.domain.feed.dto.request.FeedUpdateRequest;
 import com.codeit.weatherwear.domain.feed.dto.response.FeedDto;
 import com.codeit.weatherwear.domain.feed.entity.Feed;
@@ -69,6 +70,8 @@ class FeedServiceImplTest {
   private UUID feedId;
   private Feed mockFeed;
 
+  private FeedGetParamRequest mockFeedQuery;
+
   private WeatherSummaryDto mockWeatherDto;
   private PrecipitationDto mockPrecipitation;
   private TemperatureDto mockTemperature;
@@ -122,6 +125,12 @@ class FeedServiceImplTest {
         .likeCount(0)
         .build();
     ReflectionTestUtils.setField(mockFeed, "id", feedId);
+
+    mockFeedQuery = FeedGetParamRequest.builder()
+        .limit(10)
+        .sortBy("createdAt")
+        .sortDirection("ASCENDING")
+        .build();
 
     mockPrecipitation = PrecipitationDto.builder()
         .type(PrecipitationsType.NONE)
@@ -239,8 +248,7 @@ class FeedServiceImplTest {
         eq(false))).willReturn(mockFeedDto);
 
     // when
-    List<FeedDto> resultList = feedService.getFeedList(null, null, 10, "createdAt", "DESCENDING",
-        null, null, null, null);
+    List<FeedDto> resultList = feedService.getFeedList(mockFeedQuery);
     // then
     assertThat(resultList).isNotNull();
     assertThat(resultList).hasSize(1);

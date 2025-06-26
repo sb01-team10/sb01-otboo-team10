@@ -1,6 +1,7 @@
 package com.codeit.weatherwear.domain.feed.service.impl;
 
 import com.codeit.weatherwear.domain.feed.dto.request.FeedCreateRequest;
+import com.codeit.weatherwear.domain.feed.dto.request.FeedGetParamRequest;
 import com.codeit.weatherwear.domain.feed.dto.request.FeedUpdateRequest;
 import com.codeit.weatherwear.domain.feed.dto.response.FeedDto;
 import com.codeit.weatherwear.domain.feed.entity.Feed;
@@ -35,9 +36,7 @@ public class FeedServiceImpl implements FeedService {
   private final FeedRepository feedRepository;
 
   @Override
-  public List<FeedDto> getFeedList(String cursor, UUID idAfter, int limit, String sortBy,
-      String sortDirection, String keywordLike, String skyStatusEqual,
-      String precipitationTypeEqual, UUID authorIdEqual) {
+  public List<FeedDto> getFeedList(FeedGetParamRequest paramRequest) {
     log.info("Request Get Feed List");
 
     // todo: 우선적으로 불러오기만 할 것 (페이지네이션은 이후 구현)
