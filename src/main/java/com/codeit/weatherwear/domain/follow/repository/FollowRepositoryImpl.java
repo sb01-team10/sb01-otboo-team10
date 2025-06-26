@@ -111,7 +111,7 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom {
         ))
         .from(follow)
         .where(
-            follow.follower.id.eq(followeeId),
+            follow.followee.id.eq(followeeId),
             cursor(cursor, idAfter),
             nameLike(nameLike)
         )
