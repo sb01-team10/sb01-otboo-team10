@@ -94,9 +94,10 @@ dependencies {
     // JPA Json 타입 매핑용
     implementation 'com.vladmihalcea:hibernate-types-60:2.20.0'
 
-    // mapper
-    implementation 'org.mapstruct:mapstruct:1.6.3'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+    // spring security
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    testImplementation("org.springframework.security:spring-security-test")
+
 
 }
 
