@@ -1,4 +1,4 @@
-package com.codeit.weatherwear.domain.clothes.dto;
+package com.codeit.weatherwear.domain.clothes.dto.request;
 
 
 import jakarta.validation.constraints.NotBlank;

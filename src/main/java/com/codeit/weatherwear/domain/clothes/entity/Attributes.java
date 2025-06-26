@@ -1,6 +1,6 @@
 package com.codeit.weatherwear.domain.clothes.entity;
 
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefUpdateRequest;
+import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefUpdateRequest;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

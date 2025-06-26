@@ -27,6 +27,7 @@ public class AdminUserInitializer implements ApplicationRunner {
         String email = "system@otboo.io";
         String password = "otboo1!";
 
+
         if (!userRepository.existsByEmail(email) && !userRepository.existsByName(name)) {
             User admin = userRepository.save(
                 User.builder()

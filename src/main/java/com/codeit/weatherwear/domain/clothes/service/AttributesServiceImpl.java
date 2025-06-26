@@ -1,20 +1,25 @@
 package com.codeit.weatherwear.domain.clothes.service;
 
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefCreateRequest;
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefDto;
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefUpdateRequest;
+import com.codeit.weatherwear.domain.clothes.dto.request.AttributesSortDirection;
+import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefCreateRequest;
+import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
+import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefUpdateRequest;
 import com.codeit.weatherwear.domain.clothes.entity.Attributes;
 import com.codeit.weatherwear.domain.clothes.mapper.AttributesMapper;
 import com.codeit.weatherwear.domain.clothes.repository.AttributesRepository;
+import com.codeit.weatherwear.global.response.PageResponse;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AttributesServiceImpl implements AttributesService{
 
     private final AttributesRepository attributesRepository;
@@ -65,10 +70,61 @@ public class AttributesServiceImpl implements AttributesService{
      * @param id
      */
     @Override
+    @Transactional
     public void delete(UUID id) {
         Attributes attributes = attributesRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 속성입니다"));
         attributesRepository.deleteById(attributes.getId());
+    }
+
+    /**
+     * 속성 조회
+     * @param cursor
+     * @param idAfter
+     * @param limit
+     * @param sortBy
+     * @param sortDirection
+     * @param keywordLike
+     * @return List<ClothesAttributeDefDto> 결과 리스트
+     */
+    @Override
+    public PageResponse<List<ClothesAttributeDefDto>> searchAttributes(String cursor,
+        UUID idAfter, int limit, String sortBy, AttributesSortDirection sortDirection,
+        String keywordLike) {
+        Slice<Attributes> attributes = attributesRepository.searchAttributes(cursor, idAfter, limit,
+            sortBy, sortDirection, keywordLike);
+
+        List<Attributes> attributesList = attributes.getContent();
+        List<ClothesAttributeDefDto> result = attributesList.stream()
+            .map(attributesMapper::toDto)
+            .toList();
+
+        Attributes last =
+            (attributesList.size() > 0) ? attributesList.get(attributesList.size() - 1) : null;
+        Object nextCursor = null;
+        UUID nextIdAfter = null;
+        if(last != null) {
+            switch (sortBy) {
+                case "name":
+                    nextCursor = last.getName();
+                    break;
+                case "createdAt":
+                    nextCursor = last.getCreatedAt();
+                    break;
+                default:
+                    throw new IllegalArgumentException("지원하지 않는 정렬 기준입니다.");
+            }
+            nextIdAfter = last.getId();
+        }
+        return new PageResponse<>(
+            result,
+            nextCursor,
+            nextIdAfter,
+            attributes.hasNext(),
+            attributesRepository.getTotalCount(keywordLike),
+            sortBy,
+            sortDirection.name()
+        );
     }
 
 
