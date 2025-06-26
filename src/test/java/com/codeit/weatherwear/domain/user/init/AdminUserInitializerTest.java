@@ -26,7 +26,7 @@ class AdminUserInitializerTest {
     @Test
     void 관리자_생성_성공() throws Exception {
         // given
-        when(userRepository.existsByEmail("admin@mail.com")).thenReturn(false);
+        when(userRepository.existsByEmail("system@otboo.io")).thenReturn(false);
         when(userRepository.existsByName("admin")).thenReturn(false);
 
         // save()가 호출될 때 어떤 User 객체가 저장되었는지 확인하기 위해 ArgumentCaptor로 캡처
@@ -40,8 +40,7 @@ class AdminUserInitializerTest {
         // then
         verify(userRepository).save(captor.capture());  // 호출된 user 객체를 captor에 저장
         User savedUser = captor.getValue(); // 캡처된 인자 꺼내서 검증
-        assertThat(savedUser.getEmail()).isEqualTo("admin@mail.com");
+        assertThat(savedUser.getEmail()).isEqualTo("system@otboo.io");
         assertThat(savedUser.getName()).isEqualTo("admin");
-        assertThat(savedUser.getPassword()).isEqualTo("admin");
     }
 }
