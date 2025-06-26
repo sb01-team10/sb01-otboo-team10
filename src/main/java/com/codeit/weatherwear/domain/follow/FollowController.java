@@ -3,6 +3,7 @@ package com.codeit.weatherwear.domain.follow;
 import com.codeit.weatherwear.domain.follow.dto.FollowDto;
 import com.codeit.weatherwear.domain.follow.dto.FollowSummaryDto;
 import com.codeit.weatherwear.domain.follow.dto.request.FollowCreateRequest;
+import com.codeit.weatherwear.global.response.PageResponse;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -39,10 +40,33 @@ public class FollowController {
     return ResponseEntity.ok(followService.getSummary(userId, myId));
   }
 
+  @GetMapping("/followings")
+  public ResponseEntity<PageResponse<FollowDto>> getFollowings(
+      @RequestParam UUID followerId,
+      @RequestParam(required = false) String cursor,
+      @RequestParam(required = false) UUID idAfter,
+      @RequestParam int limit,
+      @RequestParam(required = false) String nameLike
+  ) {
+    return ResponseEntity
+        .ok(followService.getFollowings(followerId, cursor, idAfter, limit, nameLike));
+  }
+
+  @GetMapping("/followings")
+  public ResponseEntity<PageResponse<FollowDto>> getFollower(
+      @RequestParam UUID followeeId,
+      @RequestParam(required = false) String cursor,
+      @RequestParam(required = false) UUID idAfter,
+      @RequestParam int limit,
+      @RequestParam(required = false) String nameLike
+  ) {
+    return ResponseEntity
+        .ok(followService.getFollowers(followeeId, cursor, idAfter, limit, nameLike));
+  }
+
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable UUID id) {
     followService.delete(id);
     return ResponseEntity.noContent().build();
   }
-
 }

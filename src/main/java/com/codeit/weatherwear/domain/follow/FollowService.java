@@ -7,6 +7,9 @@ import com.codeit.weatherwear.domain.follow.repository.FollowRepository;
 import com.codeit.weatherwear.domain.user.entity.User;
 import com.codeit.weatherwear.domain.user.exception.UserNotFoundException;
 import com.codeit.weatherwear.domain.user.repository.UserRepository;
+import com.codeit.weatherwear.global.response.PageResponse;
+import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +45,51 @@ public class FollowService {
 
   public FollowSummaryDto getSummary(UUID userId, UUID myId) {
     return followRepository.getSummary(userId, myId);
+  }
+
+  public PageResponse<FollowDto> getFollowings(UUID followerId, String cursor,
+      UUID idAfter, int limit, String nameLike
+  ) {
+    List<FollowDto> followings = followRepository
+        .getFollowings(followerId, cursor, idAfter, limit, nameLike);
+    long totalCount = followRepository.countByFollower_Id(followerId);
+
+    return toPageResponse(followings, limit, totalCount);
+  }
+
+  public PageResponse<FollowDto> getFollowers(UUID followeeId, String cursor,
+      UUID idAfter, int limit, String nameLike
+  ) {
+    List<FollowDto> followings = followRepository
+        .getFollowings(followeeId, cursor, idAfter, limit, nameLike);
+    long totalCount = followRepository.countByFollowee_Id(followeeId);
+    return toPageResponse(followings, limit, totalCount);
+  }
+
+  private PageResponse<FollowDto> toPageResponse(List<FollowDto> followings, int limit, long totalCount) {
+    boolean hasNext = followings.size() > limit;
+    Instant nextCursor = null;
+    UUID nextIdAfter = null;
+
+    if (hasNext) {
+      followings.remove(followings.size() - 1);
+      FollowDto followDto = followings.get(followings.size() - 1);
+
+      nextCursor = followDto.created();
+      nextIdAfter = followDto.id();
+    }
+    String sortBy = "createdAt";
+    String sortDirection = "DESCENDING";
+
+    return new PageResponse<>(
+        followings,
+        nextCursor,
+        nextIdAfter,
+        hasNext,
+        totalCount,
+        sortBy,
+        sortDirection
+    );
   }
 
   @Transactional
