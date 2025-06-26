@@ -1,9 +1,10 @@
 package com.codeit.weatherwear.global.response;
 
+import java.util.List;
 import java.util.UUID;
 
 public record PageResponse<T>(
-    T data,
+    List<T> data,
     Object nextCursor,
     UUID nextIdAfter,
     boolean hasNext,
