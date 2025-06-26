@@ -2,7 +2,7 @@ package com.codeit.weatherwear.domain.user.service;
 
 import com.codeit.weatherwear.domain.location.dto.LocationDto;
 import com.codeit.weatherwear.domain.location.entity.Location;
-import com.codeit.weatherwear.domain.location.repository.LocationRepository;
+import com.codeit.weatherwear.domain.location.service.LocationService;
 import com.codeit.weatherwear.domain.user.dto.request.ChangePasswordRequest;
 import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
@@ -20,7 +20,6 @@ import com.codeit.weatherwear.domain.user.repository.UserRepository;
 import com.codeit.weatherwear.global.response.PageResponse;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
@@ -35,7 +34,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    private final LocationRepository locationRepository;
+    private final LocationService locationService;
 
     @Transactional
     @Override
@@ -78,18 +77,7 @@ public class UserServiceImpl implements UserService {
         Location location = null;
         LocationDto locationDto = profileUpdateRequest.location();
         if (locationDto != null) {
-            String locationName = locationDto.locationNames().stream()
-                .filter(s -> s != null && !s.isBlank())
-                .collect(Collectors.joining(" "));
-            location = locationRepository.save(
-                new Location(
-                    locationDto.latitude(),
-                    locationDto.longitude(),
-                    locationDto.x(),
-                    locationDto.y(),
-                    locationName
-                )
-            );
+            location = locationService.create(locationDto);
         }
 
         // TODO: S3 세팅 완료되면 ProfileImageUrl도 업데이트
@@ -152,7 +140,7 @@ public class UserServiceImpl implements UserService {
             .toList();
 
         boolean hasNext = slice.hasNext();
-        
+
         // 커서 구하기
         User lastUser = (users.size() > 0) ? users.get(users.size() - 1) : null;
         Object nextCursor = null;
