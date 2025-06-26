@@ -7,9 +7,9 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefCreateRequest;
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefDto;
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefUpdateRequest;
+import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefCreateRequest;
+import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
+import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefUpdateRequest;
 import com.codeit.weatherwear.domain.clothes.entity.Attributes;
 import com.codeit.weatherwear.domain.clothes.mapper.AttributesMapper;
 import com.codeit.weatherwear.domain.clothes.repository.AttributesRepository;
@@ -157,6 +157,17 @@ public class AttributeDefServiceTest {
             //then
             verify(attributesRepository, times(1)).findById(id);
             verify(attributesRepository, times(1)).deleteById(id);
+        }
+    }
+
+    @Nested
+    @DisplayName("속성 조회 테스트")
+    class FindAttributeDef {
+
+        @Test
+        @DisplayName("조회 성공")
+        void findAttributes_Success() {
+
         }
     }
 }

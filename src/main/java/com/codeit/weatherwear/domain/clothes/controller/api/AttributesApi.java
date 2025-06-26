@@ -1,8 +1,8 @@
 package com.codeit.weatherwear.domain.clothes.controller.api;
 
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefCreateRequest;
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefDto;
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefUpdateRequest;
+import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefCreateRequest;
+import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
+import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

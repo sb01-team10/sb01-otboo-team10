@@ -2,18 +2,13 @@ package com.codeit.weatherwear.domain.clothes.integration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefCreateRequest;
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefDto;
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefUpdateRequest;
-import com.codeit.weatherwear.domain.clothes.entity.Attributes;
+import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefCreateRequest;
+import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
 import com.codeit.weatherwear.domain.clothes.repository.AttributesRepository;
 import com.codeit.weatherwear.global.config.JpaConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +17,10 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
