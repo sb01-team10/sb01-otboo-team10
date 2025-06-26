@@ -24,7 +24,7 @@ public class AttributesCustomRepositoryImpl implements AttributesCustomRepositor
     private final JPAQueryFactory factory;
 
     @Override
-    public Slice<Attributes> searchUsers(String cursor, UUID idAfter, int limit, String sortBy,
+    public Slice<Attributes> searchAttributes(String cursor, UUID idAfter, int limit, String sortBy,
         AttributesSortDirection sortDirection, String keywordLike) {
         QAttributes attributes = QAttributes.attributes;
 

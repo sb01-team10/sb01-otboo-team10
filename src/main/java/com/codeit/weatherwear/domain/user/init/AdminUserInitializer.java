@@ -25,7 +25,7 @@ public class AdminUserInitializer implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         String name = "admin";
         String email = "admin@mail.com";
-        String password = "admin";
+        String password = "admin1!";
 
         if (!userRepository.existsByEmail(email) && !userRepository.existsByName(name)) {
             User admin = userRepository.save(
