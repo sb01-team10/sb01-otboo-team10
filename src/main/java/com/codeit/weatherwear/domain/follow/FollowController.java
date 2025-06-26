@@ -52,7 +52,7 @@ public class FollowController {
         .ok(followService.getFollowings(followerId, cursor, idAfter, limit, nameLike));
   }
 
-  @GetMapping("/followings")
+  @GetMapping("/followers")
   public ResponseEntity<PageResponse<FollowDto>> getFollower(
       @RequestParam UUID followeeId,
       @RequestParam(required = false) String cursor,
