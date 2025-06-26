@@ -18,6 +18,7 @@ import com.codeit.weatherwear.domain.weather.entity.PrecipitationsType;
 import com.codeit.weatherwear.domain.weather.entity.SkyStatus;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,16 @@ public class FeedServiceImpl implements FeedService {
   public List<FeedDto> getFeedList(String cursor, UUID idAfter, int limit, String sortBy,
       String sortDirection, String keywordLike, String skyStatusEqual,
       String precipitationTypeEqual, UUID authorIdEqual) {
-    return List.of();
+    log.info("Request Get Feed List");
+
+    // todo: 우선적으로 불러오기만 할 것 (페이지네이션은 이후 구현)
+    List<Feed> feedList = feedRepository.findAll();
+
+    return feedList.stream().map(
+        feed -> feedMapper.toDto(feed, UserSummaryDto.from(feed.getAuthor()),
+            getMockWeatherSummaryDto(),
+            null, false)
+    ).collect(Collectors.toList());
   }
 
   @Override

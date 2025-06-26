@@ -39,7 +39,9 @@ public class FeedController {
       @RequestParam(required = false) UUID authorIdEqual
   ) {
 
-    return null;
+    return ResponseEntity.ok(
+        feedService.getFeedList(cursor, idAfter, limit, sortBy, sortDirection, keywordLike,
+            skyStatusEqual, precipitationTypeEqual, authorIdEqual));
   }
 
   // 피드 등록
