@@ -3,14 +3,11 @@ package com.codeit.weatherwear.domain.feed.service.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.codeit.weatherwear.domain.feed.dto.request.FeedCreateRequest;
 import com.codeit.weatherwear.domain.feed.dto.request.FeedUpdateRequest;
@@ -261,7 +258,10 @@ class FeedServiceImplTest {
     FeedUpdateRequest updateRequest = FeedUpdateRequest.builder().content(updateContent).build();
 
     given(feedRepository.findById(feedId)).willReturn(Optional.of(mockFeed));
-    given(feedMapper.toDto(any(), any(), any(), any(), anyBoolean())).willReturn(updateFeedDto);
+//    given(feedMapper.toDto(any(), any(), any(), any(), anyBoolean())).willReturn(updateFeedDto);
+
+    given(feedMapper.toDto(eq(mockFeed), eq(mockAuthorDto), any(WeatherSummaryDto.class), isNull(),
+        eq(false))).willReturn(updateFeedDto);
 
     // when
     FeedDto result = feedService.updateFeed(feedId, updateRequest);
@@ -276,7 +276,7 @@ class FeedServiceImplTest {
   }
 
   @Test
-  @DisplayName("피드를 조회하지 못 해 피드 수정을 실패한다.")
+  @DisplayName("피드를 조회하지 못 해 피드 수정을 실패한다")
   void updateFeed_failed_cannot_find_feed() {
     // given
     UUID failedId = UUID.randomUUID();
@@ -288,6 +288,42 @@ class FeedServiceImplTest {
 
     // when & then
     assertThatThrownBy(() -> feedService.updateFeed(failedId, failedRequest))
+        .isInstanceOf(FeedNotFoundException.class);
+  }
+
+  @Test
+  @DisplayName("피드 삭제를 성공한다")
+  void deleteFeed_success() {
+    // given
+    given(feedRepository.findById(feedId)).willReturn(Optional.of(mockFeed));
+    given(feedMapper.toDto(eq(mockFeed), eq(mockAuthorDto), any(WeatherSummaryDto.class), isNull(),
+        eq(false))).willReturn(mockFeedDto);
+
+    // when
+    FeedDto result = feedService.deleteFeed(feedId);
+
+    // then
+    assertThat(result).isNotNull();
+    assertThat(result.getId()).isEqualTo(mockFeed.getId());
+    assertThat(result.getContent()).isEqualTo(mockFeed.getContent());
+
+    // verify
+    verify(feedRepository).findById(feedId);
+    verify(feedRepository).delete(mockFeed);
+    verify(feedMapper).toDto(eq(mockFeed), eq(mockAuthorDto), any(WeatherSummaryDto.class),
+        isNull(), eq(false));
+  }
+
+  @Test
+  @DisplayName("피드를 조회하지 못 해 피드 삭제를 실패한다")
+  void deleteFeed_failed_cannot_find_feed() {
+    // given
+    UUID failedId = UUID.randomUUID();
+
+    given(feedRepository.findById(failedId)).willReturn(Optional.empty());
+
+    // when & then
+    assertThatThrownBy(() -> feedService.deleteFeed(failedId))
         .isInstanceOf(FeedNotFoundException.class);
   }
 
