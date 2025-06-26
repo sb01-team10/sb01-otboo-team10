@@ -59,11 +59,12 @@ public class Feed {
   private Weather weather;
 
   @Builder
-  private Feed(User author, String content, int likeCount, int commentCount) {
+  private Feed(User author, String content, int likeCount, int commentCount, Weather weather) {
     this.author = author;
     this.content = content;
     this.likeCount = likeCount;
     this.commentCount = commentCount;
+    this.weather = weather;
   }
 
   public void updateContent(String content) {
