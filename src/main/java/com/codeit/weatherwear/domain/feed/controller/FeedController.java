@@ -7,6 +7,7 @@ import com.codeit.weatherwear.domain.feed.service.FeedService;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,7 +48,7 @@ public class FeedController {
   // 피드 등록
   @PostMapping
   public ResponseEntity<FeedDto> createFeed(@RequestBody FeedCreateRequest feedCreateRequest) {
-    return ResponseEntity.ok(feedService.createFeed(feedCreateRequest));
+    return ResponseEntity.status(HttpStatus.CREATED).body(feedService.createFeed(feedCreateRequest));
   }
 
   // 피드 갱신 (정보 업데이트)
@@ -61,6 +62,6 @@ public class FeedController {
   // 피드 삭제
   @DeleteMapping("/{feedId}")
   public ResponseEntity<FeedDto> deleteFeed(@PathVariable UUID feedId) {
-    return null;
+    return ResponseEntity.ok(feedService.deleteFeed(feedId));
   }
 }

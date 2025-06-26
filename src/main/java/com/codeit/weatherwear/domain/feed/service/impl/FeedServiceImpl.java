@@ -73,7 +73,12 @@ public class FeedServiceImpl implements FeedService {
 
   @Override
   public FeedDto deleteFeed(UUID feedId) {
-    return null;
+    log.info("Request Delete Feed - feedId: {}", feedId);
+
+    Feed feed = feedRepository.findById(feedId).orElseThrow(FeedNotFoundException::new);
+    feedRepository.delete(feed);
+
+    return toFeedDto(feed);
   }
 
   // 임시로 만들어진 WeatherSummeryDto 인스턴스를 반환합니다.
