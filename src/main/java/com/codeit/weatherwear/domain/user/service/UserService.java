@@ -5,10 +5,9 @@ import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserRoleUpdateRequest;
-import com.codeit.weatherwear.domain.user.dto.request.UserSortDirection;
+import com.codeit.weatherwear.domain.user.dto.request.UserSearchRequest;
 import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.response.UserDto;
-import com.codeit.weatherwear.domain.user.entity.Role;
 import com.codeit.weatherwear.global.response.PageResponse;
 import java.util.UUID;
 
@@ -26,8 +25,6 @@ public interface UserService {
 
     UserDto updateRole(UUID userId, UserRoleUpdateRequest userRoleUpdateRequest);
 
-    PageResponse searchUsers(String cursor, UUID idAfter,
-        int limit, String sortBy, UserSortDirection sortDirection,
-        String emailLike, Role roleEqual, Boolean locked);
+    PageResponse searchUsers(UserSearchRequest userSearchRequest);
 
 }

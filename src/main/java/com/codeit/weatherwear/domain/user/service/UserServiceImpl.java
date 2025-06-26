@@ -8,6 +8,7 @@ import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserRoleUpdateRequest;
+import com.codeit.weatherwear.domain.user.dto.request.UserSearchRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserSortDirection;
 import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.response.UserDto;
@@ -127,9 +128,15 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public PageResponse searchUsers(String cursor, UUID idAfter, int limit,
-        String sortBy, UserSortDirection sortDirection, String emailLike, Role roleEqual,
-        Boolean locked) {
+    public PageResponse searchUsers(UserSearchRequest userSearchRequest) {
+        String cursor = userSearchRequest.cursor();
+        UUID idAfter = userSearchRequest.idAfter();
+        int limit = userSearchRequest.limit();
+        String sortBy = userSearchRequest.sortBy();
+        UserSortDirection sortDirection = userSearchRequest.sortDirection();
+        String emailLike = userSearchRequest.emailLike();
+        Role roleEqual = userSearchRequest.roleEqual();
+        Boolean locked = userSearchRequest.locked();
 
         Slice<User> slice = userRepository.searchUsers(cursor, idAfter, limit, sortBy,
             sortDirection, emailLike, roleEqual, locked);
