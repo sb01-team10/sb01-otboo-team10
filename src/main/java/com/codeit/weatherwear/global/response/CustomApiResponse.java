@@ -33,6 +33,6 @@ public record CustomApiResponse<T>(
 
   public static <T> CustomApiResponse<T> fail(final CustomException e) {
     return new CustomApiResponse<>(e.getErrorCode().getStatus(), false, null,
-        ErrorResponse.of(e.getErrorCode()));
+        ErrorResponse.of(e.getErrorCode(),e.getClass().getSimpleName()));
   }
 }
