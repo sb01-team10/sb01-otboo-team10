@@ -19,7 +19,10 @@ public enum ErrorCode {
 
     // USER
     USER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "사용자 등록 실패", "사용자가 이미 존재합니다."),
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자 확인 실패", "존재하지 않는 사용자입니다.");
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자 확인 실패", "존재하지 않는 사용자입니다."),
+
+    // FEED
+    FEED_NOT_FOUND(HttpStatus.NOT_FOUND, "피드 조회 실패", "존재하지 않는 피드입니다.");
 
     private final HttpStatus status;
     private final String message;
