@@ -11,6 +11,7 @@ public record ProfileUpdateRequest(
     Gender gender,
     LocalDate birthDate,
     LocationDto location,
+    @Size(max = 5, message = "0-5 사이만 가능합니다.")
     Integer temperatureSensitivity
 ) {
 

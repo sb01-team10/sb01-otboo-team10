@@ -44,13 +44,13 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/profiles")
-    ResponseEntity<ProfileDto> findProfile(@PathVariable UUID userId) {
+    public ResponseEntity<ProfileDto> findProfile(@PathVariable UUID userId) {
         ProfileDto result = userService.findProfile(userId);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("")
-    ResponseEntity<PageResponse> searchUsers(
+    public ResponseEntity<PageResponse> searchUsers(
         @RequestParam(required = false) String cursor,
         @RequestParam(required = false) UUID idAfter,
         @RequestParam int limit,
@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @PatchMapping(value = "/{userId}/profiles", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<ProfileDto> updateProfile(
+    public ResponseEntity<ProfileDto> updateProfile(
         @PathVariable UUID userId,
         @Valid @RequestPart ProfileUpdateRequest profileUpdateRequest,
         @RequestPart(required = false) MultipartFile profileImage) {
@@ -76,21 +76,21 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}/lock")
-    ResponseEntity<UUID> updateLock(@PathVariable UUID userId,
+    public ResponseEntity<UUID> updateLock(@PathVariable UUID userId,
         @RequestBody UserLockUpdateRequest userLockUpdateRequest) {
         UUID result = userService.updateLock(userId, userLockUpdateRequest);
         return ResponseEntity.ok(result);
     }
 
     @PatchMapping("/{userId}/password")
-    ResponseEntity<Void> updatePassword(@PathVariable UUID userId,
-        @RequestBody ChangePasswordRequest changePasswordRequest) {
+    public ResponseEntity<Void> updatePassword(@PathVariable UUID userId,
+        @Valid @RequestBody ChangePasswordRequest changePasswordRequest) {
         userService.updatePassword(userId, changePasswordRequest);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{userId}/role")
-    ResponseEntity<UserDto> updateRole(@PathVariable UUID userId,
+    public ResponseEntity<UserDto> updateRole(@PathVariable UUID userId,
         @RequestBody UserRoleUpdateRequest userRoleUpdateRequest) {
         UserDto result = userService.updateRole(userId, userRoleUpdateRequest);
         return ResponseEntity.ok(result);
