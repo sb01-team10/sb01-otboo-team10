@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     private final LocationRepository locationRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -50,8 +52,7 @@ public class UserServiceImpl implements UserService {
             User.builder()
                 .name(userCreateRequest.name())
                 .email(userCreateRequest.email())
-                // TODO: Spring Security 적용 후 PasswordEncoder 적용
-                .password(userCreateRequest.password())
+                .password(passwordEncoder.encode(userCreateRequest.password()))
                 .locked(false)
                 .build()
         );
@@ -122,7 +123,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new UserNotFoundException());
 
-        String newPassword = changePasswordRequest.password();
+        String newPassword = passwordEncoder.encode(changePasswordRequest.password());
 
         user.updatePassword(newPassword);
     }
