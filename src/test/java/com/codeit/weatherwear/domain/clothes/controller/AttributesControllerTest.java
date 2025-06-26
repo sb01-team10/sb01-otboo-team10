@@ -13,6 +13,7 @@ import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefUpda
 import com.codeit.weatherwear.domain.clothes.entity.Attributes;
 import com.codeit.weatherwear.domain.clothes.repository.AttributesRepository;
 import com.codeit.weatherwear.domain.clothes.service.AttributesService;
+import com.codeit.weatherwear.domain.security.config.SecurityConfig;
 import com.codeit.weatherwear.global.exception.GlobalExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AttributesController.class)
-@Import(GlobalExceptionHandler.class)
+@Import({GlobalExceptionHandler.class, SecurityConfig.class})
 @ActiveProfiles("test")
 public class AttributesControllerTest {
 
@@ -73,17 +74,18 @@ public class AttributesControllerTest {
     void update_success() throws Exception {
         //given
         UUID id = UUID.randomUUID();
-        Attributes attributes=Attributes.builder()
+        Attributes attributes = Attributes.builder()
             .name("색상")
-            .selectableValues(new ArrayList<>(List.of("빨강","파랑")))
+            .selectableValues(new ArrayList<>(List.of("빨강", "파랑")))
             .build();
         given(repository.findById(id)).willReturn(Optional.of(attributes));
-        ClothesAttributeDefUpdateRequest request = new ClothesAttributeDefUpdateRequest("색상", List.of("빨강", "노랑"));
+        ClothesAttributeDefUpdateRequest request = new ClothesAttributeDefUpdateRequest("색상",
+            List.of("빨강", "노랑"));
 
         ClothesAttributeDefDto dto = new ClothesAttributeDefDto(UUID.randomUUID(),
             "색상", List.of("빨강", "노랑"));
 
-        given(service.update(id,request)).willReturn(dto);
+        given(service.update(id, request)).willReturn(dto);
 
         //when
         //then

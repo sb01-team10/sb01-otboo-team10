@@ -20,12 +20,13 @@ public class AdminUserInitializer implements ApplicationRunner {
     private final UserRepository userRepository;
 
     // TODO: passwordEncoder 적용
-    
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         String name = "admin";
-        String email = "admin@mail.com";
-        String password = "admin1!";
+        String email = "system@otboo.io";
+        String password = "otboo1!";
+
 
         if (!userRepository.existsByEmail(email) && !userRepository.existsByName(name)) {
             User admin = userRepository.save(

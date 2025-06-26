@@ -29,7 +29,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -41,8 +44,11 @@ class UserServiceImplTest {
     private UserRepository userRepository;
     @Mock
     private UserMapper userMapper;
+    @Spy
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Mock
     private LocationService locationService;
+
 
     @Test
     void 회원가입_성공() {
@@ -55,7 +61,7 @@ class UserServiceImplTest {
         User user = User.builder()
             .name(request.name())
             .email(request.email())
-            .password(request.password())
+            .password(passwordEncoder.encode(request.password()))
             .locked(false)
             .build();
 
@@ -197,7 +203,7 @@ class UserServiceImplTest {
 
         User user = User.builder()
             .id(userId)
-            .password("originalPassword")
+            .password(passwordEncoder.encode("originalPassword"))
             .build();
 
         ChangePasswordRequest request = new ChangePasswordRequest("newPassword");
@@ -208,7 +214,7 @@ class UserServiceImplTest {
         userService.updatePassword(userId, request);
 
         // then
-        assertThat(user.getPassword()).isEqualTo("newPassword");
+        assertThat(passwordEncoder.matches("newPassword", user.getPassword())).isTrue();
     }
 
     @Test
