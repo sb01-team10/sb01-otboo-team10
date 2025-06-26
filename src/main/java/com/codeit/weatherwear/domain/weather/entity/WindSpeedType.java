@@ -11,12 +11,16 @@ public enum WindSpeedType {
   MODERATE,
   STRONG;
 
+  private static final double WEAK_THRESHOLD = 4.0;
+  private static final double MODERATE_THRESHOLD = 9.0;
+  private static final double STRONG_THRESHOLD = 14.0;
+
   public static WindSpeedType fromCode(double wsdValue) {
-    if (wsdValue < 4.0) {
+    if (wsdValue < WEAK_THRESHOLD) {
       return WindSpeedType.NONE;
-    } else if (wsdValue < 9.0) {
+    } else if (wsdValue < MODERATE_THRESHOLD) {
       return WindSpeedType.WEAK;
-    } else if (wsdValue < 14.0) {
+    } else if (wsdValue < STRONG_THRESHOLD) {
       return WindSpeedType.MODERATE;
     } else {
       return WindSpeedType.STRONG;

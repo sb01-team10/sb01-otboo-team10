@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import org.hibernate.annotations.Comment;
 public class WindSpeed {
 
   @Comment("풍속 단위: m/s")
+  @Min(value = 0, message = "풍속은 음수가 될 수 없습니다.")
   @Column(name = "wind_speed", nullable = false)
   private double speed;
 
@@ -24,8 +26,8 @@ public class WindSpeed {
   private WindSpeedType speedAsWord;
 
   @Builder
-  private WindSpeed(double speed, WindSpeedType speedAsWord) {
+  private WindSpeed(double speed) {
     this.speed = speed;
-    this.speedAsWord = speedAsWord;
+    this.speedAsWord = WindSpeedType.fromCode(this.speed);
   }
 }
