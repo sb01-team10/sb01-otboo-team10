@@ -1,7 +1,9 @@
 package com.codeit.weatherwear.domain.feed.controller;
 
 import com.codeit.weatherwear.domain.feed.dto.request.FeedCreateRequest;
+import com.codeit.weatherwear.domain.feed.dto.request.FeedUpdateRequest;
 import com.codeit.weatherwear.domain.feed.dto.response.FeedDto;
+import com.codeit.weatherwear.domain.feed.service.FeedService;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/feeds")
 @RequiredArgsConstructor
 public class FeedController {
+
+  private final FeedService feedService;
 
   // 피드 목록 조회
   @GetMapping
@@ -41,13 +45,14 @@ public class FeedController {
   // 피드 등록
   @PostMapping
   public ResponseEntity<FeedDto> createFeed(@RequestBody FeedCreateRequest feedCreateRequest) {
-
-    return null;
+    return ResponseEntity.ok(feedService.createFeed(feedCreateRequest));
   }
 
   // 피드 갱신 (정보 업데이트)
   @PatchMapping("/{feedId}")
-  public ResponseEntity<FeedDto> updateFeed(@PathVariable UUID feedId) {
+  public ResponseEntity<FeedDto> updateFeed(
+      @PathVariable UUID feedId,
+      @RequestBody FeedUpdateRequest feedUpdateRequest) {
     return null;
   }
 

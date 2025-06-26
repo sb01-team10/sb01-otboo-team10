@@ -1,9 +1,13 @@
 package com.codeit.weatherwear.domain.feed.service.impl;
 
 import com.codeit.weatherwear.domain.feed.dto.request.FeedCreateRequest;
+import com.codeit.weatherwear.domain.feed.dto.request.FeedUpdateRequest;
 import com.codeit.weatherwear.domain.feed.dto.response.FeedDto;
 import com.codeit.weatherwear.domain.feed.entity.Feed;
+import com.codeit.weatherwear.domain.feed.mapper.FeedMapper;
+import com.codeit.weatherwear.domain.feed.repository.FeedRepository;
 import com.codeit.weatherwear.domain.feed.service.FeedService;
+import com.codeit.weatherwear.domain.follow.dto.UserSummaryDto;
 import com.codeit.weatherwear.domain.user.entity.User;
 import com.codeit.weatherwear.domain.user.exception.UserNotFoundException;
 import com.codeit.weatherwear.domain.user.repository.UserRepository;
@@ -24,6 +28,8 @@ import org.springframework.stereotype.Service;
 public class FeedServiceImpl implements FeedService {
 
   private final UserRepository userRepository;
+  private final FeedMapper feedMapper;
+  private final FeedRepository feedRepository;
 
   @Override
   public List<FeedDto> getFeedList(String cursor, UUID idAfter, int limit, String sortBy,
@@ -34,22 +40,24 @@ public class FeedServiceImpl implements FeedService {
 
   @Override
   public FeedDto createFeed(FeedCreateRequest feedCreateRequest) {
+    log.info("Request Create Feed - authorId: {}", feedCreateRequest.getAuthorId());
 
-//    User author = userRepository.findById(feedCreateRequest.getAuthorId())
-//        .orElseThrow(UserNotFoundException::new);
-//
-//    Feed feed = Feed.builder()
-//        .author(author)
-//        .content(feedCreateRequest.getContent())
-//        .likeCount(0)
-//        .commentCount(0)
-//        .build();
+    User author = userRepository.findById(feedCreateRequest.getAuthorId())
+        .orElseThrow(UserNotFoundException::new);
 
-    return null;
+    Feed feed = feedMapper.toEntity(author, feedCreateRequest);
+    Feed saved = feedRepository.save(feed);
+
+    UserSummaryDto authorDto = UserSummaryDto.from(author);
+    WeatherSummaryDto weatherSummaryDto = getMockWeatherSummaryDto();
+    // todo: OOTD 등록 - ootd 도메인
+    // todo: likedByMe 로직 필요 - feedLike 도메인
+
+    return feedMapper.toDto(saved, authorDto, weatherSummaryDto, null, false);
   }
 
   @Override
-  public FeedDto updateFeed(UUID feedId) {
+  public FeedDto updateFeed(UUID feedId, FeedUpdateRequest feedUpdateRequest) {
     return null;
   }
 

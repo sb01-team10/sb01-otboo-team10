@@ -1,6 +1,7 @@
 package com.codeit.weatherwear.domain.feed.service;
 
 import com.codeit.weatherwear.domain.feed.dto.request.FeedCreateRequest;
+import com.codeit.weatherwear.domain.feed.dto.request.FeedUpdateRequest;
 import com.codeit.weatherwear.domain.feed.dto.response.FeedDto;
 import com.codeit.weatherwear.domain.weather.dto.response.WeatherSummaryDto;
 import java.util.List;
@@ -14,7 +15,7 @@ public interface FeedService {
 
   FeedDto createFeed(FeedCreateRequest feedCreateRequest);
 
-  FeedDto updateFeed(UUID feedId);
+  FeedDto updateFeed(UUID feedId, FeedUpdateRequest feedUpdateRequest);
 
   FeedDto deleteFeed(UUID feedId);
 
