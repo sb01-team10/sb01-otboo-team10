@@ -4,6 +4,7 @@ import com.codeit.weatherwear.domain.feed.dto.request.FeedCreateRequest;
 import com.codeit.weatherwear.domain.feed.dto.request.FeedUpdateRequest;
 import com.codeit.weatherwear.domain.feed.dto.response.FeedDto;
 import com.codeit.weatherwear.domain.feed.entity.Feed;
+import com.codeit.weatherwear.domain.feed.exception.FeedNotFoundException;
 import com.codeit.weatherwear.domain.feed.mapper.FeedMapper;
 import com.codeit.weatherwear.domain.feed.repository.FeedRepository;
 import com.codeit.weatherwear.domain.feed.service.FeedService;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -41,13 +43,10 @@ public class FeedServiceImpl implements FeedService {
     // todo: 우선적으로 불러오기만 할 것 (페이지네이션은 이후 구현)
     List<Feed> feedList = feedRepository.findAll();
 
-    return feedList.stream().map(
-        feed -> feedMapper.toDto(feed, UserSummaryDto.from(feed.getAuthor()),
-            getMockWeatherSummaryDto(),
-            null, false)
-    ).collect(Collectors.toList());
+    return feedList.stream().map(this::toFeedDto).collect(Collectors.toList());
   }
 
+  @Transactional
   @Override
   public FeedDto createFeed(FeedCreateRequest feedCreateRequest) {
     log.info("Request Create Feed - authorId: {}", feedCreateRequest.getAuthorId());
@@ -58,17 +57,18 @@ public class FeedServiceImpl implements FeedService {
     Feed feed = feedMapper.toEntity(author, feedCreateRequest);
     Feed saved = feedRepository.save(feed);
 
-    UserSummaryDto authorDto = UserSummaryDto.from(author);
-    WeatherSummaryDto weatherSummaryDto = getMockWeatherSummaryDto();
-    // todo: OOTD 등록 - ootd 도메인
-    // todo: likedByMe 로직 필요 - feedLike 도메인
-
-    return feedMapper.toDto(saved, authorDto, weatherSummaryDto, null, false);
+    return toFeedDto(saved);
   }
 
+  @Transactional
   @Override
   public FeedDto updateFeed(UUID feedId, FeedUpdateRequest feedUpdateRequest) {
-    return null;
+    log.info("Request Update Feed - feedId: {}", feedId);
+
+    Feed feed = feedRepository.findById(feedId).orElseThrow(FeedNotFoundException::new);
+    feed.updateContent(feedUpdateRequest.getContent());
+
+    return toFeedDto(feed);
   }
 
   @Override
@@ -99,5 +99,14 @@ public class FeedServiceImpl implements FeedService {
         .precipitation(precipitation)
         .temperature(temperature)
         .build();
+  }
+
+  private FeedDto toFeedDto(Feed feed) {
+    UserSummaryDto authorDto = UserSummaryDto.from(feed.getAuthor());
+    WeatherSummaryDto weatherSummaryDto = getMockWeatherSummaryDto();
+    // todo: OOTD 등록 - ootd 도메인
+    // todo: likedByMe 로직 필요 - feedLike 도메인
+
+    return feedMapper.toDto(feed, authorDto, weatherSummaryDto, null, false);
   }
 }

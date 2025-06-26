@@ -55,7 +55,7 @@ public class FeedController {
   public ResponseEntity<FeedDto> updateFeed(
       @PathVariable UUID feedId,
       @RequestBody FeedUpdateRequest feedUpdateRequest) {
-    return null;
+    return ResponseEntity.ok(feedService.updateFeed(feedId, feedUpdateRequest));
   }
 
   // 피드 삭제
