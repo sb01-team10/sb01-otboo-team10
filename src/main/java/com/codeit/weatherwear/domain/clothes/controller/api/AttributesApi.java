@@ -65,13 +65,13 @@ public interface AttributesApi {
             @RequestParam(value = "idAfter", required = false)
             UUID idAfter,
         @Parameter(name = "limit", description = "페이지 크기", example = "50")
-            @RequestParam(value = "limit", defaultValue = "50",required = true)
+            @RequestParam(value = "limit",required = true)
             int limit,
         @Parameter(name = "sortBy", description = "정렬 기준", example = "sortBy")
-            @RequestParam(value = "sortBy", defaultValue = "sortBy",required = true)
+            @RequestParam(value = "sortBy",required = false)
             String sortBy,
         @Parameter(name = "sortDirection", description = "정렬 방향", example = "ASCENDING")
-            @RequestParam(value = "sortDirection",required = false)
+            @RequestParam(value = "sortDirection",defaultValue = "ASCENDING",required = false)
             AttributesSortDirection sortDirection,
         @Parameter(name = "keywordLike", description = "검색어", example = "색깔")
             @RequestParam(value = "keywordLike",required = false)

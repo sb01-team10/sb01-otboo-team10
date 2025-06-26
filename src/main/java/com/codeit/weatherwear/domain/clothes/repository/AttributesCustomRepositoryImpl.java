@@ -70,8 +70,10 @@ public class AttributesCustomRepositoryImpl implements AttributesCustomRepositor
         switch (sortBy) {
             case "name":
                 condition.and((direction.equals(Order.ASC))
-                    ? attributes.name.gt(keywordLike)
-                    : attributes.name.lt(keywordLike));
+                    ? attributes.name.gt(cursor)
+                    .or(attributes.name.eq(cursor).and(attributes.id.gt(idAfter)))
+                    : attributes.name.lt(cursor)
+                        .or(attributes.name.eq(cursor).and(attributes.id.lt(idAfter))));
                 break;
             case "createdAt":
                 Instant parse = Instant.parse(cursor);

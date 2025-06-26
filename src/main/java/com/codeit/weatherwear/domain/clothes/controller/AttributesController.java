@@ -61,7 +61,7 @@ public class AttributesController implements AttributesApi {
      * 의상 속성을 삭제합니다.
      *
      * @param definitionId
-     * @return 200 400
+     * @return 204 400
      */
     @Override
     @DeleteMapping("/{definitionId}")
