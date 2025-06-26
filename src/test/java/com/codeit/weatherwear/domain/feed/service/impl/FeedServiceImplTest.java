@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.codeit.weatherwear.domain.feed.dto.request.FeedCreateRequest;
@@ -30,7 +31,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -178,7 +178,7 @@ class FeedServiceImplTest {
     verify(feedMapper).toDto(eq(mockFeed), eq(mockAuthorDto), any(WeatherSummaryDto.class),
         isNull(), eq(false));
   }
-  
+
   @Test
   @DisplayName("사용자를 찾지 못해 피드 생성에 실패합니다.")
   void createFeed_failed_cannot_find_user() {
@@ -197,4 +197,27 @@ class FeedServiceImplTest {
     assertThatThrownBy(() -> feedService.createFeed(failedRequest))
         .isInstanceOf(UserNotFoundException.class);
   }
+
+  @Test
+  @DisplayName("전체 피드 리스트를 성공적으로 불러와 전달한다 - 페이지네이션 적용 안 한 상태")
+  void getFeedList_success() {
+    // given
+    List<Feed> feedList = List.of(mockFeed);
+    given(feedRepository.findAll()).willReturn(feedList);
+    given(feedMapper.toDto(eq(mockFeed), eq(mockAuthorDto), any(WeatherSummaryDto.class), isNull(),
+        eq(false))).willReturn(mockFeedDto);
+
+    // when
+    List<FeedDto> resultList = feedService.getFeedList(null, null, 10, "createdAt", "DESCENDING",
+        null, null, null, null);
+    // then
+    assertThat(resultList).isNotNull();
+    assertThat(resultList).hasSize(1);
+    assertThat(resultList.get(0)).isEqualTo(mockFeedDto);
+
+    // verify
+    verify(feedMapper, times(feedList.size())).toDto(eq(mockFeed), eq(mockAuthorDto),
+        any(WeatherSummaryDto.class), isNull(), eq(false));
+  }
+
 }
