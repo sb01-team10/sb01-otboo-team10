@@ -44,6 +44,9 @@ public class Feed {
   @JoinColumn(name = "author_id", nullable = false)
   private User author;
 
+  @Column(name = "content")
+  private String content;
+
   @Column(name = "like_count")
   private int likeCount = 0;
 
@@ -51,9 +54,15 @@ public class Feed {
   private int commentCount = 0;
 
   @Builder
-  private Feed(int likeCount, int commentCount) {
+  private Feed(User author, String content, int likeCount, int commentCount) {
+    this.author = author;
+    this.content = content;
     this.likeCount = likeCount;
     this.commentCount = commentCount;
+  }
+
+  public void updateContent(String content) {
+    this.content = content;
   }
 
   public void updateLikeCount(int likeCount) {
