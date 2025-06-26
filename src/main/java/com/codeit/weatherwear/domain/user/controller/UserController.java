@@ -8,9 +8,9 @@ import com.codeit.weatherwear.domain.user.dto.request.UserRoleUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserSortDirection;
 import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.response.UserDto;
-import com.codeit.weatherwear.domain.user.dto.response.UserPageResponse;
 import com.codeit.weatherwear.domain.user.entity.Role;
 import com.codeit.weatherwear.domain.user.service.UserService;
+import com.codeit.weatherwear.global.response.PageResponse;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @GetMapping("")
-    ResponseEntity<UserPageResponse<UserDto>> searchUsers(
+    ResponseEntity<PageResponse> searchUsers(
         @RequestParam(required = false) String cursor,
         @RequestParam(required = false) UUID idAfter,
         @RequestParam int limit,
@@ -60,7 +60,7 @@ public class UserController {
         @RequestParam(required = false) Role roleEqual,
         @RequestParam(required = false) Boolean locked
     ) {
-        UserPageResponse<UserDto> result = userService.searchUsers(cursor, idAfter, limit, sortBy,
+        PageResponse result = userService.searchUsers(cursor, idAfter, limit, sortBy,
             sortDirection, emailLike, roleEqual, locked);
         return ResponseEntity.ok(result);
     }

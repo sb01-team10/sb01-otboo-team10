@@ -8,8 +8,8 @@ import com.codeit.weatherwear.domain.user.dto.request.UserRoleUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserSortDirection;
 import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.response.UserDto;
-import com.codeit.weatherwear.domain.user.dto.response.UserPageResponse;
 import com.codeit.weatherwear.domain.user.entity.Role;
+import com.codeit.weatherwear.global.response.PageResponse;
 import java.util.UUID;
 
 public interface UserService {
@@ -26,7 +26,7 @@ public interface UserService {
 
     UserDto updateRole(UUID userId, UserRoleUpdateRequest userRoleUpdateRequest);
 
-    UserPageResponse<UserDto> searchUsers(String cursor, UUID idAfter,
+    PageResponse searchUsers(String cursor, UUID idAfter,
         int limit, String sortBy, UserSortDirection sortDirection,
         String emailLike, Role roleEqual, Boolean locked);
 

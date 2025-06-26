@@ -11,13 +11,13 @@ import com.codeit.weatherwear.domain.user.dto.request.UserRoleUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserSortDirection;
 import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.response.UserDto;
-import com.codeit.weatherwear.domain.user.dto.response.UserPageResponse;
 import com.codeit.weatherwear.domain.user.entity.Role;
 import com.codeit.weatherwear.domain.user.entity.User;
 import com.codeit.weatherwear.domain.user.exception.UserAlreadyExistsException;
 import com.codeit.weatherwear.domain.user.exception.UserNotFoundException;
 import com.codeit.weatherwear.domain.user.mapper.UserMapper;
 import com.codeit.weatherwear.domain.user.repository.UserRepository;
+import com.codeit.weatherwear.global.response.PageResponse;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public UserPageResponse<UserDto> searchUsers(String cursor, UUID idAfter, int limit,
+    public PageResponse searchUsers(String cursor, UUID idAfter, int limit,
         String sortBy, UserSortDirection sortDirection, String emailLike, Role roleEqual,
         Boolean locked) {
 
@@ -151,11 +151,13 @@ public class UserServiceImpl implements UserService {
             .map(userMapper::toUserDto)
             .toList();
 
+        boolean hasNext = slice.hasNext();
+        
         // 커서 구하기
-        User lastUser = (users.size() > 0) ? null : users.get(users.size() - 1);
+        User lastUser = (users.size() > 0) ? users.get(users.size() - 1) : null;
         Object nextCursor = null;
         UUID nextIdAfter = null;
-        if (lastUser != null) {
+        if (lastUser != null && hasNext) {
             switch (sortBy) {
                 case "email":
                     nextCursor = lastUser.getEmail();
@@ -169,7 +171,7 @@ public class UserServiceImpl implements UserService {
             nextIdAfter = lastUser.getId();
         }
 
-        return new UserPageResponse<>(
+        return new PageResponse(
             userDtos,
             nextCursor,
             nextIdAfter,
