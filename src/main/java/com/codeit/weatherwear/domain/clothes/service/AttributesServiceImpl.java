@@ -85,7 +85,7 @@ public class AttributesServiceImpl implements AttributesService{
      * @param sortBy
      * @param sortDirection
      * @param keywordLike
-     * @return
+     * @return List<ClothesAttributeDefDto> 결과 리스트
      */
     @Override
     public PageResponse<List<ClothesAttributeDefDto>> searchAttributes(String cursor,
