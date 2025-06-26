@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Slice;
 
 public interface AttributesCustomRepository {
-    Slice<Attributes> searchUsers(
+    Slice<Attributes> searchAttributes(
         String cursor,
         UUID idAfter,
         int limit,
