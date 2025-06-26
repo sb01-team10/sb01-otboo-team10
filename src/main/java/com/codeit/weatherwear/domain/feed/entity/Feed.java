@@ -1,6 +1,7 @@
 package com.codeit.weatherwear.domain.feed.entity;
 
 import com.codeit.weatherwear.domain.user.entity.User;
+import com.codeit.weatherwear.domain.weather.entity.Weather;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -53,12 +54,17 @@ public class Feed {
   @Column(name = "comment_count")
   private int commentCount = 0;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "weather_id", nullable = false)
+  private Weather weather;
+
   @Builder
-  private Feed(User author, String content, int likeCount, int commentCount) {
+  private Feed(User author, String content, int likeCount, int commentCount, Weather weather) {
     this.author = author;
     this.content = content;
     this.likeCount = likeCount;
     this.commentCount = commentCount;
+    this.weather = weather;
   }
 
   public void updateContent(String content) {
