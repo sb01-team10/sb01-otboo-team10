@@ -6,9 +6,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.codeit.weatherwear.domain.user.dto.request.ChangePasswordRequest;
 import com.codeit.weatherwear.domain.user.dto.request.ProfileUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserCreateRequest;
 import com.codeit.weatherwear.domain.user.dto.request.UserLockUpdateRequest;
+import com.codeit.weatherwear.domain.user.dto.request.UserRoleUpdateRequest;
 import com.codeit.weatherwear.domain.user.dto.response.ProfileDto;
 import com.codeit.weatherwear.domain.user.dto.response.UserDto;
 import com.codeit.weatherwear.domain.user.entity.Gender;
@@ -65,7 +67,7 @@ class UserServiceImplTest {
         );
 
         when(userRepository.save(any(User.class))).thenReturn(user);
-        when(userMapper.toDto(user)).thenReturn(dto);
+        when(userMapper.toUserDto(user)).thenReturn(dto);
 
         // when
         UserDto result = userService.create(request);
@@ -183,5 +185,77 @@ class UserServiceImplTest {
         // then
         assertThat(result.getUserId()).isEqualTo(userId);
         assertThat(result.getName()).isEqualTo("test");
+    }
+
+    @Test
+    void 비밀번호_변경_성공() {
+        // given
+        UUID userId = UUID.randomUUID();
+
+        User user = User.builder()
+            .id(userId)
+            .password("originalPassword")
+            .build();
+
+        ChangePasswordRequest request = new ChangePasswordRequest("newPassword");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // when
+        userService.updatePassword(userId, request);
+
+        // then
+        assertThat(user.getPassword()).isEqualTo("newPassword");
+    }
+
+    @Test
+    void 비밀번호_변경_실패() {
+        // given
+        UUID userId = UUID.randomUUID();
+        ChangePasswordRequest request = new ChangePasswordRequest("newPassword");
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(UserNotFoundException.class,
+            () -> userService.updatePassword(userId, request));
+    }
+
+    @Test
+    void 권한_수정_성공() {
+        // given
+        UUID userId = UUID.randomUUID();
+        UserRoleUpdateRequest request = new UserRoleUpdateRequest(Role.ADMIN);
+
+        User user = User.builder()
+            .id(userId)
+            .role(Role.USER)
+            .build();
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        // 실제로 role이 바뀌었는지 확인하기 위해 invocate
+        when(userMapper.toUserDto(any(User.class)))
+            .thenAnswer(invocation -> {
+                User u = invocation.getArgument(0);
+                return new UserDto(u.getId(), null, null, u.getName(), u.getRole(), null,
+                    u.isLocked());
+            });
+
+        // when
+        UserDto result = userService.updateRole(userId, request);
+
+        // then
+        assertThat(user.getRole()).isEqualTo(Role.ADMIN);
+        assertThat(result.getRole()).isEqualTo(Role.ADMIN);
+    }
+
+    @Test
+    void 권한_수정_실패() {
+        // given
+        UUID userId = UUID.randomUUID();
+        UserRoleUpdateRequest request = new UserRoleUpdateRequest(Role.ADMIN);
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(UserNotFoundException.class, () -> userService.updateRole(userId, request));
     }
 }
