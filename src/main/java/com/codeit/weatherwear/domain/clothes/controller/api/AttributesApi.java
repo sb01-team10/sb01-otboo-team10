@@ -2,9 +2,9 @@ package com.codeit.weatherwear.domain.clothes.controller.api;
 
 import com.codeit.weatherwear.domain.clothes.dto.request.AttributesSortDirection;
 import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefCreateRequest;
-import com.codeit.weatherwear.domain.clothes.dto.response.AttributesPageResponse;
 import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
 import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefUpdateRequest;
+import com.codeit.weatherwear.global.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.time.Instant;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,11 +56,11 @@ public interface AttributesApi {
         )
     })
     @GetMapping
-    ResponseEntity<AttributesPageResponse<ClothesAttributeDefDto>> searchAttributes(
+    ResponseEntity<PageResponse<ClothesAttributeDefDto>> searchAttributes(
         @Parameter(name = "cursor", description = "커서 페이지네이션 커서")
             @RequestParam(value = "cursor", required = false)
             String cursor,
-        @Parameter(name = "idAfter", description = "보조 커서(createdAt)")
+        @Parameter(name = "idAfter", description = "보조 커서")
             @RequestParam(value = "idAfter", required = false)
             UUID idAfter,
         @Parameter(name = "limit", description = "페이지 크기", example = "50")
@@ -71,7 +70,7 @@ public interface AttributesApi {
             @RequestParam(value = "sortBy", defaultValue = "sortBy",required = true)
             String sortBy,
         @Parameter(name = "sortDirection", description = "정렬 방향", example = "ASCENDING")
-            @RequestParam(value = "limit",required = false)
+            @RequestParam(value = "sortDirection",required = false)
             AttributesSortDirection sortDirection,
         @Parameter(name = "keywordLike", description = "검색어", example = "색깔")
             @RequestParam(value = "keywordLike",required = false)

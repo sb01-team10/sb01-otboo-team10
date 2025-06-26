@@ -4,14 +4,14 @@ import com.codeit.weatherwear.domain.clothes.controller.api.AttributesApi;
 import com.codeit.weatherwear.domain.clothes.dto.request.AttributesSortDirection;
 import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefCreateRequest;
 import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefUpdateRequest;
-import com.codeit.weatherwear.domain.clothes.dto.response.AttributesPageResponse;
 import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
 import com.codeit.weatherwear.domain.clothes.service.AttributesService;
+import com.codeit.weatherwear.global.response.PageResponse;
+import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -36,7 +36,7 @@ public class AttributesController implements AttributesApi {
      */
     @Override
     @PostMapping
-    public ResponseEntity<ClothesAttributeDefDto> create(@Validated @RequestBody ClothesAttributeDefCreateRequest dto) {
+    public ResponseEntity<ClothesAttributeDefDto> create(@Valid @RequestBody ClothesAttributeDefCreateRequest dto) {
         ClothesAttributeDefDto createAttribute = service.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createAttribute);
     }
@@ -51,7 +51,7 @@ public class AttributesController implements AttributesApi {
     @PatchMapping("/{definitionId}")
     public ResponseEntity<ClothesAttributeDefDto> update(
         @PathVariable UUID definitionId,
-        @Validated @RequestBody ClothesAttributeDefUpdateRequest request) {
+        @Valid @RequestBody ClothesAttributeDefUpdateRequest request) {
         ClothesAttributeDefDto updateAttribute = service.update(definitionId, request);
         return ResponseEntity.status(HttpStatus.OK).body(updateAttribute);
     }
@@ -82,7 +82,7 @@ public class AttributesController implements AttributesApi {
      */
     @Override
     @GetMapping
-    public ResponseEntity<AttributesPageResponse<ClothesAttributeDefDto>> searchAttributes(
+    public ResponseEntity<PageResponse<ClothesAttributeDefDto>> searchAttributes(
         @RequestParam(required = false) String cursor,
         @RequestParam(required = false) UUID idAfter,
         @RequestParam int limit,
@@ -90,7 +90,7 @@ public class AttributesController implements AttributesApi {
         @RequestParam AttributesSortDirection sortDirection,
         @RequestParam(required = false) String keywordLike
     ) {
-        AttributesPageResponse<ClothesAttributeDefDto> result = service.searchAttributes(cursor, idAfter, limit, sortBy,
+        PageResponse<ClothesAttributeDefDto> result = service.searchAttributes(cursor, idAfter, limit, sortBy,
             sortDirection,keywordLike);
         return ResponseEntity.ok(result);
     }

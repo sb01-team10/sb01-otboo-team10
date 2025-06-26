@@ -26,47 +26,23 @@ public class AttributesCustomRepositoryImpl implements AttributesCustomRepositor
     @Override
     public Slice<Attributes> searchAttributes(String cursor, UUID idAfter, int limit, String sortBy,
         AttributesSortDirection sortDirection, String keywordLike) {
+
         QAttributes attributes = QAttributes.attributes;
+        Order direction = (sortDirection.equals(AttributesSortDirection.ASCENDING) ? Order.ASC : Order.DESC);
 
-        Order direction= (sortDirection.equals(AttributesSortDirection.ASCENDING) ? Order.ASC : Order.DESC);
-        OrderSpecifier<?> orderSpecifier;
+        OrderSpecifier<?> orderSpecifier = buildOrderSpecifiers(sortBy, direction, attributes);
 
-        switch (sortBy) {
-            case "createdAt":
-                orderSpecifier = new OrderSpecifier<>(direction, attributes.createdAt);
-                break;
-            case "keywordLike":
-                orderSpecifier = new OrderSpecifier<>(direction, attributes.name);
-            default:
-                throw new IllegalArgumentException("지원하지 않는 정렬 기준입니다.");
-        }
+        BooleanBuilder condition = new BooleanBuilder();
 
-        BooleanBuilder builder = new BooleanBuilder();
-        builder.and((keywordLike==null||keywordLike.isBlank())?null:
-            attributes.name.containsIgnoreCase(keywordLike));
+        condition.and((keywordLike==null||keywordLike.isBlank())?null
+            : attributes.name.containsIgnoreCase(keywordLike));
 
-        if(cursor != null&&!cursor.isBlank()) {
-            switch (sortBy) {
-                case "keywordLike":
-                    builder.and((direction.equals(Order.ASC))
-                        ?attributes.name.gt(keywordLike)
-                        :attributes.name.lt(keywordLike));
-                    break;
-                case "createdAt":
-                    Instant parse = Instant.parse(cursor);
-                    builder.and((direction.equals(Order.ASC))
-                        ? attributes.createdAt.gt(parse)
-                        .or(attributes.createdAt.eq(parse).and(attributes.id.gt(idAfter)))
-                        : attributes.createdAt.lt(parse)
-                            .or(attributes.createdAt.eq(parse).and(attributes.id.lt(idAfter))));
-                    break;
-                default:
-                    new IllegalArgumentException("지원하지 않는 정렬기준입니다.");
-            }
+        if(cursor != null &&!cursor.isBlank()) {
+            condition.and(getCursorCondition(cursor, idAfter, sortBy, keywordLike, condition, direction, attributes));
         }
 
         JPAQuery<Attributes> query = factory.selectFrom(attributes);
-        query.where(builder);
+        query.where(condition);
         query.orderBy(orderSpecifier);
         query.limit(limit+1);
         List<Attributes> attributesList = query.fetch();
@@ -87,5 +63,46 @@ public class AttributesCustomRepositoryImpl implements AttributesCustomRepositor
             .from(attributes)
             .where(builder)
             .fetchOne();
+    }
+
+    private BooleanBuilder getCursorCondition(String cursor, UUID idAfter, String sortBy, String keywordLike,
+        BooleanBuilder condition, Order direction, QAttributes attributes) {
+        switch (sortBy) {
+            case "name":
+                condition.and((direction.equals(Order.ASC))
+                    ? attributes.name.gt(keywordLike)
+                    : attributes.name.lt(keywordLike));
+                break;
+            case "createdAt":
+                Instant parse = Instant.parse(cursor);
+                condition.and((direction.equals(Order.ASC))
+                    ? attributes.createdAt.gt(parse)
+                    .or(attributes.createdAt.eq(parse).and(attributes.id.gt(idAfter)))
+                    : attributes.createdAt.lt(parse)
+                        .or(attributes.createdAt.eq(parse).and(attributes.id.lt(idAfter))));
+                break;
+            default:
+                throw new IllegalArgumentException("지원하지 않는 정렬기준입니다.");
+        }
+        return condition;
+    }
+
+
+    // 정렬 기준 필드 + createdAt을 함께 적용한 Order By 조건을 생성함
+    private OrderSpecifier<?> buildOrderSpecifiers(String sortBy, Order direction,
+        QAttributes attributes) {
+        OrderSpecifier<?> orderSpecifier;
+
+        switch (sortBy) {
+            case "createdAt":
+                orderSpecifier = new OrderSpecifier<>(direction, attributes.createdAt);
+                break;
+            case "name":
+                orderSpecifier = new OrderSpecifier<>(direction, attributes.name);
+                break;
+            default:
+                throw new IllegalArgumentException("지원하지 않는 정렬 기준입니다.");
+        }
+        return orderSpecifier;
     }
 }

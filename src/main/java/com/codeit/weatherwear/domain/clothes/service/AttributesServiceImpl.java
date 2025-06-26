@@ -2,12 +2,12 @@ package com.codeit.weatherwear.domain.clothes.service;
 
 import com.codeit.weatherwear.domain.clothes.dto.request.AttributesSortDirection;
 import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefCreateRequest;
-import com.codeit.weatherwear.domain.clothes.dto.response.AttributesPageResponse;
 import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
 import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefUpdateRequest;
 import com.codeit.weatherwear.domain.clothes.entity.Attributes;
 import com.codeit.weatherwear.domain.clothes.mapper.AttributesMapper;
 import com.codeit.weatherwear.domain.clothes.repository.AttributesRepository;
+import com.codeit.weatherwear.global.response.PageResponse;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -77,8 +77,18 @@ public class AttributesServiceImpl implements AttributesService{
         attributesRepository.deleteById(attributes.getId());
     }
 
+    /**
+     * 속성 조회
+     * @param cursor
+     * @param idAfter
+     * @param limit
+     * @param sortBy
+     * @param sortDirection
+     * @param keywordLike
+     * @return
+     */
     @Override
-    public AttributesPageResponse<ClothesAttributeDefDto> searchAttributes(String cursor,
+    public PageResponse<List<ClothesAttributeDefDto>> searchAttributes(String cursor,
         UUID idAfter, int limit, String sortBy, AttributesSortDirection sortDirection,
         String keywordLike) {
         Slice<Attributes> attributes = attributesRepository.searchAttributes(cursor, idAfter, limit,
@@ -90,12 +100,12 @@ public class AttributesServiceImpl implements AttributesService{
             .toList();
 
         Attributes last =
-            (attributesList.size() > 0) ? null : attributesList.get(attributesList.size() - 1);
+            (attributesList.size() > 0) ? attributesList.get(attributesList.size() - 1) : null;
         Object nextCursor = null;
         UUID nextIdAfter = null;
         if(last != null) {
             switch (sortBy) {
-                case "keywordLike":
+                case "name":
                     nextCursor = last.getName();
                     break;
                 case "createdAt":
@@ -106,7 +116,7 @@ public class AttributesServiceImpl implements AttributesService{
             }
             nextIdAfter = last.getId();
         }
-        return new AttributesPageResponse<>(
+        return new PageResponse<>(
             result,
             nextCursor,
             nextIdAfter,

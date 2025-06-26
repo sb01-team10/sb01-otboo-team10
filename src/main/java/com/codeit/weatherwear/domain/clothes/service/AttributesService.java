@@ -5,6 +5,8 @@ import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefCrea
 import com.codeit.weatherwear.domain.clothes.dto.response.AttributesPageResponse;
 import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
 import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefUpdateRequest;
+import com.codeit.weatherwear.global.response.PageResponse;
+import java.util.List;
 import java.util.UUID;
 
 public interface AttributesService {
@@ -14,7 +16,7 @@ public interface AttributesService {
 
     void delete(UUID id);
 
-    AttributesPageResponse<ClothesAttributeDefDto> searchAttributes(String cursor, UUID idAfter, int limit,
+    PageResponse<List<ClothesAttributeDefDto>> searchAttributes(String cursor, UUID idAfter, int limit,
         String sortBy, AttributesSortDirection sortDirection, String keywordLike);
 
 }
