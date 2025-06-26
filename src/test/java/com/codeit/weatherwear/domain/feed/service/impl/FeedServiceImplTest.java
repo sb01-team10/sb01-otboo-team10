@@ -3,15 +3,20 @@ package com.codeit.weatherwear.domain.feed.service.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.codeit.weatherwear.domain.feed.dto.request.FeedCreateRequest;
+import com.codeit.weatherwear.domain.feed.dto.request.FeedUpdateRequest;
 import com.codeit.weatherwear.domain.feed.dto.response.FeedDto;
 import com.codeit.weatherwear.domain.feed.entity.Feed;
+import com.codeit.weatherwear.domain.feed.exception.FeedNotFoundException;
 import com.codeit.weatherwear.domain.feed.mapper.FeedMapper;
 import com.codeit.weatherwear.domain.feed.repository.FeedRepository;
 import com.codeit.weatherwear.domain.follow.dto.UserSummaryDto;
@@ -72,6 +77,10 @@ class FeedServiceImplTest {
   private TemperatureDto mockTemperature;
   private UserSummaryDto mockAuthorDto;
   private FeedDto mockFeedDto;
+
+  private Feed updateMockFeed;
+  private FeedDto updateFeedDto;
+  private String updateContent;
 
   @BeforeEach
   void setUp() {
@@ -149,6 +158,31 @@ class FeedServiceImplTest {
         .likeCount(mockFeed.getLikeCount())
         .likedByMe(false)
         .build();
+
+    updateContent = "수정된 메시지";
+    updateMockFeed = Feed.builder()
+        .author(mockAuthor)
+        .content(updateContent)
+        .commentCount(0)
+        .likeCount(0)
+        .build();
+    ReflectionTestUtils.setField(updateMockFeed, "id", feedId);
+
+    updateFeedDto = FeedDto.builder()
+        .id(updateMockFeed.getId())
+        .createdAt(updateMockFeed.getCreatedAt())
+        .updatedAt(updateMockFeed.getUpdatedAt())
+        .author(mockAuthorDto)
+        .weather(mockWeatherDto)
+        .ootds(null)
+        .content(updateMockFeed.getContent())
+        .commentCount(updateMockFeed.getCommentCount())
+        .likeCount(updateMockFeed.getLikeCount())
+        .likedByMe(false)
+        .build();
+
+    ReflectionTestUtils.setField(mockFeed, "id", feedId);
+
   }
 
   @Test
@@ -218,6 +252,43 @@ class FeedServiceImplTest {
     // verify
     verify(feedMapper, times(feedList.size())).toDto(eq(mockFeed), eq(mockAuthorDto),
         any(WeatherSummaryDto.class), isNull(), eq(false));
+  }
+
+  @Test
+  @DisplayName("피드를 성공적으로 수정한다")
+  void updateFeed_success() {
+    // given
+    FeedUpdateRequest updateRequest = FeedUpdateRequest.builder().content(updateContent).build();
+
+    given(feedRepository.findById(feedId)).willReturn(Optional.of(mockFeed));
+    given(feedMapper.toDto(any(), any(), any(), any(), anyBoolean())).willReturn(updateFeedDto);
+
+    // when
+    FeedDto result = feedService.updateFeed(feedId, updateRequest);
+
+    // then
+    assertThat(result).isNotNull();
+    assertThat(result.getId()).isEqualTo(feedId);
+    assertThat(result.getContent()).isEqualTo(updateContent);
+
+    // verify
+    assertThat(mockFeed.getContent()).isEqualTo(updateContent);
+  }
+
+  @Test
+  @DisplayName("피드를 조회하지 못 해 피드 수정을 실패한다.")
+  void updateFeed_failed_cannot_find_feed() {
+    // given
+    UUID failedId = UUID.randomUUID();
+    FeedUpdateRequest failedRequest = FeedUpdateRequest.builder()
+        .content("실패 테스트")
+        .build();
+
+    given(feedRepository.findById(failedId)).willReturn(Optional.empty());
+
+    // when & then
+    assertThatThrownBy(() -> feedService.updateFeed(failedId, failedRequest))
+        .isInstanceOf(FeedNotFoundException.class);
   }
 
 }
