@@ -24,3 +24,14 @@ server:
 weather:
   api-url: ${WEATHER_INFO_API_URL}
   api-service-key: ${WEATHER_INFO_SERVICE_KEY}
+
+jwt:
+  issuer: weatherwear
+  access-token:
+    validity-seconds: 900 # 15분
+  refresh-token:
+    validity-seconds: 2592000 # 30일
+  secret: ${JWT_SECRET:dev-secret-key-must-be-at-least-32-characters-long}
+
+time:
+  zone-id: ${TIME_ZONE_ID:Asia/Seoul}

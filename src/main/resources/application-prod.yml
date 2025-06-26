@@ -46,3 +46,7 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+
+
+jwt:
+  secret:${JWT_SECRET} # 반드시 환경변수 통해 시크릿 키 주입

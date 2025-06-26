@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,7 +19,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "jwt_sessions")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class JwtSession {
 
@@ -50,6 +51,16 @@ public class JwtSession {
     public JwtSession(UUID userId, String accessToken, String refreshToken,
         Instant expirationTime) {
         this.userId = userId;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+        this.expirationTime = expirationTime;
+    }
+
+    public boolean isExpired() {
+        return this.expirationTime.isBefore(Instant.now());
+    }
+
+    public void update(String accessToken, String refreshToken, Instant expirationTime) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.expirationTime = expirationTime;
