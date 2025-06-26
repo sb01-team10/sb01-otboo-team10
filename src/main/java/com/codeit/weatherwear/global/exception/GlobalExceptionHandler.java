@@ -1,7 +1,8 @@
 package com.codeit.weatherwear.global.exception;
 
-import com.codeit.weatherwear.global.response.CustomApiResponse;
+import com.codeit.weatherwear.global.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,9 +23,11 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(value = {NoHandlerFoundException.class,
       HttpRequestMethodNotSupportedException.class})
-  public CustomApiResponse<?> handleNoPageFoundException(Exception e) {
+  public ResponseEntity<?> handleNoPageFoundException(Exception e) {
     log.error("GlobalExceptionHandler catch NoHandlerFoundException : {}", e.getMessage());
-    return CustomApiResponse.fail(new CustomException(ErrorCode.INTERNAL_SERVER_ERROR));
+    return ResponseEntity
+        .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus())
+        .body(ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, e,e.getClass().getSimpleName()));
   }
 
   /**
@@ -34,10 +37,12 @@ public class GlobalExceptionHandler {
    * @return 해당 Error 코드에 대응하는 에러 응답
    */
   @ExceptionHandler(value = {CustomException.class})
-  public CustomApiResponse<?> handleCustomException(CustomException e) {
+  public ResponseEntity<?> handleCustomException(CustomException e) {
     log.error("handleCustomException() in GlobalExceptionHandler throw CustomException : {}",
         e.getMessage());
-    return CustomApiResponse.fail(e);
+    return ResponseEntity
+        .status(e.getErrorCode().getStatus())
+        .body(ErrorResponse.of(e.getErrorCode(), e,e.getClass().getSimpleName()));
   }
 
   /**
@@ -47,10 +52,12 @@ public class GlobalExceptionHandler {
    * @return 500 INTERNAL SERVER ERROR 응답
    */
   @ExceptionHandler(value = {Exception.class})
-  public CustomApiResponse<?> handleException(Exception e) {
+  public ResponseEntity<?> handleException(Exception e) {
     log.error("handleCustomException() in GlobalExceptionHandler throw Exception : {}",
         e.getMessage());
-    return CustomApiResponse.fail(new CustomException(ErrorCode.INTERNAL_SERVER_ERROR));
+    return ResponseEntity
+        .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus())
+        .body(ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, e,e.getClass().getSimpleName()));
   }
 
 }

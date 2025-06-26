@@ -17,11 +17,14 @@ public record ErrorResponse(
     String message,
     Map<String,String> details) {
 
-  public static ErrorResponse of(ErrorCode errorCode,String exceptionName) {
+  public static ErrorResponse of(ErrorCode errorCode,Exception ex,String exceptionName) {
     return ErrorResponse.builder()
         .exceptionName(exceptionName)
         .message(errorCode.getMessage())
-        .details(Map.of("detail", errorCode.getDetail()))
+        .details(Map.of(
+            "exceptionClass", ex.getClass().getSimpleName(),
+            "exceptionMessage",ex.getMessage()
+        ))
         .build();
   }
 }
