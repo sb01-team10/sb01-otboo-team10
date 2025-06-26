@@ -1,7 +1,7 @@
 package com.codeit.weatherwear.domain.feed.dto.response;
 
+import com.codeit.weatherwear.domain.follow.dto.UserSummaryDto;
 import com.codeit.weatherwear.domain.ootd.dto.response.OotdDto;
-import com.codeit.weatherwear.domain.user.dto.response.AuthorDto;
 import com.codeit.weatherwear.domain.weather.dto.response.WeatherSummaryDto;
 import java.time.Instant;
 import java.util.List;
@@ -16,7 +16,7 @@ public class FeedDto {
   private final UUID id;
   private final Instant createdAt;
   private final Instant updatedAt;
-  private final AuthorDto author;
+  private final UserSummaryDto author;
   private final WeatherSummaryDto weather;
   private final List<OotdDto> ootds;
   private final String content;
