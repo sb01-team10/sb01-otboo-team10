@@ -15,17 +15,17 @@ public enum PrecipitationsType {
   private final int precipitationTypeCode;
 
   public static PrecipitationsType fromCode(String ptyCode) {
-    try {
-      int code = Integer.parseInt(ptyCode);
-      for (PrecipitationsType type : values()) {
-        if (type.getPrecipitationTypeCode() == code) {
-          return type;
-        }
-      }
-    } catch (NumberFormatException e) {
-      // -, null, 0값은 ‘강수없음’
+    if (ptyCode == null || ptyCode.trim().isEmpty() || ptyCode.equals("-")) {
       return PrecipitationsType.NONE;
     }
+
+    int code = Integer.parseInt(ptyCode);
+    for (PrecipitationsType type : values()) {
+      if (type.getPrecipitationTypeCode() == code) {
+        return type;
+      }
+    }
+
     return PrecipitationsType.NONE;
   }
 }
