@@ -19,11 +19,17 @@ public enum PrecipitationsType {
       return PrecipitationsType.NONE;
     }
 
-    int code = Integer.parseInt(ptyCode);
-    for (PrecipitationsType type : values()) {
-      if (type.getPrecipitationTypeCode() == code) {
-        return type;
+    int code;
+    try {
+      code = Integer.parseInt(ptyCode);
+      for (PrecipitationsType type : values()) {
+        if (type.getPrecipitationTypeCode() == code) {
+          return type;
+        }
       }
+    } catch (NumberFormatException e) {
+      // 생각치 못한 예외 상황 처리를 위함
+      return PrecipitationsType.NONE;
     }
 
     return PrecipitationsType.NONE;
