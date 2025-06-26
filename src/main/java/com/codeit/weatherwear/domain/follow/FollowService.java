@@ -61,7 +61,7 @@ public class FollowService {
       UUID idAfter, int limit, String nameLike
   ) {
     List<FollowDto> followings = followRepository
-        .getFollowings(followeeId, cursor, idAfter, limit, nameLike);
+        .getFollowers(followeeId, cursor, idAfter, limit, nameLike);
     long totalCount = followRepository.countByFollowee_Id(followeeId);
     return toPageResponse(followings, limit, totalCount);
   }

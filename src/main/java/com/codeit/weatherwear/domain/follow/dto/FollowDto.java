@@ -15,8 +15,8 @@ public record FollowDto(
     return new FollowDto(
         follow.getId(),
         follow.getCreatedAt(),
-        com.codeit.weatherwear.domain.follow.dto.UserSummaryDto.from(follow.getFollowee()),
-        com.codeit.weatherwear.domain.follow.dto.UserSummaryDto.from(follow.getFollower())
+        UserSummaryDto.from(follow.getFollowee()),
+        UserSummaryDto.from(follow.getFollower())
     );
   }
 }
