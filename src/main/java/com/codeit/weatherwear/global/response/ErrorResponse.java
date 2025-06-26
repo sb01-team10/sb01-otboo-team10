@@ -15,16 +15,15 @@ import lombok.Builder;
 public record ErrorResponse(
     String exceptionName,
     String message,
-    Map<String,String> details) {
+    Map<String,Object> details) {
 
-  public static ErrorResponse of(ErrorCode errorCode,Exception ex,String exceptionName) {
+  public static ErrorResponse of(ErrorCode errorCode,
+      Exception ex,
+      Map<String,Object> details) {
     return ErrorResponse.builder()
-        .exceptionName(exceptionName)
+        .exceptionName(ex.getClass().getSimpleName())
         .message(errorCode.getMessage())
-        .details(Map.of(
-            "exceptionClass", ex.getClass().getSimpleName(),
-            "exceptionMessage",ex.getMessage()
-        ))
+        .details(details)
         .build();
   }
 }

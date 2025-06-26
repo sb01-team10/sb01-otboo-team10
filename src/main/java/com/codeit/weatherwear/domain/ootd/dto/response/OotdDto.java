@@ -1,6 +1,6 @@
 package com.codeit.weatherwear.domain.ootd.dto.response;
 
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefDto;
+import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
 import java.util.List;
 import java.util.UUID;
 import lombok.Builder;

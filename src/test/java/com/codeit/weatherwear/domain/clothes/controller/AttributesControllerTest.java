@@ -7,9 +7,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefCreateRequest;
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefDto;
-import com.codeit.weatherwear.domain.clothes.dto.ClothesAttributeDefUpdateRequest;
+import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefCreateRequest;
+import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
+import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefUpdateRequest;
 import com.codeit.weatherwear.domain.clothes.entity.Attributes;
 import com.codeit.weatherwear.domain.clothes.repository.AttributesRepository;
 import com.codeit.weatherwear.domain.clothes.service.AttributesService;
