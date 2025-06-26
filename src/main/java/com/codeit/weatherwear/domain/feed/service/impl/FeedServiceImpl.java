@@ -35,6 +35,7 @@ public class FeedServiceImpl implements FeedService {
   private final FeedMapper feedMapper;
   private final FeedRepository feedRepository;
 
+  @Transactional
   @Override
   public List<FeedDto> getFeedList(FeedGetParamRequest paramRequest) {
     log.info("Request Get Feed List");
@@ -70,6 +71,7 @@ public class FeedServiceImpl implements FeedService {
     return toFeedDto(feed);
   }
 
+  @Transactional
   @Override
   public FeedDto deleteFeed(UUID feedId) {
     log.info("Request Delete Feed - feedId: {}", feedId);
