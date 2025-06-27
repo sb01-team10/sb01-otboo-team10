@@ -1,26 +1,25 @@
 package com.codeit.weatherwear.domain.clothes.controller;
 
 import com.codeit.weatherwear.domain.clothes.controller.api.AttributesApi;
-import com.codeit.weatherwear.domain.clothes.dto.request.AttributesSortDirection;
+import com.codeit.weatherwear.domain.clothes.dto.request.AttributesSearchRequest;
 import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefCreateRequest;
 import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefUpdateRequest;
 import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
 import com.codeit.weatherwear.domain.clothes.service.AttributesService;
 import com.codeit.weatherwear.global.response.PageResponse;
 import jakarta.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -73,26 +72,14 @@ public class AttributesController implements AttributesApi {
     /**
      * 의상 속성을 조회합니다.
      *
-     * @param cursor 커서 페이지네이션 커서
-     * @param idAfter 보조 커서
-     * @param limit 페이지 크기
-     * @param sortBy 정렬 기준
-     * @param sortDirection 정렬 방향
-     * @param keywordLike 검색어
+     * @param request 조회 조건
      * @return 200 400
      */
     @Override
     @GetMapping
-    public ResponseEntity<PageResponse<List<ClothesAttributeDefDto>>> searchAttributes(
-        @RequestParam(required = false) String cursor,
-        @RequestParam(required = false) UUID idAfter,
-        @RequestParam int limit,
-        @RequestParam String sortBy,
-        @RequestParam AttributesSortDirection sortDirection,
-        @RequestParam(required = false) String keywordLike
-    ) {
-        PageResponse<List<ClothesAttributeDefDto>> result = service.searchAttributes(cursor, idAfter, limit, sortBy,
-            sortDirection,keywordLike);
+    public ResponseEntity<PageResponse<ClothesAttributeDefDto>> searchAttributes(
+        @ModelAttribute @Valid AttributesSearchRequest request) {
+        PageResponse<ClothesAttributeDefDto> result = service.searchAttributes(request);
         return ResponseEntity.ok(result);
     }
 }
