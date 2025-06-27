@@ -1,5 +1,6 @@
 package com.codeit.weatherwear.domain.clothes.controller.api;
 
+import com.codeit.weatherwear.domain.clothes.dto.request.AttributesSearchRequest;
 import com.codeit.weatherwear.domain.clothes.dto.request.AttributesSortDirection;
 import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefCreateRequest;
 import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
@@ -12,8 +13,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import java.util.UUID;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,25 +58,8 @@ public interface AttributesApi {
         )
     })
     @GetMapping
-    ResponseEntity<PageResponse<List<ClothesAttributeDefDto>>> searchAttributes(
-        @Parameter(name = "cursor", description = "커서 페이지네이션 커서")
-            @RequestParam(value = "cursor", required = false)
-            String cursor,
-        @Parameter(name = "idAfter", description = "보조 커서")
-            @RequestParam(value = "idAfter", required = false)
-            UUID idAfter,
-        @Parameter(name = "limit", description = "페이지 크기", example = "50")
-            @RequestParam(value = "limit",required = true)
-            int limit,
-        @Parameter(name = "sortBy", description = "정렬 기준", example = "sortBy")
-            @RequestParam(value = "sortBy",required = false)
-            String sortBy,
-        @Parameter(name = "sortDirection", description = "정렬 방향", example = "ASCENDING")
-            @RequestParam(value = "sortDirection",defaultValue = "ASCENDING",required = false)
-            AttributesSortDirection sortDirection,
-        @Parameter(name = "keywordLike", description = "검색어", example = "색깔")
-            @RequestParam(value = "keywordLike",required = false)
-            String keywordLike);
+    ResponseEntity<PageResponse<ClothesAttributeDefDto>> searchAttributes(
+       @ParameterObject AttributesSearchRequest request);
 
 
 
