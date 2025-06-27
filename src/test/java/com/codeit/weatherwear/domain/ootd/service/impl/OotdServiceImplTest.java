@@ -78,7 +78,7 @@ class OotdServiceImplTest {
         .attributes(null)
         .build();
     mockOotd2 = mock(Ootd.class);
-    mockOotdDto1 = OotdDto.builder()
+    mockOotdDto2 = OotdDto.builder()
         .clothesId(clothId2)
         .name("cloth2")
         .imageUrl(null)
