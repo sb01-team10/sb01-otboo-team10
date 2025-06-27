@@ -88,7 +88,7 @@ public class AttributesServiceImpl implements AttributesService{
      * @return List<ClothesAttributeDefDto> 결과 리스트
      */
     @Override
-    public PageResponse<List<ClothesAttributeDefDto>> searchAttributes(String cursor,
+    public PageResponse<ClothesAttributeDefDto> searchAttributes(String cursor,
         UUID idAfter, int limit, String sortBy, AttributesSortDirection sortDirection,
         String keywordLike) {
         Slice<Attributes> attributes = attributesRepository.searchAttributes(cursor, idAfter, limit,

@@ -15,7 +15,7 @@ public interface AttributesService {
 
     void delete(UUID id);
 
-    PageResponse<List<ClothesAttributeDefDto>> searchAttributes(String cursor, UUID idAfter, int limit,
+    PageResponse<ClothesAttributeDefDto> searchAttributes(String cursor, UUID idAfter, int limit,
         String sortBy, AttributesSortDirection sortDirection, String keywordLike);
 
 }

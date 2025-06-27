@@ -8,7 +8,6 @@ import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto
 import com.codeit.weatherwear.domain.clothes.service.AttributesService;
 import com.codeit.weatherwear.global.response.PageResponse;
 import jakarta.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -83,7 +82,7 @@ public class AttributesController implements AttributesApi {
      */
     @Override
     @GetMapping
-    public ResponseEntity<PageResponse<List<ClothesAttributeDefDto>>> searchAttributes(
+    public ResponseEntity<PageResponse<ClothesAttributeDefDto>> searchAttributes(
         @RequestParam(required = false) String cursor,
         @RequestParam(required = false) UUID idAfter,
         @RequestParam int limit,
@@ -91,7 +90,7 @@ public class AttributesController implements AttributesApi {
         @RequestParam AttributesSortDirection sortDirection,
         @RequestParam(required = false) String keywordLike
     ) {
-        PageResponse<List<ClothesAttributeDefDto>> result = service.searchAttributes(cursor, idAfter, limit, sortBy,
+        PageResponse<ClothesAttributeDefDto> result = service.searchAttributes(cursor, idAfter, limit, sortBy,
             sortDirection,keywordLike);
         return ResponseEntity.ok(result);
     }

@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,7 +56,7 @@ public interface AttributesApi {
         )
     })
     @GetMapping
-    ResponseEntity<PageResponse<List<ClothesAttributeDefDto>>> searchAttributes(
+    ResponseEntity<PageResponse<ClothesAttributeDefDto>> searchAttributes(
         @Parameter(name = "cursor", description = "커서 페이지네이션 커서")
             @RequestParam(value = "cursor", required = false)
             String cursor,
