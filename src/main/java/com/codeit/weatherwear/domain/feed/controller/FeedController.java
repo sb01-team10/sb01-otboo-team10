@@ -54,6 +54,6 @@ public class FeedController {
   // 피드 삭제
   @DeleteMapping("/{feedId}")
   public ResponseEntity<FeedDto> deleteFeed(@PathVariable UUID feedId) {
-    return ResponseEntity.ok(feedService.deleteFeed(feedId));
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(feedService.deleteFeed(feedId));
   }
 }

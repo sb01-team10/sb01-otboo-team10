@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -34,7 +35,7 @@ public class Weather {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "location_id", nullable = false)
-  private Location locationId;
+  private Location location;
 
   @Column(name = "forecasted_at", nullable = false)
   private Instant forecastedAt;
@@ -58,5 +59,18 @@ public class Weather {
   @Embedded
   private WindSpeed windSpeed;
 
+  @Builder
+  private Weather(Location location, Instant forecastedAt, Instant forecastAt, SkyStatus skyStatus,
+      Precipitation precipitation, Humidity humidity, Temperature temperature,
+      WindSpeed windSpeed) {
+    this.location = location;
+    this.forecastedAt = forecastedAt;
+    this.forecastAt = forecastAt;
+    this.skyStatus = skyStatus;
+    this.precipitation = precipitation;
+    this.humidity = humidity;
+    this.temperature = temperature;
+    this.windSpeed = windSpeed;
+  }
 
 }

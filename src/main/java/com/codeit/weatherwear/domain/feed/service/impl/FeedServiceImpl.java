@@ -65,7 +65,7 @@ public class FeedServiceImpl implements FeedService {
   public FeedDto updateFeed(UUID feedId, FeedUpdateRequest feedUpdateRequest) {
     log.info("Request Update Feed - feedId: {}", feedId);
 
-    Feed feed = feedRepository.findById(feedId).orElseThrow(FeedNotFoundException::new);
+    Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new FeedNotFoundException(feedId));
     feed.updateContent(feedUpdateRequest.getContent());
 
     return toFeedDto(feed);
@@ -76,7 +76,7 @@ public class FeedServiceImpl implements FeedService {
   public FeedDto deleteFeed(UUID feedId) {
     log.info("Request Delete Feed - feedId: {}", feedId);
 
-    Feed feed = feedRepository.findById(feedId).orElseThrow(FeedNotFoundException::new);
+    Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new FeedNotFoundException(feedId));
     feedRepository.delete(feed);
 
     return toFeedDto(feed);

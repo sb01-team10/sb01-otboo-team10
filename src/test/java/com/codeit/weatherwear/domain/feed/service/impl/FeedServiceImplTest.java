@@ -266,7 +266,6 @@ class FeedServiceImplTest {
     FeedUpdateRequest updateRequest = FeedUpdateRequest.builder().content(updateContent).build();
 
     given(feedRepository.findById(feedId)).willReturn(Optional.of(mockFeed));
-//    given(feedMapper.toDto(any(), any(), any(), any(), anyBoolean())).willReturn(updateFeedDto);
 
     given(feedMapper.toDto(eq(mockFeed), eq(mockAuthorDto), any(WeatherSummaryDto.class), isNull(),
         eq(false))).willReturn(updateFeedDto);
