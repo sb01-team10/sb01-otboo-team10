@@ -1,6 +1,7 @@
 package com.codeit.weatherwear.domain.user.dto.request;
 
 import com.codeit.weatherwear.domain.user.entity.Role;
+import com.codeit.weatherwear.global.request.SortDirection;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -20,7 +21,7 @@ public record UserSearchRequest(
     String sortBy,
 
     @NotNull
-    UserSortDirection sortDirection,
+    SortDirection sortDirection,
 
     String emailLike,
     Role roleEqual,

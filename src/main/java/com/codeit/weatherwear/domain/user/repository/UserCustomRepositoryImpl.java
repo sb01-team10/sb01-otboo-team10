@@ -1,9 +1,9 @@
 package com.codeit.weatherwear.domain.user.repository;
 
-import com.codeit.weatherwear.domain.user.dto.request.UserSortDirection;
 import com.codeit.weatherwear.domain.user.entity.QUser;
 import com.codeit.weatherwear.domain.user.entity.Role;
 import com.codeit.weatherwear.domain.user.entity.User;
+import com.codeit.weatherwear.global.request.SortDirection;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -26,14 +26,14 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
 
     @Override
     public Slice<User> searchUsers(String cursor, UUID idAfter, int limit,
-        String sortBy, UserSortDirection sortDirection, String emailLike, Role roleEqual,
+        String sortBy, SortDirection sortDirection, String emailLike, Role roleEqual,
         Boolean locked) {
 
         QUser user = QUser.user;
 
         // 정렬 방향
         Order direction =
-            (sortDirection.equals(UserSortDirection.ASCENDING)) ? Order.ASC : Order.DESC;
+            (sortDirection.equals(SortDirection.ASCENDING)) ? Order.ASC : Order.DESC;
         OrderSpecifier<?> orderSpecifier;
 
         switch (sortBy) {
