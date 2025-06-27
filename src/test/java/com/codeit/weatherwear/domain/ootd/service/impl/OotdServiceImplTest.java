@@ -48,6 +48,7 @@ class OotdServiceImplTest {
   private UUID clothId1;
   private UUID clothId2;
 
+  private List<Ootd> ootdList;
   private Ootd mockOotd1;
   private OotdDto mockOotdDto1;
   private Ootd mockOotd2;
@@ -83,6 +84,7 @@ class OotdServiceImplTest {
         .type("하의")
         .attributes(null)
         .build();
+    ootdList = List.of(mockOotd1, mockOotd2);
 
     mockLocation = new Location(37.513068, 127.102570, 961159, 1953082, "서울 송파구 신천동");
 
@@ -122,8 +124,7 @@ class OotdServiceImplTest {
     // given
     given(ootdMapper.toEntity(mockFeed, clothId1)).willReturn(mockOotd1);
     given(ootdMapper.toEntity(mockFeed, clothId2)).willReturn(mockOotd2);
-    given(ootdRepository.saveAll(List.of(mockOotd1, mockOotd2))).willReturn(
-        List.of(mockOotd1, mockOotd2));
+    given(ootdRepository.saveAll(ootdList)).willReturn(ootdList);
     given(ootdMapper.toDto(mockOotd1)).willReturn(mockOotdDto1);
     given(ootdMapper.toDto(mockOotd2)).willReturn(mockOotdDto2);
 
@@ -133,7 +134,7 @@ class OotdServiceImplTest {
     // then
     then(ootdMapper).should().toEntity(mockFeed, clothId1);
     then(ootdMapper).should().toEntity(mockFeed, clothId2);
-    then(ootdRepository).should().saveAll(List.of(mockOotd1, mockOotd2));
+    then(ootdRepository).should().saveAll(ootdList);
     then(ootdMapper).should(times(1)).toDto(mockOotd1);
     then(ootdMapper).should(times(1)).toDto(mockOotd2);
 
@@ -160,5 +161,45 @@ class OotdServiceImplTest {
         .isNotNull()
         .isEmpty();
   }
+
+  @Test
+  @DisplayName("feedId를 받아 성공적으로 값을 가져온다.")
+  void findOotd_success() {
+    // given
+    given(ootdRepository.findByFeedId(feedId)).willReturn(ootdList);
+    given(ootdMapper.toDto(mockOotd1)).willReturn(mockOotdDto1);
+    given(ootdMapper.toDto(mockOotd2)).willReturn(mockOotdDto2);
+
+    // when
+    List<OotdDto> result = ootdService.findOotdByFeedId(feedId);
+
+    // then
+    then(ootdRepository).should(times(1)).findByFeedId(feedId);
+    then(ootdMapper).should(times(1)).toDto(mockOotd1);
+    then(ootdMapper).should(times(1)).toDto(mockOotd2);
+
+    assertThat(result)
+        .hasSize(2)
+        .containsExactly(mockOotdDto1, mockOotdDto2);
+  }
+
+  @Test
+  @DisplayName("feedId를 받았을 때, OOTD가 없을 때 빈 리스트를 응답한다.")
+  void findOotd_no_content() {
+    // given
+    given(ootdRepository.findByFeedId(feedId)).willReturn(List.of());
+
+    // when
+    List<OotdDto> result = ootdService.findOotdByFeedId(feedId);
+
+    // then
+    then(ootdRepository).should(times(1)).findByFeedId(feedId);
+    then(ootdMapper).shouldHaveNoInteractions();
+
+    assertThat(result)
+        .isNotNull()
+        .isEmpty();
+  }
+
 
 }
