@@ -1,5 +1,6 @@
 package com.codeit.weatherwear.domain.clothes.service;
 
+import com.codeit.weatherwear.domain.clothes.dto.request.AttributesSearchRequest;
 import com.codeit.weatherwear.domain.clothes.dto.request.AttributesSortDirection;
 import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefCreateRequest;
 import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
@@ -79,18 +80,18 @@ public class AttributesServiceImpl implements AttributesService{
 
     /**
      * 속성 조회
-     * @param cursor
-     * @param idAfter
-     * @param limit
-     * @param sortBy
-     * @param sortDirection
-     * @param keywordLike
+     * @param request 조회 조건
      * @return List<ClothesAttributeDefDto> 결과 리스트
      */
     @Override
-    public PageResponse<ClothesAttributeDefDto> searchAttributes(String cursor,
-        UUID idAfter, int limit, String sortBy, AttributesSortDirection sortDirection,
-        String keywordLike) {
+    public PageResponse<ClothesAttributeDefDto> searchAttributes(AttributesSearchRequest request) {
+        String cursor = request.cursor();
+        UUID idAfter = request.idAfter();
+        int limit = request.limit();
+        String sortBy = request.sortBy();
+        AttributesSortDirection sortDirection = request.sortDirection();
+        String keywordLike = request.keywordLike();
+
         Slice<Attributes> attributes = attributesRepository.searchAttributes(cursor, idAfter, limit,
             sortBy, sortDirection, keywordLike);
 
