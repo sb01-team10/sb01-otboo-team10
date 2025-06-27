@@ -120,7 +120,7 @@ public class AttributesServiceImpl implements AttributesService {
             }
             nextIdAfter = last.getId();
         }
-        return new PageResponse(
+        return new PageResponse<>(
             result,
             nextCursor,
             nextIdAfter,
