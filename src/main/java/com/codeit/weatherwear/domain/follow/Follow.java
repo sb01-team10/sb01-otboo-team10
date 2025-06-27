@@ -1,5 +1,6 @@
 package com.codeit.weatherwear.domain.follow;
 
+import com.codeit.weatherwear.domain.follow.exception.SelfFollowNotAllowedException;
 import com.codeit.weatherwear.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -50,6 +51,10 @@ public class Follow {
   }
 
   public static Follow create(User followee, User follower) {
+    //자기 자신을 팔로우 할 수 없음
+    if (followee.equals(follower)) {
+      throw SelfFollowNotAllowedException.withId(followee.getId());
+    }
     return new Follow(followee, follower);
   }
 

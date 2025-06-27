@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
       HttpRequestMethodNotSupportedException.class})
   public ResponseEntity<?> handleNoPageFoundException(Exception e) {
     //TODO: 배포 후 e.getMessage()로 바꾸기
-    log.error("GlobalExceptionHandler catch NoHandlerFoundException : {}", e);
+    log.error("GlobalExceptionHandler catch NoHandlerFoundException : ", e);
     return ResponseEntity
         .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus())
         .body(ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, e,Map.of("reason", "No handler or unsupported method")));
@@ -61,8 +61,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler
   public ResponseEntity<?> handleException(Exception e) {
     //TODO: 배포 후 e.getMessage()로 바꾸기
-    log.error("handleCustomException() in GlobalExceptionHandler throw Exception : {}",
-        e);
+    log.error("handleCustomException() in GlobalExceptionHandler throw Exception : ", e);
     return ResponseEntity
         .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus())
         .body(ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, e,Map.of("reason", "Unexpected error")));

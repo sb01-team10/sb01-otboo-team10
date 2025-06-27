@@ -3,10 +3,12 @@ package com.codeit.weatherwear.domain.follow;
 import com.codeit.weatherwear.domain.follow.dto.FollowDto;
 import com.codeit.weatherwear.domain.follow.dto.FollowSummaryDto;
 import com.codeit.weatherwear.domain.follow.dto.request.FollowCreateRequest;
+import com.codeit.weatherwear.domain.follow.exception.FollowDuplicatedException;
 import com.codeit.weatherwear.domain.follow.repository.FollowRepository;
 import com.codeit.weatherwear.domain.user.entity.User;
 import com.codeit.weatherwear.domain.user.exception.UserNotFoundException;
 import com.codeit.weatherwear.domain.user.repository.UserRepository;
+import com.codeit.weatherwear.global.request.SortDirection;
 import com.codeit.weatherwear.global.response.PageResponse;
 import java.time.Instant;
 import java.util.List;
@@ -32,8 +34,10 @@ public class FollowService {
     User followee = userRepository.findById(request.followeeId())
         .orElseThrow(UserNotFoundException::new);
 
-    //예외 비즈니스 로직은 추후 작성 예정
-    //ex) 자기 자신을 팔로우 할 수 없음, 이미 팔로우 한 유저를 팔로우 할 수 없음
+    //이미 팔로우 한 유저를 팔로우 할 수 없음
+    if (followRepository.existsByFolloweeAndFollower(followee, follower)) {
+      throw FollowDuplicatedException.withId(followee.getId(), follower.getId());
+    }
 
     Follow follow = followRepository.save(Follow.create(followee, follower));
 
@@ -79,7 +83,6 @@ public class FollowService {
       nextIdAfter = followDto.id();
     }
     String sortBy = "createdAt";
-    String sortDirection = "DESCENDING";
 
     return new PageResponse<>(
         followings,
@@ -88,7 +91,7 @@ public class FollowService {
         hasNext,
         totalCount,
         sortBy,
-        sortDirection
+        SortDirection.DESCENDING.name()
     );
   }
 
