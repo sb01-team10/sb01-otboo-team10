@@ -7,6 +7,7 @@ import com.codeit.weatherwear.domain.follow.repository.FollowRepository;
 import com.codeit.weatherwear.domain.user.entity.User;
 import com.codeit.weatherwear.domain.user.exception.UserNotFoundException;
 import com.codeit.weatherwear.domain.user.repository.UserRepository;
+import com.codeit.weatherwear.global.request.SortDirection;
 import com.codeit.weatherwear.global.response.PageResponse;
 import java.time.Instant;
 import java.util.List;
@@ -79,7 +80,6 @@ public class FollowService {
       nextIdAfter = followDto.id();
     }
     String sortBy = "createdAt";
-    String sortDirection = "DESCENDING";
 
     return new PageResponse<>(
         followings,
@@ -88,7 +88,7 @@ public class FollowService {
         hasNext,
         totalCount,
         sortBy,
-        sortDirection
+        SortDirection.DESCENDING.name()
     );
   }
 
