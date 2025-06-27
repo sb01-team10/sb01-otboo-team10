@@ -3,6 +3,7 @@ package com.codeit.weatherwear.domain.ootd.service.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 
@@ -201,5 +202,27 @@ class OotdServiceImplTest {
         .isEmpty();
   }
 
+  @Test
+  @DisplayName("feedId를 받아 해당 OOTD들을 삭제한다")
+  void deleteOotd_success() {
+    // given
+    given(ootdRepository.findByFeedId(feedId)).willReturn(ootdList);
+    willDoNothing().given(ootdRepository).deleteAll(ootdList);
+    given(ootdMapper.toDto(mockOotd1)).willReturn(mockOotdDto1);
+    given(ootdMapper.toDto(mockOotd2)).willReturn(mockOotdDto2);
+
+    // when
+    List<OotdDto> result = ootdService.deleteOotdByFeedId(feedId);
+
+    // then
+    then(ootdRepository).should(times(1)).findByFeedId(feedId);
+    then(ootdRepository).should(times(1)).deleteAll(ootdList);
+    then(ootdMapper).should(times(1)).toDto(mockOotd1);
+    then(ootdMapper).should(times(1)).toDto(mockOotd2);
+
+    assertThat(result)
+        .hasSize(2)
+        .containsExactly(mockOotdDto1, mockOotdDto2);
+  }
 
 }
