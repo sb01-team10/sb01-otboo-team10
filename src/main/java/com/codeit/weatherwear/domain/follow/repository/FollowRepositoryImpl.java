@@ -25,12 +25,14 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom {
         .from(follow)
         .where(follow.followee.id.eq(userId))
         .fetchOne();
+    followerCount = followerCount == null ? 0L : followerCount;
 
     Long followingCount = queryFactory
         .select(follow.count())
         .from(follow)
         .where(follow.follower.id.eq(userId))
         .fetchOne();
+    followingCount = followingCount == null ? 0L : followingCount;
 
     UUID followedByMeId = queryFactory
         .select(follow.id)
@@ -49,6 +51,7 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom {
             follow.followee.id.eq(myId)
         )
         .fetchOne();
+    followingMeCount = followingMeCount == null ? 0L : followingMeCount;
 
     return new FollowSummaryDto(
         userId,
