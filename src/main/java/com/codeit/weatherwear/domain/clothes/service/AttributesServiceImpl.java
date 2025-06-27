@@ -1,9 +1,10 @@
 package com.codeit.weatherwear.domain.clothes.service;
 
+import com.codeit.weatherwear.domain.clothes.dto.request.AttributesSearchRequest;
 import com.codeit.weatherwear.domain.clothes.dto.request.AttributesSortDirection;
 import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefCreateRequest;
-import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
 import com.codeit.weatherwear.domain.clothes.dto.request.ClothesAttributeDefUpdateRequest;
+import com.codeit.weatherwear.domain.clothes.dto.response.ClothesAttributeDefDto;
 import com.codeit.weatherwear.domain.clothes.entity.Attributes;
 import com.codeit.weatherwear.domain.clothes.mapper.AttributesMapper;
 import com.codeit.weatherwear.domain.clothes.repository.AttributesRepository;
@@ -20,20 +21,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AttributesServiceImpl implements AttributesService{
+public class AttributesServiceImpl implements AttributesService {
 
     private final AttributesRepository attributesRepository;
     private final AttributesMapper attributesMapper;
 
     /**
      * 속성 등록
+     *
      * @param request 속성 생성 요청 DTO
      * @return 속성DTO
      */
     @Override
     @Transactional
     public ClothesAttributeDefDto create(ClothesAttributeDefCreateRequest request) {
-        if(attributesRepository.existsByName(request.name())){
+        if (attributesRepository.existsByName(request.name())) {
             throw new IllegalArgumentException("이미 등록된 속성입니다.");
         }
         Set<String> uniqueValues = new HashSet<>(request.selectValues());
@@ -52,6 +54,7 @@ public class AttributesServiceImpl implements AttributesService{
 
     /**
      * 속성 수정
+     *
      * @param id
      * @param request 속성 수정 요청 DTO
      * @return 속성 DTO
@@ -67,6 +70,7 @@ public class AttributesServiceImpl implements AttributesService{
 
     /**
      * 속성 삭제
+     *
      * @param id
      */
     @Override
@@ -79,18 +83,18 @@ public class AttributesServiceImpl implements AttributesService{
 
     /**
      * 속성 조회
-     * @param cursor
-     * @param idAfter
-     * @param limit
-     * @param sortBy
-     * @param sortDirection
-     * @param keywordLike
+     * @param request 조회 조건
      * @return List<ClothesAttributeDefDto> 결과 리스트
      */
     @Override
-    public PageResponse<List<ClothesAttributeDefDto>> searchAttributes(String cursor,
-        UUID idAfter, int limit, String sortBy, AttributesSortDirection sortDirection,
-        String keywordLike) {
+    public PageResponse<ClothesAttributeDefDto> searchAttributes(AttributesSearchRequest request) {
+        String cursor = request.cursor();
+        UUID idAfter = request.idAfter();
+        int limit = request.limit();
+        String sortBy = request.sortBy();
+        AttributesSortDirection sortDirection = request.sortDirection();
+        String keywordLike = request.keywordLike();
+
         Slice<Attributes> attributes = attributesRepository.searchAttributes(cursor, idAfter, limit,
             sortBy, sortDirection, keywordLike);
 
@@ -103,7 +107,7 @@ public class AttributesServiceImpl implements AttributesService{
             (attributesList.size() > 0) ? attributesList.get(attributesList.size() - 1) : null;
         Object nextCursor = null;
         UUID nextIdAfter = null;
-        if(last != null) {
+        if (last != null) {
             switch (sortBy) {
                 case "name":
                     nextCursor = last.getName();
