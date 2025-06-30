@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,7 +20,7 @@ public class AdminUserInitializer implements ApplicationRunner {
 
     private final UserRepository userRepository;
 
-    // TODO: passwordEncoder 적용
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -27,13 +28,12 @@ public class AdminUserInitializer implements ApplicationRunner {
         String email = "system@otboo.io";
         String password = "otboo1!";
 
-
         if (!userRepository.existsByEmail(email) && !userRepository.existsByName(name)) {
             User admin = userRepository.save(
                 User.builder()
                     .name(name)
                     .email(email)
-                    .password(password)
+                    .password(passwordEncoder.encode(password))
                     .role(Role.ADMIN)
                     .build()
             );
