@@ -27,6 +27,7 @@ public class JwtSessionService {
     private final JwtSessionRepository jwtSessionRepository;
     private final JwtProperties jwtProperties;
     private final Clock clock;
+    private SecretKey signingKey;
 
     public enum TokenType {
         ACCESS, REFRESH
@@ -75,7 +76,7 @@ public class JwtSessionService {
         try {
 
             JwtParser parser = Jwts.parser()
-                .setSigningKey(getSigningKey())
+                .verifyWith(getSigningKey())
                 .build();
             parser.parseClaimsJws(token);
 
@@ -90,22 +91,34 @@ public class JwtSessionService {
 
     // 서명키 생성
     private SecretKey getSigningKey() {
-        byte[] keyBytes = jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8);
-        return Keys.hmacShaKeyFor(keyBytes);
+        if (this.signingKey == null) {
+
+            byte[] keyBytes = jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8);
+            return Keys.hmacShaKeyFor(keyBytes);
+        }
+        return this.signingKey;
     }
 
     // 토큰에서 사용자 ID 추출
     public UUID extractUserId(String token) {
-        JwtParser parser = Jwts.parser()
-            .setSigningKey(getSigningKey())
-            .build();
+        try {
+            JwtParser parser = Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build();
 
-        String subject = parser
-            .parseSignedClaims(token)
-            .getPayload()
-            .getSubject();
+            String subject = parser
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
 
-        return UUID.fromString(subject);
+            return UUID.fromString(subject);
+        } catch (JwtException e) {
+            log.error("Failed to extract user ID from token", e);
+            throw new IllegalArgumentException("Invalid JWT token", e);
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid UUID format in token subject", e);
+            throw new IllegalArgumentException("Invalid user ID format in token", e);
+        }
     }
 
 }
