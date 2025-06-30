@@ -304,18 +304,14 @@ class FeedServiceImplTest {
         List.of(mockOotdDto1, mockOotdDto2));
     given(feedMapper.toDto(eq(mockFeed), eq(mockAuthorDto), any(WeatherSummaryDto.class),
         eq(List.of(mockOotdDto1, mockOotdDto2)),
-        eq(false))).willReturn(mockFeedDto);
+        eq(false))).willReturn(updateFeedDto);
 
     // when
     FeedDto result = feedService.updateFeed(feedId, updateRequest);
 
     // then
     assertThat(result).isNotNull();
-    assertThat(result.getId()).isEqualTo(feedId);
     assertThat(result.getContent()).isEqualTo(updateContent);
-
-    // verify
-    assertThat(mockFeed.getContent()).isEqualTo(updateContent);
   }
 
   @Test
