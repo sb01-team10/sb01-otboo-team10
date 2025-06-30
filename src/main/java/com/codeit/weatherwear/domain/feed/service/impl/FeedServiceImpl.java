@@ -10,6 +10,9 @@ import com.codeit.weatherwear.domain.feed.mapper.FeedMapper;
 import com.codeit.weatherwear.domain.feed.repository.FeedRepository;
 import com.codeit.weatherwear.domain.feed.service.FeedService;
 import com.codeit.weatherwear.domain.follow.dto.UserSummaryDto;
+import com.codeit.weatherwear.domain.ootd.dto.response.OotdDto;
+import com.codeit.weatherwear.domain.ootd.entity.Ootd;
+import com.codeit.weatherwear.domain.ootd.service.OotdService;
 import com.codeit.weatherwear.domain.user.entity.User;
 import com.codeit.weatherwear.domain.user.exception.UserNotFoundException;
 import com.codeit.weatherwear.domain.user.repository.UserRepository;
@@ -34,6 +37,7 @@ public class FeedServiceImpl implements FeedService {
   private final UserRepository userRepository;
   private final FeedMapper feedMapper;
   private final FeedRepository feedRepository;
+  private final OotdService ootdService;
 
   @Transactional
   @Override
@@ -57,7 +61,7 @@ public class FeedServiceImpl implements FeedService {
     Feed feed = feedMapper.toEntity(author, feedCreateRequest);
     Feed saved = feedRepository.save(feed);
 
-    return toFeedDto(saved);
+    return toFeedDto(saved, feedCreateRequest.getClothesIds());
   }
 
   @Transactional
@@ -107,12 +111,25 @@ public class FeedServiceImpl implements FeedService {
         .build();
   }
 
+  // 생성 시 - todo: 아래 FeedDto 생성기와 코드가 같아서 둔 건데, 생성에만 사용할거면 이렇게 나눌 필요가 있나?
+  private FeedDto toFeedDto(Feed feed, List<UUID> clothIds) {
+    UserSummaryDto authorDto = UserSummaryDto.from(feed.getAuthor());
+    WeatherSummaryDto weatherSummaryDto = getMockWeatherSummaryDto();
+    List<OotdDto> ootds = ootdService.createOotdList(feed, clothIds);
+
+    // todo: likedByMe 로직 필요 - feedLike 도메인
+
+    return feedMapper.toDto(feed, authorDto, weatherSummaryDto, ootds, false);
+  }
+
+  // 일반적인 상황
   private FeedDto toFeedDto(Feed feed) {
     UserSummaryDto authorDto = UserSummaryDto.from(feed.getAuthor());
     WeatherSummaryDto weatherSummaryDto = getMockWeatherSummaryDto();
-    // todo: OOTD 등록 - ootd 도메인
+    List<OotdDto> ootds = ootdService.findOotdByFeedId(feed.getId());
+
     // todo: likedByMe 로직 필요 - feedLike 도메인
 
-    return feedMapper.toDto(feed, authorDto, weatherSummaryDto, null, false);
+    return feedMapper.toDto(feed, authorDto, weatherSummaryDto, ootds, false);
   }
 }
