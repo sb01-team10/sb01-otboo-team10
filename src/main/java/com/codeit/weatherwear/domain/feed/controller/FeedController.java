@@ -5,6 +5,7 @@ import com.codeit.weatherwear.domain.feed.dto.request.FeedGetParamRequest;
 import com.codeit.weatherwear.domain.feed.dto.request.FeedUpdateRequest;
 import com.codeit.weatherwear.domain.feed.dto.response.FeedDto;
 import com.codeit.weatherwear.domain.feed.service.FeedService;
+import com.codeit.weatherwear.global.response.PageResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +31,7 @@ public class FeedController {
 
   // 피드 목록 조회
   @GetMapping
-  public ResponseEntity<List<FeedDto>> getFeedList(
+  public ResponseEntity<PageResponse<FeedDto>> getFeedList(
       @ModelAttribute @Valid FeedGetParamRequest paramRequest
   ) {
     return ResponseEntity.ok(feedService.getFeedList(paramRequest));

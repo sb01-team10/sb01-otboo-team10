@@ -27,8 +27,10 @@ public enum PrecipitationsType {
           return type;
         }
       }
-    } catch (NumberFormatException e) {
+    } catch (IllegalArgumentException e) {
       // 생각치 못한 예외 상황 처리를 위함
+      return PrecipitationsType.NONE;
+    } catch (Exception e) {
       return PrecipitationsType.NONE;
     }
 

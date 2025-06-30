@@ -1,5 +1,9 @@
 package com.codeit.weatherwear.domain.feed.dto.request;
 
+import com.codeit.weatherwear.domain.feed.dto.condition.FeedSearchCondition;
+import com.codeit.weatherwear.domain.weather.entity.PrecipitationsType;
+import com.codeit.weatherwear.domain.weather.entity.SkyStatus;
+import com.codeit.weatherwear.global.request.SortDirection;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,5 +32,21 @@ public class FeedGetParamRequest {
   private String skyStatusEqual;
   private String precipitationTypeEqual;
   private UUID authorIdEqual;
+
+  public FeedSearchCondition toSearchCondition() {
+    return FeedSearchCondition.builder()
+        .idAfter(this.getIdAfter())
+        .limit(this.getLimit())
+        .sortBy(this.sortBy)
+        .sortDirection(SortDirection.valueOf(this.getSortDirection().toUpperCase()))
+        .keywordLike(this.getKeywordLike())
+        .skyStatusEqual(this.getSkyStatusEqual() != null ? SkyStatus.valueOf(
+            this.getSkyStatusEqual().toUpperCase()) : null)
+        .precipitationsTypeEqual(
+            this.getPrecipitationTypeEqual() != null ? PrecipitationsType.valueOf(
+                this.getPrecipitationTypeEqual().toUpperCase()) : null)
+        .authorIdEqual(this.getAuthorIdEqual())
+        .build();
+  }
 
 }

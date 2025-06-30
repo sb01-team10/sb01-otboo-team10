@@ -5,12 +5,12 @@ import com.codeit.weatherwear.domain.feed.dto.request.FeedGetParamRequest;
 import com.codeit.weatherwear.domain.feed.dto.request.FeedUpdateRequest;
 import com.codeit.weatherwear.domain.feed.dto.response.FeedDto;
 import com.codeit.weatherwear.domain.weather.dto.response.WeatherSummaryDto;
-import java.util.List;
+import com.codeit.weatherwear.global.response.PageResponse;
 import java.util.UUID;
 
 public interface FeedService {
 
-  List<FeedDto> getFeedList(FeedGetParamRequest paramRequest);
+  PageResponse<FeedDto> getFeedList(FeedGetParamRequest paramRequest);
 
   FeedDto createFeed(FeedCreateRequest feedCreateRequest);
 
