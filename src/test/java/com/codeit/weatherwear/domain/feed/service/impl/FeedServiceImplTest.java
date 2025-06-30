@@ -1,5 +1,6 @@
 package com.codeit.weatherwear.domain.feed.service.impl;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -9,6 +10,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.codeit.weatherwear.domain.feed.dto.condition.FeedSearchCondition;
 import com.codeit.weatherwear.domain.feed.dto.request.FeedCreateRequest;
 import com.codeit.weatherwear.domain.feed.dto.request.FeedGetParamRequest;
 import com.codeit.weatherwear.domain.feed.dto.request.FeedUpdateRequest;
@@ -31,6 +33,7 @@ import com.codeit.weatherwear.domain.weather.dto.response.TemperatureDto;
 import com.codeit.weatherwear.domain.weather.dto.response.WeatherSummaryDto;
 import com.codeit.weatherwear.domain.weather.entity.PrecipitationsType;
 import com.codeit.weatherwear.domain.weather.entity.SkyStatus;
+import com.codeit.weatherwear.global.response.PageResponse;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
@@ -93,6 +96,8 @@ class FeedServiceImplTest {
   private OotdDto mockOotdDto1;
   private OotdDto mockOotdDto2;
 
+  private FeedSearchCondition condition;
+
   @BeforeEach
   void setUp() {
     mockLocation = new Location(37.513068, 127.102570, 961159, 1953082, "서울 송파구 신천동");
@@ -144,6 +149,8 @@ class FeedServiceImplTest {
         .sortBy("createdAt")
         .sortDirection("ASCENDING")
         .build();
+
+    condition = mockFeedQuery.toSearchCondition();
 
     mockPrecipitation = PrecipitationDto.builder()
         .type(PrecipitationsType.NONE)
@@ -269,11 +276,13 @@ class FeedServiceImplTest {
   }
 
   @Test
-  @DisplayName("전체 피드 리스트를 성공적으로 불러와 전달한다 - 페이지네이션 적용 안 한 상태")
+  @DisplayName("전체 피드 리스트를 성공적으로 불러와 PageResponse로 전달한다")
   void getFeedList_success() {
     // given
     List<Feed> feedList = List.of(mockFeed);
-    given(feedRepository.findAll()).willReturn(feedList);
+
+
+    given(feedRepository.searchFeeds(any(FeedSearchCondition.class))).willReturn(feedList);
     given(ootdService.findOotdByFeedId(eq(mockFeed.getId()))).willReturn(
         List.of(mockOotdDto1, mockOotdDto2));
     given(feedMapper.toDto(eq(mockFeed), eq(mockAuthorDto), any(WeatherSummaryDto.class),
@@ -281,14 +290,19 @@ class FeedServiceImplTest {
         eq(false))).willReturn(mockFeedDto);
 
     // when
-    List<FeedDto> resultList = feedService.getFeedList(mockFeedQuery);
+    PageResponse<FeedDto> resultList = feedService.getFeedList(mockFeedQuery);
+
     // then
     assertThat(resultList).isNotNull();
-    assertThat(resultList).hasSize(1);
-    assertThat(resultList.get(0).getOotds()).isNotNull();
-    assertThat(resultList.get(0)).isEqualTo(mockFeedDto);
+    assertThat(resultList.data()).hasSize(1);
+    assertThat(resultList.data().get(0).getOotds()).isNotNull();
+    assertThat(resultList.data().get(0)).isEqualTo(mockFeedDto);
+    assertThat(resultList.hasNext()).isFalse();
+    assertThat(resultList.sortBy()).isEqualTo(condition.getSortBy());
+    assertThat(resultList.sortDirection()).isEqualTo(condition.getSortDirection().name());
 
     // verify
+    verify(feedRepository).searchFeeds(any(FeedSearchCondition.class));
     verify(feedMapper, times(feedList.size())).toDto(eq(mockFeed), eq(mockAuthorDto),
         any(WeatherSummaryDto.class), eq(List.of(mockOotdDto1, mockOotdDto2)), eq(false));
   }
