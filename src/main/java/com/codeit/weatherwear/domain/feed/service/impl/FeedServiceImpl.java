@@ -60,8 +60,9 @@ public class FeedServiceImpl implements FeedService {
 
     Feed feed = feedMapper.toEntity(author, feedCreateRequest);
     Feed saved = feedRepository.save(feed);
+    List<OotdDto> ootdList = ootdService.createOotdList(feed, feedCreateRequest.getClothesIds());
 
-    return toFeedDto(saved, feedCreateRequest.getClothesIds());
+    return toFeedDto(saved, ootdList);
   }
 
   @Transactional
@@ -82,8 +83,9 @@ public class FeedServiceImpl implements FeedService {
 
     Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new FeedNotFoundException(feedId));
     feedRepository.delete(feed);
+    List<OotdDto> ootds = ootdService.deleteOotdByFeedId(feedId);
 
-    return toFeedDto(feed);
+    return toFeedDto(feed, ootds);
   }
 
   // 임시로 만들어진 WeatherSummeryDto 인스턴스를 반환합니다.
@@ -111,18 +113,17 @@ public class FeedServiceImpl implements FeedService {
         .build();
   }
 
-  // 생성 시 - todo: 아래 FeedDto 생성기와 코드가 같아서 둔 건데, 생성에만 사용할거면 이렇게 나눌 필요가 있나?
-  private FeedDto toFeedDto(Feed feed, List<UUID> clothIds) {
+  // 생성/삭제
+  private FeedDto toFeedDto(Feed feed, List<OotdDto> ootds) {
     UserSummaryDto authorDto = UserSummaryDto.from(feed.getAuthor());
     WeatherSummaryDto weatherSummaryDto = getMockWeatherSummaryDto();
-    List<OotdDto> ootds = ootdService.createOotdList(feed, clothIds);
 
     // todo: likedByMe 로직 필요 - feedLike 도메인
 
     return feedMapper.toDto(feed, authorDto, weatherSummaryDto, ootds, false);
   }
 
-  // 일반적인 상황
+  // 일반적인 상황 (조회/갱신)
   private FeedDto toFeedDto(Feed feed) {
     UserSummaryDto authorDto = UserSummaryDto.from(feed.getAuthor());
     WeatherSummaryDto weatherSummaryDto = getMockWeatherSummaryDto();
@@ -132,4 +133,5 @@ public class FeedServiceImpl implements FeedService {
 
     return feedMapper.toDto(feed, authorDto, weatherSummaryDto, ootds, false);
   }
+
 }
