@@ -1,6 +1,5 @@
 package com.codeit.weatherwear.domain.security.customauthentication;
 
-import com.codeit.weatherwear.domain.user.exception.UserNotFoundException;
 import com.codeit.weatherwear.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,7 +24,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
-            .map(user -> new CustomUserDetails(user))
-            .orElseThrow(() -> new UserNotFoundException());
+            .map(user -> new CustomUserDetails(
+                user.getId(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getRole())
+            )
+            .orElseThrow(
+                () -> new UsernameNotFoundException("User not found with email: " + email));
+
     }
 }

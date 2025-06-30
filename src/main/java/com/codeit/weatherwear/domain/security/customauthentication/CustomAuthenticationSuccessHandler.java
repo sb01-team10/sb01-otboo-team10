@@ -1,12 +1,12 @@
 package com.codeit.weatherwear.domain.security.customauthentication;
 
 import com.codeit.weatherwear.domain.security.service.JwtSessionService;
-import com.codeit.weatherwear.domain.user.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -32,7 +32,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         // 인증된 사용자 정보
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        User user = userDetails.getUser();
+        UUID userId = userDetails.getUserId();
 
         // TODO: 토큰 발급
 
