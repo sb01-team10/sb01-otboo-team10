@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LamcUtils {
 
+  // Default 값 -> API 문서에 있는 내용 참고
   private static final double DEFAULT_GRID = 5.0;
   private static final double DEG_TO_RAD = Math.PI / 180.0;
   private static final double RAD_TO_DEG = 180.0 / Math.PI;
@@ -21,10 +22,12 @@ public class LamcUtils {
       .yo(675.0 / DEFAULT_GRID)
       .build();
 
+  // 격자값
   public record GridPoint(int nx, int ny) {
 
   }
 
+  // 위경도
   public record GeoPoint(double longitude, double latitude) {
 
   }
@@ -46,7 +49,7 @@ public class LamcUtils {
   }
 
   /**
-   * Lambert Conformal Conic projection
+   * Lambert Conformal Conic projection<br>기상청 API 문서에 나와 있는 변환 로직 JAVA에 맞게 수정하여 사용
    *
    * @param arg1 경도 or X
    * @param arg2 위도 or Y

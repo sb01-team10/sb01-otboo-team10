@@ -12,8 +12,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,14 +25,10 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
   @Transactional
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws ServletException, IOException {
-    // 인증 정보 저장
-    SecurityContext context = SecurityContextHolder.createEmptyContext();
-    context.setAuthentication(authentication);
-    SecurityContextHolder.setContext(context);
+
     CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
     UUID userId = userDetails.getUserId();
 
-    log.info("oauth: 인증에 성공해 토큰을 발급합니다.");
     // 기존 토큰 무효화 & 새 토큰 발급
     jwtSessionService.invalidateToken(userId);
     JwtSession jwtSession = jwtSessionService.createJwtSession(userId);

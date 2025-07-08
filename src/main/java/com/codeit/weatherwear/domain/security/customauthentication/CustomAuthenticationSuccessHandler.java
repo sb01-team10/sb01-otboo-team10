@@ -13,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @RequiredArgsConstructor
@@ -28,11 +26,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException, ServletException {
-
-    // 인증 정보 저장
-    SecurityContext context = SecurityContextHolder.createEmptyContext();
-    context.setAuthentication(authentication);
-    SecurityContextHolder.setContext(context);
 
     // 인증된 사용자 정보
     CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();

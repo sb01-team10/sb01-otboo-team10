@@ -8,6 +8,6 @@ import lombok.Getter;
 @Builder
 public class WindSpeedDto {
 
-  private final double speed;
+  private final Double speed;
   private final WindSpeedType asWord;
 }

@@ -40,6 +40,21 @@ spring:
             scope:
               - email
               - profile
+          kakao:
+            client-id: ${KAKAO_CLIENT_REST_API_KEY}
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
+            scope:
+              - profile_nickname
+            client-name: Kakao
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
 
 server:
   shutdown: graceful

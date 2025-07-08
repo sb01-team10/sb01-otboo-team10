@@ -15,12 +15,12 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 @Slf4j
 public class CustomUserDetails implements UserDetails, OAuth2User {
 
-  private UUID userID;
-  private String email;
-  private String password;
-  private Role role;
-  private boolean locked;
-  private Instant tempPasswordExpirationTime;
+  private final UUID userID;
+  private final String email;
+  private final String password;
+  private final Role role;
+  private final boolean locked;
+  private final Instant tempPasswordExpirationTime;
 
   private Map<String, Object> attributes;
 
@@ -32,10 +32,6 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     this.role = role;
     this.locked = locked;
     this.tempPasswordExpirationTime = tempPasswordExpirationTime;
-  }
-
-  public CustomUserDetails(Map<String, Object> attributes) {
-    this.attributes = attributes;
   }
 
   @Override

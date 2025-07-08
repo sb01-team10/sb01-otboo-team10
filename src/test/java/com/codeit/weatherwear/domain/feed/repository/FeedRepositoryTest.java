@@ -76,10 +76,11 @@ class FeedRepositoryTest {
         .humidity(Humidity.builder().comparedToDayBefore(0.1).current(0.1).build())
         .location(location)
         .precipitation(
-            Precipitation.builder().amount(0).probability(0.1).type(PrecipitationsType.NONE)
+            Precipitation.builder().amount(0.0).probability(0.1).type(PrecipitationsType.NONE)
                 .build())
         .temperature(
-            Temperature.builder().comparedToDayBefore(10).current(23).max(30).min(20).build())
+            Temperature.builder().comparedToDayBefore(10.0).current(23.0).max(30.0).min(20.0)
+                .build())
         .skyStatus(SkyStatus.CLEAR)
         .windSpeed(WindSpeed.builder().speed(10).build())
         .build();

@@ -14,23 +14,23 @@ import org.hibernate.annotations.Comment;
 public class Temperature {
 
   @Comment("현재 온도(섭씨)")
-  @Column(name = "temperature_current", nullable = false)
-  private double current;
+  @Column(name = "temperature_current")
+  private Double current;
 
   @Comment("전일 대비 온도(섭씨)")
-  @Column(name = "temperature_compared_to_day_before", nullable = false)
-  private double comparedToDayBefore;
+  @Column(name = "temperature_compared_to_day_before")
+  private Double comparedToDayBefore;
 
   @Comment("일 최저 기온(섭씨)")
-  @Column(name = "temperature_min", nullable = false)
-  private double min;
+  @Column(name = "temperature_min")
+  private Double min;
 
   @Comment("일 최고 기온(섭씨)")
-  @Column(name = "temperature_max", nullable = false)
-  private double max;
+  @Column(name = "temperature_max")
+  private Double max;
 
   @Builder
-  private Temperature(double current, double comparedToDayBefore, double min, double max) {
+  private Temperature(Double current, Double comparedToDayBefore, Double min, Double max) {
     this.current = current;
     this.comparedToDayBefore = comparedToDayBefore;
     this.min = min;

@@ -6,6 +6,7 @@ import com.codeit.weatherwear.domain.user.entity.Role;
 import com.codeit.weatherwear.domain.user.entity.User;
 import com.codeit.weatherwear.domain.user.repository.UserRepository;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -25,18 +26,33 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     OAuth2User oAuth2User = super.loadUser(userRequest);
     String provider = userRequest.getClientRegistration().getRegistrationId();  // google / kakao
-    String email = oAuth2User.getAttribute("email");
+
+    String email = null;
+    String name = null;
+
+    if (provider.equals("google")) {
+      email = oAuth2User.getAttribute("email");
+      name = oAuth2User.getAttribute("name");
+    } else if (provider.equals("kakao")) {
+      Map<String, Object> kakaoAccount = oAuth2User.getAttribute("kakao_account");
+      Map<String, Object> profile =
+          kakaoAccount != null ? (Map<String, Object>) kakaoAccount.get("profile") : null;
+      name = profile != null ? (String) profile.get("nickname") : "kakao_user";
+      // 카카오의 경우 이메일을 닉네임+kakao.com으로
+      email = name + "@kakao.com";
+    } else {
+      throw new OAuth2AuthenticationException("지원하지 않는 소셜 로그인입니다: " + provider);
+    }
 
     User user = userRepository.findByEmail(email)
         .orElse(null);
     if (user == null) {
       // 새로운 회원으로 추가
-      log.info("oauth2: DB에 회원 정보가 없어 새로운 회원으로 추가합니다.");
       user = userRepository.save(User.builder()
-          .name(oAuth2User.getAttribute("name"))
+          .name(name)
           .email(email)
           .password("")
-          .linkedOAuthProviders(List.of(OAuthProvider.google))
+          .linkedOAuthProviders(List.of(OAuthProvider.valueOf(provider)))
           .role(Role.USER)
           .build());
     }

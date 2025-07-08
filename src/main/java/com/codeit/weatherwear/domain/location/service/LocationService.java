@@ -9,7 +9,5 @@ public interface LocationService {
 
   Location getLocation(double latitude, double longitude);
 
-  Location findOrCreateByXY(int x, int y);
-
   Location findOrCreateByGeoPoint(double latitude, double longitude);
 }

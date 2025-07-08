@@ -26,6 +26,16 @@ public enum ErrorCode {
   SELF_FOLLOW_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "자기 자신을 팔로우 할 수 없습니다.", ""),
   FOLLOW_DUPLICATED(HttpStatus.BAD_REQUEST, "이미 팔로우한 사용자입니다.", ""),
 
+  // LOCATION
+  KAKAO_GEO_API_RESPONSE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "외부 API 응답 오류",
+      "카카오 주소 정보 요청에 대한 정상적인 응답을 반환하지 않았습니다."),
+  KAKAO_GEO_API_REQUEST_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "외부 API 요청 중 오류",
+      "카카오 주소 정보 요청 중 오류가 발생하였습니다."),
+  LOCATION_NOT_FOUND_BY_GEO_POINT(HttpStatus.NOT_FOUND, "위치 조회 실패", "존재하지 않는 위치 엔티티입니다."),
+  ADDRESS_FIELD_NOT_FOUND(HttpStatus.NOT_FOUND, "주소 정보 확인 실패", "응답 JSON에서 주소 노드를 찾을 수 없습니다."),
+  ADDRESS_JSON_PARSE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "주소 JSON 파싱 실패",
+      "주소 응답 데이터를 파싱하는 도중 오류가 발생했습니다."),
+
   // FEED
   FEED_NOT_FOUND(HttpStatus.NOT_FOUND, "피드 조회 실패", "존재하지 않는 피드입니다."),
   UNSUPPORTED_SORT_FIELD(HttpStatus.BAD_REQUEST, "지원하지 않는 정렬 필드", "지원하지 않는 정렬 필드입니다."),
@@ -34,6 +44,12 @@ public enum ErrorCode {
 
   // WEATHER
   INVALID_WIND_SPEED(HttpStatus.BAD_REQUEST, "유효하지 않은 풍속", "풍속은 0 이상의 값이어야 합니다."),
+  WEATHER_API_RESPONSE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "날씨 API 응답 오류",
+      "날씨 API가 정상적인 응답을 반환하지 않았습니다."),
+  WEATHER_API_REQUEST_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "날씨 API 요청 실패",
+      "날씨 API 요청 중 네트워크 오류 또는 인터럽트가 발생했습니다."),
+  WEATHER_API_PARSING_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "단기 예보 JSON 파싱 실패",
+      "단기 예보 JSON 파싱 중 오류가 발생하여 실패하였습니다."),
 
   // JWT
   JWTSESSION_NOT_FOUND(HttpStatus.UNAUTHORIZED, "인증 정보 확인 실패", "토큰이 만료되거나 로그아웃되었습니다."),
@@ -49,7 +65,6 @@ public enum ErrorCode {
   S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3 이미지 업로드에 실패했습니다.", "이미지 저장 중 오류 발생"),
   PRESIGNED_URL_GENERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Presigned URL 생성 실패", "이미지 접근 URL 생성 중 오류 발생"),
   S3_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3 객체 삭제에 실패했습니다.", "이미지를 삭제할 수 없습니다."),
-
 
   //CLOTH
   CLOTH_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "옷 등록 실패", "존재하는 옷입니다."),

@@ -7,8 +7,8 @@ import lombok.Getter;
 @Builder
 public class TemperatureDto {
 
-  private final double current;
-  private final double comparedToDayBefore;
-  private final double min;
-  private final double max;
+  private final Double current;
+  private final Double comparedToDayBefore;
+  private final Double min;
+  private final Double max;
 }

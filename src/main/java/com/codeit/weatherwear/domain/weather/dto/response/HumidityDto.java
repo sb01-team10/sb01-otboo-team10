@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 public class HumidityDto {
 
-  private final double current;
-  private final double comparedToDayBefore;
+  private final Double current;
+  private final Double comparedToDayBefore;
 
 }

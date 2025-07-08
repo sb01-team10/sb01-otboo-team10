@@ -18,11 +18,11 @@ public class WindSpeed {
 
   @Comment("풍속 단위: m/s")
   @Min(value = 0, message = "풍속은 음수가 될 수 없습니다.")
-  @Column(name = "wind_speed", nullable = false)
-  private double speed;
+  @Column(name = "wind_speed")
+  private Double speed;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "wind_speed_as_word", nullable = false)
+  @Column(name = "wind_speed_as_word")
   private WindSpeedType speedAsWord;
 
   @Builder
