@@ -24,6 +24,7 @@ import com.codeit.weatherwear.domain.clothes.repository.ClothRepository;
 import com.codeit.weatherwear.domain.clothes.service.parser.SiteParser;
 import com.codeit.weatherwear.domain.user.entity.User;
 import com.codeit.weatherwear.domain.user.repository.UserRepository;
+import com.codeit.weatherwear.global.storage.ThumbnailImageStorage;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +47,8 @@ public class ClothServiceTest {
     @Mock
     private ClothRepository clothRepository;
     @Mock
+    private ThumbnailImageStorage thumbnailImageStorage;
+    @Mock
     private ClothMapper mapper;
     @Mock
     private List<SiteParser> siteParsers;
@@ -54,7 +57,7 @@ public class ClothServiceTest {
     private ClothServiceImpl sut;
 
     @Nested
-    @DisplayName("의상 등록 테스트")
+    @DisplayName("의상 등록 테스트 - 이미지 없음")
     class RegisterCloth {
 
         @Test
@@ -114,9 +117,9 @@ public class ClothServiceTest {
 
             given(attributeRepository.findAllById(any())).willReturn(List.of(colorDef, sizeDef));
             given(clothRepository.save(any(Cloth.class))).willReturn(clothes);
-            given(mapper.toDto(any(Cloth.class))).willReturn(clothesDto);
+            given(mapper.toDto(any(Cloth.class),any())).willReturn(clothesDto);
             //when
-            ClothesDto result = sut.create(request);
+            ClothesDto result = sut.create(request,Optional.empty());
             //then
             assertThat(result.getName()).isEqualTo("후드티");
             assertThat(result.getType()).isEqualTo(ClothType.TOP);
@@ -141,7 +144,7 @@ public class ClothServiceTest {
             given(attributeRepository.findAllById(any())).willReturn(List.of()); // 속성 없음
 
             // when & then
-            assertThatThrownBy(() -> sut.create(request))
+            assertThatThrownBy(() -> sut.create(request,Optional.empty()))
                 .isInstanceOf(AttributeNotFoundException.class)
                 .hasMessageContaining("속성 확인 실패");
 
@@ -195,7 +198,7 @@ public class ClothServiceTest {
     }
 
     @Nested
-    @DisplayName("의상 수정 테스트")
+    @DisplayName("의상 수정 테스트 - 이미지 없음")
     class UpdateCloth {
 
         @Test
@@ -244,9 +247,9 @@ public class ClothServiceTest {
 
             given(clothRepository.findByIdWithAttributes(clothesId)).willReturn(Optional.of(cloth));
             given(attributeRepository.findAllById(any())).willReturn(List.of(colorDef));
-            given(mapper.toDto(any(Cloth.class))).willReturn(clothesDto);
+            given(mapper.toDto(any(Cloth.class),any())).willReturn(clothesDto);
             //when
-            ClothesDto result=sut.update(clothesId,request);
+            ClothesDto result=sut.update(clothesId,request,Optional.empty());
 
             //then
             assertThat(result.getName()).isEqualTo("빨강 후드티");
