@@ -111,6 +111,10 @@ dependencies {
 
     //웹 크롤링 Selenium
     implementation 'org.seleniumhq.selenium:selenium-java:4.10.0'
+
+    //S3
+    implementation 'software.amazon.awssdk:s3:2.31.7'
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.581'
 }
 
 

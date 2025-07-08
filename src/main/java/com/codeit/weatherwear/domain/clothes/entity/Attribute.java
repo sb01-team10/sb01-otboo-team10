@@ -1,7 +1,5 @@
 package com.codeit.weatherwear.domain.clothes.entity;
 
-import com.codeit.weatherwear.domain.clothes.exception.InvalidAttributeNameException;
-import com.codeit.weatherwear.domain.clothes.exception.SelectableDuplicateException;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;

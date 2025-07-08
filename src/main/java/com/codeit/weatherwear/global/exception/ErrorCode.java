@@ -45,6 +45,11 @@ public enum ErrorCode {
   SELECTABLE_DUPLICATE(HttpStatus.BAD_REQUEST, "속성 값 중복 등록", "중복된 속성 값이 존재합니다."),
   INVALID_ATTRIBUTE_NAME(HttpStatus.BAD_REQUEST, "잘못된 속성명입니다.", "정보를 찾을 수 없습니다."),
 
+  //S3
+  S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3 이미지 업로드에 실패했습니다.", "이미지 저장 중 오류 발생"),
+  PRESIGNED_URL_GENERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Presigned URL 생성 실패", "이미지 접근 URL 생성 중 오류 발생"),
+  S3_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3 객체 삭제에 실패했습니다.", "이미지를 삭제할 수 없습니다."),
+
 
   //CLOTH
   CLOTH_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "옷 등록 실패", "존재하는 옷입니다."),
