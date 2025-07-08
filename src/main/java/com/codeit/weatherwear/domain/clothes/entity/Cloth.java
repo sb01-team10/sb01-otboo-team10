@@ -97,4 +97,8 @@ public class Cloth {
     this.clothType = type;
   }
 
+  public void updateImageUrl(String imageUrl) {
+    this.clothesImageUrl = imageUrl;
+  }
+
 }

@@ -8,6 +8,7 @@ import com.codeit.weatherwear.domain.clothes.dto.response.ClothesDto;
 import com.codeit.weatherwear.domain.clothes.service.ClothService;
 import com.codeit.weatherwear.global.response.PageResponse;
 import jakarta.validation.Valid;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,12 +49,12 @@ public class ClothController implements ClothApi {
       @RequestPart(value = "image", required = false) MultipartFile image) {
     log.info("[옷 등록 요청] 옷 이름: {}, 의상 타입: {}", request.name(), request.type());
 
-    ClothesDto createClothes = clothService.create(request);
+    ClothesDto createClothes = clothService.create(request, Optional.ofNullable(image));
     return ResponseEntity.status(HttpStatus.CREATED).body(createClothes);
   }
 
     /**
-     * 의상을 url으로부터 불러와 등록합니다.
+     * 의상을 url으로부터 불러옵니다.
      *
      * @param url 구매 사이트 url
      * @return
@@ -105,7 +106,7 @@ public class ClothController implements ClothApi {
       @RequestPart(value = "image", required = false) MultipartFile image) {
     log.info("[옷 수정 요청] ID: {}, 옷 이름: {}", clothesId, request.name());
 
-    ClothesDto update = clothService.update(clothesId, request);
+    ClothesDto update = clothService.update(clothesId, request,Optional.ofNullable(image));
     return ResponseEntity.ok(update);
   }
 

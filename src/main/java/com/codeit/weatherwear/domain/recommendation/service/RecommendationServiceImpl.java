@@ -14,6 +14,7 @@ import com.codeit.weatherwear.domain.user.repository.UserRepository;
 import com.codeit.weatherwear.domain.weather.entity.Weather;
 import com.codeit.weatherwear.domain.weather.entity.WindSpeedType;
 import com.codeit.weatherwear.domain.weather.repository.WeatherRepository;
+import com.codeit.weatherwear.global.storage.ThumbnailImageStorage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +38,7 @@ public class RecommendationServiceImpl implements RecommendationService {
   private final UserRepository userRepository;
   private final WeatherRepository weatherRepository;
   private final ClothRepository clothRepository;
+  private final ThumbnailImageStorage thumbnailImageStorage;
   private final ClothMapper clothMapper;
 
   /**
@@ -73,7 +75,12 @@ public class RecommendationServiceImpl implements RecommendationService {
     List<Cloth> dresses = groupedFilteredClothes.getOrDefault(ClothType.DRESS, Collections.emptyList());
     if (!dresses.isEmpty()) {
       // DRESS 중 무작위로 하나 선택하여 추천 목록에 추가
-      recommendedClothes.add(clothMapper.toDto(getRandomCloth(dresses)));
+      Cloth randomDress = getRandomCloth(dresses);
+      String imageUrl = randomDress.getClothesImageUrl() != null
+          ? thumbnailImageStorage.get(randomDress.getClothesImageUrl())
+          : null;
+
+      recommendedClothes.add(clothMapper.toDto(randomDress, imageUrl));
       // DRESS가 선택되었으므로 TOP과 BOTTOM은 추천 대상에서 제외
       groupedFilteredClothes.remove(ClothType.TOP);
       groupedFilteredClothes.remove(ClothType.BOTTOM);
@@ -85,7 +92,11 @@ public class RecommendationServiceImpl implements RecommendationService {
     for (Map.Entry<ClothType, List<Cloth>> entry : groupedFilteredClothes.entrySet()) {
       List<Cloth> clothsOfType = entry.getValue();
       if (!clothsOfType.isEmpty()) {
-        recommendedClothes.add(clothMapper.toDto(getRandomCloth(clothsOfType)));
+        Cloth randomCloth = getRandomCloth(clothsOfType);
+        String imageUrl = randomCloth.getClothesImageUrl() != null
+            ? thumbnailImageStorage.get(randomCloth.getClothesImageUrl())
+            : null;
+        recommendedClothes.add(clothMapper.toDto(randomCloth, imageUrl));
       }
     }
 
