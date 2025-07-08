@@ -97,12 +97,11 @@ public class ClothController implements ClothApi {
    */
   @Override
   @PreAuthorize("@authorizationEvaluator.isClothOwner(#clothesId, authentication.principal.userId)")
-  @PatchMapping(
-      value = "/{clothesId}"
-      , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+  @PatchMapping(value = "/{id}"
+      ,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<ClothesDto> update(
-      @PathVariable("clothesId") UUID clothesId,
-      @Valid @RequestPart("request") ClothesUpdateRequest request,
+      @PathVariable("id") UUID clothesId,
+      @RequestPart("request") ClothesUpdateRequest request,
       @RequestPart(value = "image", required = false) MultipartFile image) {
     log.info("[옷 수정 요청] ID: {}, 옷 이름: {}", clothesId, request.name());
 

@@ -2,10 +2,12 @@ package com.codeit.weatherwear.domain.recommendation.service;
 
 
 import com.codeit.weatherwear.domain.clothes.dto.response.ClothesDto;
+import com.codeit.weatherwear.domain.clothes.dto.response.RecommendClothesDto;
 import com.codeit.weatherwear.domain.clothes.entity.Cloth;
 import com.codeit.weatherwear.domain.clothes.entity.ClothType;
 import com.codeit.weatherwear.domain.clothes.entity.ClothWithAttributes;
 import com.codeit.weatherwear.domain.clothes.mapper.ClothMapper;
+import com.codeit.weatherwear.domain.clothes.mapper.RecommendClothesMapper;
 import com.codeit.weatherwear.domain.clothes.repository.ClothRepository;
 import com.codeit.weatherwear.domain.recommendation.dto.RecommendationDto;
 import com.codeit.weatherwear.domain.user.entity.User;
@@ -39,7 +41,7 @@ public class RecommendationServiceImpl implements RecommendationService {
   private final WeatherRepository weatherRepository;
   private final ClothRepository clothRepository;
   private final ThumbnailImageStorage thumbnailImageStorage;
-  private final ClothMapper clothMapper;
+  private final RecommendClothesMapper recommendClothesMapper;
 
   /**
    * 의상 추천
@@ -66,7 +68,7 @@ public class RecommendationServiceImpl implements RecommendationService {
     List<Cloth> filtered = filterCloth(user, weather, clothes);
 
     //타입별 1개씩 선택
-    List<ClothesDto> recommendedClothes = new ArrayList<>();
+    List<RecommendClothesDto> recommendedClothes = new ArrayList<>();
     // 타입별로 필터링된 옷을 그룹화
     Map<ClothType, List<Cloth>> groupedFilteredClothes = filtered.stream()
         .collect(Collectors.groupingBy(Cloth::getClothType));
@@ -80,7 +82,7 @@ public class RecommendationServiceImpl implements RecommendationService {
           ? thumbnailImageStorage.get(randomDress.getClothesImageUrl())
           : null;
 
-      recommendedClothes.add(clothMapper.toDto(randomDress, imageUrl));
+      recommendedClothes.add(recommendClothesMapper.toDto(randomDress, imageUrl));
       // DRESS가 선택되었으므로 TOP과 BOTTOM은 추천 대상에서 제외
       groupedFilteredClothes.remove(ClothType.TOP);
       groupedFilteredClothes.remove(ClothType.BOTTOM);
@@ -96,7 +98,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         String imageUrl = randomCloth.getClothesImageUrl() != null
             ? thumbnailImageStorage.get(randomCloth.getClothesImageUrl())
             : null;
-        recommendedClothes.add(clothMapper.toDto(randomCloth, imageUrl));
+        recommendedClothes.add(recommendClothesMapper.toDto(randomCloth, imageUrl));
       }
     }
 

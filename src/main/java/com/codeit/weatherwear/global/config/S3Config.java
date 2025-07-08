@@ -12,13 +12,13 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 /** AWS S3 관련 설정을 구성하는 Configuration 클래스입니다. S3Client와 S3Presigner Bean을 생성하여 DI(의존성 주입)에 사용됩니다. */
 @Configuration
 public class S3Config {
-  @Value("${AWS_S3_ACCESS_KEY")
+  @Value("${AWS_S3_ACCESS_KEY}")
   private String accessKey;
 
-  @Value("${AWS_S3_SECRET_KEY")
+  @Value("${AWS_S3_SECRET_KEY}")
   private String secretKey;
 
-  @Value("${AWS_S3_REGION")
+  @Value("${AWS_S3_REGION}")
   private String region;
 
   /** S3Client Bean 생성 - 일반적인 S3 작업(업로드, 다운로드 등)을 수행하기 위한 클라이언트 */
