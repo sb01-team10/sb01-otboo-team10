@@ -96,7 +96,7 @@ public class ClothController implements ClothApi {
    * @return
    */
   @Override
-  @PreAuthorize("@authorizationEvaluator.isClothOwner(#clothesId, authentication.principal.userId)")
+  @PreAuthorize("@authorizationEvaluator.isClothOwner(authentication.principal.userId, #clothesId)")
   @PatchMapping(value = "/{id}"
       ,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<ClothesDto> update(
