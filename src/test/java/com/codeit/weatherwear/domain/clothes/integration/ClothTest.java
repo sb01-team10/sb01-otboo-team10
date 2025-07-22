@@ -49,7 +49,7 @@ public class ClothTest {
     restTemplate = restTemplate.withBasicAuth("user", "password");
   }
 
-  /*@Test
+  @Test
   @DisplayName("무신사 URL에서 의상 정보 추출 - 성공")
   void extractClothesFromMusinsaUrl_success() {
     // given
@@ -72,5 +72,5 @@ public class ClothTest {
     assertThat(dto).isNotNull();
     assertThat(dto.getName()).isNotEmpty();
     assertThat(dto.getImageUrl()).contains("http");
-  }*/
+  }
 }

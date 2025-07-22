@@ -54,3 +54,4 @@ sse:
 gemini:
   api:
     key: asd
+    url: asd
