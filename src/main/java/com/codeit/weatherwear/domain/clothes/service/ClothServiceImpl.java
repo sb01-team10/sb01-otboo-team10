@@ -135,6 +135,7 @@ public class ClothServiceImpl implements ClothService {
     chromeOptions.addArguments("--lang=ko");
     chromeOptions.addArguments("--no-sandbox");
     chromeOptions.addArguments("--disable-gpu");
+    chromeOptions.addArguments("--window-size=1920,1080");
     chromeOptions.addArguments(
         "--user-agent=Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36");
     chromeOptions.setPageLoadStrategy(PageLoadStrategy.NONE);
