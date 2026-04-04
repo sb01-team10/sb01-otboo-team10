@@ -22,3 +22,5 @@ out/
 .env*
 *.log
 *.bak
+
+.claude/
