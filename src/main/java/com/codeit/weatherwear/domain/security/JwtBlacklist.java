@@ -1,34 +1,28 @@
 package com.codeit.weatherwear.domain.security;
 
+import java.time.Duration;
 import java.time.Instant;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j
+@RequiredArgsConstructor
 public class JwtBlacklist {
 
-  /**
-   * key = access token / value = expiration time
-   */
-  private Map<String, Instant> blacklist = new ConcurrentHashMap();
+  private static final String KEY_PREFIX = "jwt:blacklist:";
+
+  private final StringRedisTemplate redisTemplate;
 
   public void addBlacklist(String accessToken, Instant expirationTime) {
-    blacklist.put(accessToken, expirationTime);
+    Duration ttl = Duration.between(Instant.now(), expirationTime);
+    if (ttl.isNegative() || ttl.isZero()) {
+      return;
+    }
+    redisTemplate.opsForValue().set(KEY_PREFIX + accessToken, "", ttl);
   }
 
   public boolean existsInBlacklist(String accessToken) {
-    return blacklist.containsKey(accessToken);
-  }
-
-  // 메모리 누수 방지를 위해 1시간마다 만료된 액세스 토큰 삭제
-  @Scheduled(cron = "0 0 0/1 * * *")
-  public void cleanExpiredToken() {
-    log.info("Clean JwtBlacklist: delete expired access tokens in list");
-    Instant now = Instant.now();
-    blacklist.entrySet().removeIf(entry -> entry.getValue().isBefore(now));
+    return Boolean.TRUE.equals(redisTemplate.hasKey(KEY_PREFIX + accessToken));
   }
 }
